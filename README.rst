@@ -1,7 +1,9 @@
-spookylukey's opinionated guide to writing Django views
-=======================================================
+Django Views - The Right Way
+============================
 
-Welcome! This is a documentation only project.
+.. class:: center
 
-Just getting set up...
+An opinionated guide
+
+Welcome! This is a documentation only project, and I'm just getting set up...
 

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>How to write Django views’s - an opinionated guide &#8212; How to write Django views  documentation</title>
+    <title>Django Views - The Right Way &#8212; How to write Django views  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -30,10 +30,54 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="how-to-write-django-views-s-an-opinionated-guide">
-<h1>How to write Django views’s - an opinionated guide<a class="headerlink" href="#how-to-write-django-views-s-an-opinionated-guide" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="django-views-the-right-way">
+<h1>Django Views - The Right Way<a class="headerlink" href="#django-views-the-right-way" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to my opinionated guide on how to write views in Django.</p>
+<p>This guide was inspired by the fact that many (wrong) people on the internet are
+(wrongly) encouraging the use of “Class Based Views” (CBVs from now on) as both
+a superior way of writing views, and also the way to teach those who are
+starting out with Django.</p>
+<p>This is wrong advice! (Did I mention that?) It’s got so bad that some people are
+even scared to write “function based views” (FBVs from now on), despite the fact
+that these are so much easier and simpler. So here I am to save the day, and
+show you The Right Way.</p>
+<p>The essential part of this guide is very short, because FBVs are very easy and
+simple, but I’ve added extra bits for common patterns in FBVs. If you read all
+of it:</p>
+<ul class="simple">
+<li><p>You’ll learn how to make your views shorter and much, much simpler than if you
+use CBVs.</p></li>
+<li><p>You’ll be freed from a whole bunch of terrifying APIs that were only making
+your life harder.</p></li>
+<li><p>You’ll learn general Python techniques for good program structure, in contrast
+to Django specific APIs that are actually teaching you bad patterns.</p></li>
+</ul>
+<p>Each page is composed of two parts:</p>
+<ol class="arabic simple">
+<li><p>The business - a short, definitive guide to The Right Way. As a junior
+developer, this part is all you need.</p></li>
+<li><p>Discussion - a longer, in-depth explanation of why everyone else who tells
+you differently is wrong. It’s targeted at slightly more experience
+developers, or junior developers who want to sit at my feet and catch my
+pearls of wisdom.</p></li>
+</ol>
 <div class="toctree-wrapper compound">
 </div>
+</div>
+<div class="section" id="caveats-and-disclaimers-etc">
+<h1>Caveats and disclaimers etc.<a class="headerlink" href="#caveats-and-disclaimers-etc" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li><p>Yes, this guide will be slightly exaggerated in style, and definitely
+arrogant. Because it’s more fun to write that way. #SorryNotSorry</p></li>
+<li><p>My comments mainly apply to the CBVs that come with Django. Specifically,
+many of my criticisms don’t apply to Django Rest Framework (see later
+discussion), and possibly other implementations.</p></li>
+<li><p>Although I’m a Django core dev, I’m not speaking for all the Django
+developers, and I’m not actually implying they are all stupid (although they
+may be wrong). I was actually around when CBVs were first being added to
+Django, and even involved in the design of them a bit, and at the time didn’t
+realise the things I’m expressing now.</p></li>
+</ol>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
