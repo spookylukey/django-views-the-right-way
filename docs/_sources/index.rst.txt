@@ -1,12 +1,7 @@
-.. How to write Django views documentation master file, created by
-   sphinx-quickstart on Mon Apr  6 19:12:19 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Django Views - The Right Way
+Django Views — The Right Way
 ============================
 
-Welcome to my opinionated guide on how to write views in Django.
+Welcome to my opinionated guide on how to write views in Django!
 
 This guide was inspired by the fact that many (wrong) people on the internet are
 (wrongly) encouraging the use of "Class Based Views" (CBVs from now on) as both
@@ -23,9 +18,9 @@ simple, but I've added extra bits for common patterns in FBVs. If you read all
 of it:
 
 * You'll learn how to make your views shorter and much, much simpler than if you
-  use CBVs.
-* You'll be freed from a whole bunch of terrifying APIs that were only making
-  your life harder.
+  used CBVs.
+* You'll be freed from learning a whole stack of terrifying APIs that were only
+  making your life harder.
 * You'll learn general Python techniques for good program structure, in contrast
   to Django specific APIs that are actually teaching you bad patterns.
 
@@ -51,14 +46,15 @@ Caveats and disclaimers etc.
    arrogant. Because it's more fun to write that way. #SorryNotSorry
 
 2. My comments mainly apply to the CBVs that come with Django. Specifically,
-   many of my criticisms don't apply to Django Rest Framework (see later
-   discussion), and possibly other implementations.
+   many of my criticisms don't apply to Django Rest Framework, the Django admin
+   (which uses a form of CBV), and possibly other implementations. See later
+   discussion on this.
 
 3. Although I'm a Django core dev, I'm not speaking for all the Django
    developers, and I'm not actually implying they are all stupid (although they
    may be wrong). I was actually around when CBVs were first being added to
    Django, and even involved in the design of them a bit, and at the time didn't
-   realise the things I'm expressing now.
+   see the things I'm expressing now.
 
 
 Indices and tables
