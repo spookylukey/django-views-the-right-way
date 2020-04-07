@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>The Definitive Pattern</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Django Views — The Right Way" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="the-definitive-pattern">
+<h1>The Definitive Pattern<a class="headerlink" href="#the-definitive-pattern" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-pattern">
+<h2>The pattern<a class="headerlink" href="#the-pattern" title="Permalink to this headline">¶</a></h2>
+<p>This is how you start writing any HTML-based page in Django:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
+
+<span class="k">def</span> <span class="nf">example_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>With the corresponding urls.py:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;example/&lt;str:arg&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">example_view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;example_name&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Which bits do you change?</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">example_view</span></code> should be the name of your page e.g. <code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">kitten_list</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example.html</span></code> should be the path to the template you are using.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{}</span></code>, the third argument to <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code>, is the context data you
+want available in your template.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arg</span></code> is a placeholder for any number of optional URL arguments — parts of
+the URL path that you are matching with a <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters">path converter</a>
+(here we used <code class="docutils literal notranslate"><span class="pre">str</span></code>) and supplying to the view function as a parameter. You
+can remove it, or add more, but have to change the URLconf to match.</p></li>
+</ul>
+<p>That’s it!</p>
+<p>But, you need a slightly deeper understanding if you’re going to write good
+Django views.</p>
+</div>
+<div class="section" id="the-explanation">
+<h2>The explanation<a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
+<p>First, it’s vital to know what a view <strong>is</strong>. As the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/views/">Django docs state</a>:</p>
+<blockquote>
+<div><p>A view…is a Python function that takes a Web request and returns a Web response</p>
+</div></blockquote>
+<p>Given that definition, what does your most basic view function look like? Time
+for Hello World! In your views.py, you’d have this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This function expects to receive a ‘request’ object as its argument. This will
+be an instance of <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest">HttpRequest</a>,
+which contains all the information about the request that the user’s browser
+sent. It then returns an <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponse">HttpResponse</a>
+object as its return value. This contains all the data to be sent back to the
+user’s browser — HTTP headers and body, which is typically a web page. In our
+case, we sent just the text “Hello world!”. This request-response cycle is the
+heart of the Django web framework.</p>
+<p>In order to get Django to actually call our view function, we have to hook it
+into a <code class="docutils literal notranslate"><span class="pre">urlconf</span></code> somewhere. This is covered in the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial01/#write-your-first-view">Django tutorial part 1</a>,
+so I won’t cover all the app layout stuff in detail — in brief, we’ll have this
+in our urls.py:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;hello/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">hello_world</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;hello_world&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In many cases, we want a single view function to actually match a family of URLs
+which have some kind of parameter in them, and access that parameter in our view
+function. Django has built-in support for this. Suppose we want to match URLs
+like <code class="docutils literal notranslate"><span class="pre">hello/XXX/</span></code> where XXX could be any string. Then our URLconf becomes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;hello/&lt;str:my_arg&gt;&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">hello_world</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;hello_world&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>and our view signature:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">my_arg</span><span class="p">):</span>
+    <span class="c1"># etc</span>
+</pre></div>
+</div>
+<p>Now, for our classic web app, we are normally serving HTML i.e. web pages.
+Further, our HTML normally has bits we want to insert into it — this is a
+dynamic web site, not a static one — and we want to build it up in an ordered
+way that will handle HTML escaping, and also provide a common set of page
+elements (like navigation) for our different pages. So we’ll almost always want
+to use Django’s template engine — covered in the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/#write-views-that-actually-do-something">Django tutorial part 3</a>
+. Instead of passing that “Hello world” string, we’re going to have a
+<code class="docutils literal notranslate"><span class="pre">hello_world.html</span></code> template, and pass it some “context data” — any dynamic
+information that needs to appear in the page.</p>
+<p>So our revised view might look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
+
+
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;hello_world.html&#39;</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Note that a template is not an essential part of a Django view — HTTP requests
+and responses are the essential parts. Templates are just a way of building up
+the body of the response. But for this kind of app, they are extremely common.
+So, as the Django tutorial notes, there is a shortcut for this process of
+loading a template, rendering it and putting it into a response — <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#django.shortcuts.render">render()</a>. With that, we can condense our view to this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">my_arg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;hello_world.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>The third parameter here is the empty context dictionary.</p>
+<p>This is a great pattern for writing views. Django has one more trick up its
+sleeve, however — <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/template-response/#templateresponse-objects">TemplateResponse</a>.</p>
+<p>The issue with just using <code class="docutils literal notranslate"><span class="pre">render</span></code> is that you get a plain <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code>
+object back that has no memory that it ever came from a template. Sometimes,
+however, it is useful to have functions return a value that does remember what
+it’s “made of” — something that stores the template it is from, and the context.
+This can be really useful in testing, but also if we want to something outside
+of our view function (such as decorators or middleware) to check or even change
+whats in the response before it finally gets ‘rendered’ and sent to the user.
+We’ll cover use case of this later in the guide.</p>
+<p>For now, you can just accept that <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code> is a more useful return
+value than a plain <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code>.</p>
+<p>With that substitution, we’ve arrived at the pattern you’ll want to memorise for
+views:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
+
+<span class="k">def</span> <span class="nf">example_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>You need to know what each bit is, as described above. <strong>But that is the end of
+the lesson</strong>. You can skip to the next part. Or you can even just stop reading —
+you now know all the essentials of writing HTML views in Django.</p>
+<p>You don’t need to learn any of the CBV APIs - TemplateView, RedirectView,
+ListView, DetailView, FormView, MultipleObjectMixin and all their inheritance
+trees. They will only make your life harder. Print out their documentation, put
+in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how much there is</a> — fill the warehouse with dynamite and <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t look back</a>.</p>
+</div>
+<div class="section" id="discussion">
+<h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h2>
+<p>The CBV equivalent to the view I wrote above is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
+
+ <span class="k">class</span> <span class="nc">ExampleView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;example.html&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;example/&lt;str:arg&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ExampleView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;example_name&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Why is this worse than the FBV?</p>
+<p>First of all, <strong>it’s barely any shorter</strong>.</p>
+<p>CBVs have some massive downsides, which include a huge amount of complexity. In
+the face of this, the major selling point of CBVs that they remove the
+duplication and boilerplate of FBVs. But, we only had 2 lines to begin with, and
+we still have 2 lines. We could just about squeeze it to one long one using
+<code class="docutils literal notranslate"><span class="pre">TemplateView.as_view(template_name=&quot;example.html&quot;)</span></code> but that’s not how you
+normally write it.</p>
+<p>Given the downside, I expected the upside to be a lot more convincing. Maybe
+it’s better when it comes to DetailView etc? We’ll see about that. (TODO)</p>
+<p>But let’s add a more realistic situation – we actually want some context data.
+Let’s say it’s just a single piece of information, like a title, using some
+generic ‘page’ template.</p>
+<p>FBV version:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;page.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;My Title&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+<p>CBV version:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;page.html&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;My Title&#39;</span>
+        <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+</div>
+<p>For this trivial task, we’ve had to define a new, bulky method, and now we find
+<strong>it’s a lot longer</strong> than the FBV, in addition to being much more complex and
+indirect.</p>
+<p>In fact, you’ll find many people don’t actually start with the bare
+<code class="docutils literal notranslate"><span class="pre">TemplateView</span></code> subclass. If you <a class="reference external" href="https://github.com/search?q=get_context_data&amp;type=Code">search GitHub</a> for
+<code class="docutils literal notranslate"><span class="pre">get_context_data</span></code>, you’ll find hundreds and hundreds of examples that look
+like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HomeView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">HomeView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+</div>
+<p>This doesn’t make much sense, until you realised that people are using
+boilerplate generators/snippets to create new CBVs — such as <a class="reference external" href="https://github.com/pashinin/emacsd/blob/c8e50e6bb573641f3ffd454236215ea59e4eca13/snippets/python-mode/class">this for emacs</a>
+and <a class="reference external" href="https://github.com/ppiet/dotfiles/blob/e92c4b31d253e48027b72335f071281352b05f01/vim/UltiSnips/python.snippets">this for vim</a>,
+and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/blob/60673ae395bf493fd5fa6addeceac662218e1703/osx/Sublime%20Text/get_context_data.sublime-snippet">this for Sublime Text</a>.</p>
+<p>In other words:</p>
+<ul class="simple">
+<li><p>The boilerplate you need for a basic CBV is bigger than for an FBV</p></li>
+<li><p>It’s so big and tedious that people use snippets library to write it for them.</p></li>
+</ul>
+<p>And this brings me to my <strong>second</strong> point: the CBV was a bad starting point.
+With the FBV, we just added the context data right into the context dictionary
+we had already created. There was an obvious place for the thing we wanted to
+add, because the logic of the view isn’t hidden away somewhere in a base class.</p>
+<p>With the CBV, if you start with the minimal version, you have to do a lot more
+work to add a basic customisation.</p>
+<p>You find this again and again with CBVs. As soon as you need any logic, you have
+to start defining methods, which brings you pain:</p>
+<ul class="simple">
+<li><p>You’ve got to know which methods to define, which involves knowing this
+massive API.</p></li>
+<li><p>You could easily get it wrong in a way which introduces terrifying bugs. (TODO
+link)</p></li>
+<li><p>You’ve got to add the method, which is a whole bunch of boilerplate.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Django Views — The Right Way</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/thepattern.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
