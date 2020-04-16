@@ -221,8 +221,8 @@ Why is this worse than the FBV?
 First of all, **it's barely any shorter**.
 
 CBVs have some massive downsides, which include a huge amount of complexity. In
-the face of this, the major selling point of CBVs that they remove the
-duplication and boilerplate of FBVs. But, we only had 2 lines to begin with, and
+the face of this, the major selling point of CBVs is that they are supposed to
+remove duplication and boilerplate. But, we only had 2 lines to begin with, and
 we still have 2 lines. We could just about squeeze it to one long one using
 ``TemplateView.as_view(template_name="example.html")`` but that's not how you
 normally write it.
@@ -274,7 +274,7 @@ like this:
            context = super(HomeView, self).get_context_data()
            return context
 
-This doesn't make much sense, until you realised that people are using
+This doesn't make much sense, until you realise that people are using
 boilerplate generators/snippets to create new CBVs — such as `this for emacs
 <https://github.com/pashinin/emacsd/blob/c8e50e6bb573641f3ffd454236215ea59e4eca13/snippets/python-mode/class>`_
 and `this for vim

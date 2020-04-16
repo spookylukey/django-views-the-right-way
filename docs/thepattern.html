@@ -195,8 +195,8 @@ in a shed — or rather, a warehouse <a class="reference external" href="https:/
 <p>Why is this worse than the FBV?</p>
 <p>First of all, <strong>it’s barely any shorter</strong>.</p>
 <p>CBVs have some massive downsides, which include a huge amount of complexity. In
-the face of this, the major selling point of CBVs that they remove the
-duplication and boilerplate of FBVs. But, we only had 2 lines to begin with, and
+the face of this, the major selling point of CBVs is that they are supposed to
+remove duplication and boilerplate. But, we only had 2 lines to begin with, and
 we still have 2 lines. We could just about squeeze it to one long one using
 <code class="docutils literal notranslate"><span class="pre">TemplateView.as_view(template_name=&quot;example.html&quot;)</span></code> but that’s not how you
 normally write it.</p>
@@ -237,7 +237,7 @@ like this:</p>
         <span class="k">return</span> <span class="n">context</span>
 </pre></div>
 </div>
-<p>This doesn’t make much sense, until you realised that people are using
+<p>This doesn’t make much sense, until you realise that people are using
 boilerplate generators/snippets to create new CBVs — such as <a class="reference external" href="https://github.com/pashinin/emacsd/blob/c8e50e6bb573641f3ffd454236215ea59e4eca13/snippets/python-mode/class">this for emacs</a>
 and <a class="reference external" href="https://github.com/ppiet/dotfiles/blob/e92c4b31d253e48027b72335f071281352b05f01/vim/UltiSnips/python.snippets">this for vim</a>,
 and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/blob/60673ae395bf493fd5fa6addeceac662218e1703/osx/Sublime%20Text/get_context_data.sublime-snippet">this for Sublime Text</a>.</p>
