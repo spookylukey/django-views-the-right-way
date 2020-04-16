@@ -14,6 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Definitive Pattern" href="thepattern.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -59,9 +60,20 @@ developer, this part is all you need.</p></li>
 <li><p>Discussion - a longer, in-depth explanation of why everyone else who tells
 you differently is wrong. It’s targeted at slightly more experience
 developers, or junior developers who want to sit at my feet and catch my
-pearls of wisdom.</p></li>
+pearls of wisdom. In each one I’ll tackle a few different aspects of the
+comparisons between CBVs and FBVs.</p></li>
 </ol>
+<p>So let’s go!</p>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Definitive Pattern</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="thepattern.html#the-pattern">The pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thepattern.html#the-explanation">The explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thepattern.html#discussion">Discussion</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div class="section" id="caveats-and-disclaimers-etc">
@@ -69,6 +81,10 @@ pearls of wisdom.</p></li>
 <ol class="arabic simple">
 <li><p>Yes, this guide will be slightly exaggerated in style, and definitely
 arrogant. Because it’s more fun to write that way. #SorryNotSorry</p></li>
+<li><p>I’m assuming you are writing a ‘classic’ web app or web site — in which
+most of your pages are server-side rendered HTML, with perhaps some Javascript
+loaded onto those pages, as opposed to a site where your server mostly sends
+data (e.g. JSON) to a client-side Javascript web app that puts the pages together.</p></li>
 <li><p>My comments mainly apply to the CBVs that come with Django. Specifically,
 many of my criticisms don’t apply to Django Rest Framework, the Django admin
 (which uses a form of CBV), and possibly other implementations. See later
@@ -99,6 +115,7 @@ see the things I’m expressing now.</p></li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="thepattern.html" title="next chapter">The Definitive Pattern</a></li>
   </ul></li>
 </ul>
 </div>

@@ -28,24 +28,33 @@ Each page is composed of two parts:
 
 2. Discussion - a longer, in-depth explanation of why everyone else who tells
    you differently is wrong :-). It's targeted at slightly more experienced
-   developers.
+   developers. In each one I'll tackle a few different aspects of the
+   comparisons between CBVs and FBVs.
 
+So let's go!
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   thepattern
 
 Caveats and disclaimers etc.
 ============================
 
 1. Yes, there may in fact be more than one Right Way. But not in this guide!
 
-2. My comments mainly apply to the CBVs that come with Django. Specifically,
+2. I'm assuming you are writing a ‘classic’ web app or web site — in which
+   most of your pages are server-side rendered HTML, with perhaps some Javascript
+   loaded onto those pages, as opposed to a site where your server mostly sends
+   data (e.g. JSON) to a client-side Javascript web app that puts the pages together.
+
+3. My comments mainly apply to the CBVs that come with Django. Specifically,
    many of my criticisms don't apply to Django Rest Framework, the Django admin
    (which uses a form of CBV), and possibly other implementations. See later
    discussion on this.
 
-3. Although I'm a Django core dev, I'm not speaking for all the Django
+4. Although I'm a Django core dev, I'm not speaking for all the Django
    developers. I was actually around when CBVs were first being added to Django,
    and even involved in the design of them a bit, and at the time didn't see the
    things I'm expressing now.
