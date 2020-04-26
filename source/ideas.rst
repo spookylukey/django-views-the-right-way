@@ -1,3 +1,145 @@
+
+- The Pattern
+
+- How to do X with a function based view: do X
+  - It's easy!
+
+
+- Context data
+
+- Redirect
+  - HTTP response
+
+
+  - Discussion: codeless views?
+
+Discussion -
+
+  - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView
+
+Original::
+    from django.shortcuts import get_object_or_404
+    from django.views.generic.base import RedirectView
+
+    from articles.models import Article
+
+    class ArticleCounterRedirectView(RedirectView):
+
+        permanent = False
+        query_string = True
+        pattern_name = 'article-detail'
+
+        def get_redirect_url(self, *args, **kwargs):
+            article = get_object_or_404(Article, pk=kwargs['pk'])
+            article.update_counter()
+            return super().get_redirect_url(*args, **kwargs)
+
+Function::
+
+    from django.http import HttpResponseRedirect
+    from django.urls import reverse
+    from django.shortcuts import get_object_or_404
+
+    from articles.models import Article
+
+    def article_counter_redirect_view(request, pk):
+        article = get_object_or_404(Article, pk=pk)
+        article.update_counter()
+        query_string = request.META.get('QUERY_STRING', '')
+        return HttpResponseRedirect(reverse('article-detail', kwargs={'pk': pk})
+                                    + ('?' + query_string) if query_string else '')
+
+Function wrapper of CBV::
+
+    from django.shortcuts import get_object_or_404
+    from django.views.generic.base import RedirectView
+
+    from articles.models import Article
+
+    def article_counter_redirect_view(request, pk):
+        article = get_object_or_404(Article, pk=kwargs['pk'])
+        article.update_counter()
+        return RedirectView.as_view(
+            pattern_name='article-detail'
+            query_string=True,
+            permanent=False,
+        )(request, pk=pk)
+
+
+        
+
+- URL parameters
+
+  - Discussion: checkable URLconf
+
+
+
+- Display an object.
+
+
+
+Discussion - DetailView vs get_object_or_404
+
+https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview
+
+
+Original::
+
+    from django.utils import timezone
+    from django.views.generic.detail import DetailView
+
+    from articles.models import Article
+
+    class ArticleDetailView(DetailView):
+
+        model = Article
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context['now'] = timezone.now()
+            return context
+
+Rewritten::
+
+    from django.template.response import TemplateResponse
+    from django.shortcuts import get_object_or_404
+    from django.utils import timezone
+
+    def article_view(request, slug):
+       return TemplateResponse(request, "my_app/article_detail.html", {
+           'article': get_object_or_404(Article.objects.all(), slug=slug),
+           'now': timezone.now(),
+       })
+
+
+Comparisons:
+- Compare template ``object``
+- Suppose we need to change CBV to be filtered QuerySet, not all objects.
+
+  ``model`` -> ``queryset``
+
+- Suppose we need it to be filtered according to something in request
+  ``queryset`` attribute -> ``get_queryset`` method.
+
+
+Discussion - shortcuts vs mixins
+
+
+Discussion - convention vs configuration (template name)
+
+
+
+
+
+- Simple customisation
+  - keyword args in the URLconf
+
+- Custom logic
+
+  - Write some code. Do it yourself, it's not hard.
+  - Discussion: codeless views?
+    History of CBVs. 
+
 https://twitter.com/rasulkireev/status/1230974745644060678
 
 https://twitter.com/rasulkireev/status/1231267109717626880
@@ -5,15 +147,32 @@ https://twitter.com/rasulkireev/status/1231267109717626880
 https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/
 
 
-Boilerplate
+Discussion - Boilerplate
 
-Starting point
+Discussion - Starting point
+ - guy who created template tags just to add something to the context
+   
 
 
+   
 
 
-DetailView vs get_object_or_404
-shortcuts
+---
+
+Customising in the middle - Callbacks
+
+Discussion - Callbacks vs template method
+
+---
+
+Customising the start - pre-conditions
+
+
+Customising the start - delegating
+
+
+Customising the end
+
 
 
 Security
@@ -132,3 +291,115 @@ everything I need::
 
 Which would you rather? And this is a very simple example, real CBVs often gain
 far more base classes.
+
+
+
+URL checking
+
+https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d
+
+Especially useful if you have registered a view in more than one way
+
+
+e.g.
+
+/foo/<int:year>/
+
+/foo/<int:from_year>-<int:to_year>/
+
+
+def show_foo(request, year=None, from_year=None, to_year=None)
+
+
+Type checker will ensure that you don't accidentally have something like:
+
+def show_foo(request, year, from_year=None, to_year=None)
+
+
+-----
+Redirects
+ - HTTP
+   
+
+URL conf
+
+RedirectView vs make_redirect
+
+Discussion - views in the URLconf
+
+-----
+
+
+View factory / mass produced views
+
+- Redirect views for a whole family of views, each needing same kwargs passed on.
+
+  - Will do the same custom logic each time.
+  
+-----
+
+Discussion - convention or configuration
+
+
+
+
+--------------------
+
+MRO problem:
+
+Before::
+
+
+    class AjaxMroFixer(type):
+
+        def mro(cls):
+            classes = type.mro(cls)
+            # Move AjaxyFormMixin to one before last that has a 'post' defined.
+            new_list = [c for c in classes if c is not AjaxyFormMixin]
+            have_post = [c for c in new_list if 'post' in c.__dict__]
+            last = have_post[-1]
+            new_list.insert(new_list.index(last), AjaxyFormMixin)
+            return new_list
+
+
+    class BookingAccountDetails(DefaultMetaData, AjaxyFormMixin, TemplateResponseMixin, BaseUpdateView, metaclass=AjaxMroFixer):
+        metadata_title = "Booking - account details"
+        form_class = AccountDetailsForm
+        template_name = 'cciw/bookings/account_details.html'
+        success_url = reverse_lazy('cciw.bookings.views.add_place')
+        extra_context = {'stage': 'account'}
+
+        def get_object(self):
+            return self.request.booking_account
+
+        def form_valid(self, form):
+            messages.info(self.request, 'Account details updated, thank you.')
+            return super(BookingAccountDetails, self).form_valid(form)
+
+
+After::
+  
+    @booking_account_required
+    @ajax_form_validate(AccountDetailsForm)
+    def account_details(request):
+        form_class = AccountDetailsForm
+
+        if request.method == "POST":
+            form = form_class(request.POST, instance=request.booking_account)
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Account details updated, thank you.')
+                return next_step(request.booking_account)
+        else:
+            form = form_class(instance=request.booking_account)
+        return TemplateResponse(request, 'cciw/bookings/account_details.html', {
+            'title': 'Booking - account details',
+            'stage': BookingStage.ACCOUNT,
+            'form': form,
+        })
+
+
+``account_details`` is only slightly longer than ``BookingAccountDetails`` (129
+tokens vs 102), despite the fact that it includes all the form flow control
+logic and all other logic, rather than delegating to base classes. However, it
+is many times easier to understand, and no crazy metaclass fixes are necessary.

@@ -4,11 +4,11 @@ The Definitive Pattern
 The pattern
 -----------
 
-This is how you start writing any HTML-based page in Django:
+This is how you start writing any HTML-based view in Django:
 
 .. code-block:: python
 
-   from django.shortcuts import TemplateResponse
+   from django.template.response import TemplateResponse
 
    def example_view(request, arg):
        return TemplateResponse(request, "example.html", {})
@@ -46,6 +46,9 @@ Django views.
 
 The explanation
 ---------------
+
+Most pages won't have this longer section, but because this is foundational I'm
+spending a bit more time.
 
 First, it's vital to know what a view **is**. As the `Django docs state
 <https://docs.djangoproject.com/en/stable/topics/http/views/>`_:
@@ -178,7 +181,7 @@ views:
 
 .. code-block:: python
 
-   from django.shortcuts import TemplateResponse
+   from django.template.response import TemplateResponse
 
    def example_view(request, arg):
        return TemplateResponse(request, "example.html", {})
@@ -190,14 +193,14 @@ you now know all the essentials of writing HTML views in Django.
 
 You don't need to learn any of the CBV APIs - TemplateView, RedirectView,
 ListView, DetailView, FormView, MultipleObjectMixin and all their inheritance
-trees. They will only make your life harder. Print out their documentation, put
-in a shed — or rather, a warehouse `given how much there is
-<https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and `don't look back
-<https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
+trees or method flowcharts. They will only make your life harder. Print out
+their documentation, put in a shed — or rather, a warehouse `given how much
+there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and `don't
+look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
 
 
-Discussion
-----------
+Discussion - boilerplate
+------------------------
 
 The CBV equivalent to the view I wrote above is as follows:
 
@@ -287,10 +290,17 @@ In other words:
 * The boilerplate you need for a basic CBV is bigger than for an FBV
 * It's so big and tedious that people use snippets library to write it for them.
 
-And this brings me to my **second** point: the CBV was a bad starting point.
-With the FBV, we just added the context data right into the context dictionary
-we had already created. There was an obvious place for the thing we wanted to
-add, because the logic of the view isn't hidden away somewhere in a base class.
+Discussion - starting points
+----------------------------
+
+Some people will say we can use the CBV for the really simple cases, and then
+switch to FBV later as needed. But in reality that doesn't happen... TODO
+
+
+And the CBV was a bad starting point. With the FBV, we just added the context
+data right into the context dictionary we had already created. There was an
+obvious place for the thing we wanted to add, because the logic of the view
+isn't hidden away somewhere in a base class.
 
 With the CBV, if you start with the minimal version, you have to do a lot more
 work to add a basic customisation.
