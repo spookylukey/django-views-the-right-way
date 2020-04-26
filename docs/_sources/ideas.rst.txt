@@ -8,7 +8,7 @@
 - Context data
 
 - Redirect
-  - HTTP response
+  - HTTP level
 
 
   - Discussion: codeless views?

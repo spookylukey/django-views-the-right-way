@@ -1,7 +1,12 @@
-The Definitive Pattern
-======================
+The Right Way
+=============
 
-The pattern
+.. contents:: Contents
+
+
+.. _the-pattern:
+
+The Pattern
 -----------
 
 This is how you start writing any HTML-based view in Django:
@@ -13,8 +18,7 @@ This is how you start writing any HTML-based view in Django:
    def example_view(request, arg):
        return TemplateResponse(request, "example.html", {})
 
-
-With the corresponding urls.py:
+And the corresponding urls.py:
 
 .. code-block:: python
 
@@ -29,7 +33,8 @@ With the corresponding urls.py:
 
 Which bits do you change?
 
-* ``example_view`` should be the name of your page e.g. ``home`` or ``kitten_list``.
+* ``example_view`` should be a function name that describes your view e.g.
+  ``home`` or ``article_list``.
 * ``example.html`` should be the path to the template you are using.
 * ``{}``, the third argument to ``TemplateResponse``, is the context data you
   want available in your template.
@@ -38,17 +43,21 @@ Which bits do you change?
   <https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters>`_
   (here we used ``str``) and supplying to the view function as a parameter. You
   can remove it, or add more, but have to change the URLconf to match.
+* In ``urls.py``, you change the arguments to ``path`` to be, respectively:
+
+  * the matched URL (with any arguments),
+  * your view callable defined above,
+  * and an optional name that needs to be unique across your project, e.g.
+    ``home`` or ``myapp_articles_list``, to enable `URL reversing
+    <https://docs.djangoproject.com/en/3.0/topics/http/urls/#reverse-resolution-of-urls>`_
 
 That's it!
 
 But, you need a slightly deeper understanding if you're going to write good
-Django views.
+Django views, so this page is slightly longer than most, for an explanation.
 
 The explanation
 ---------------
-
-Most pages won't have this longer section, but because this is foundational I'm
-spending a bit more time.
 
 First, it's vital to know what a view **is**. As the `Django docs state
 <https://docs.djangoproject.com/en/stable/topics/http/views/>`_:
@@ -100,12 +109,12 @@ in our urls.py:
 In many cases, we want a single view function to actually match a family of URLs
 which have some kind of parameter in them, and access that parameter in our view
 function. Django has built-in support for this. Suppose we want to match URLs
-like ``hello/XXX/`` where XXX could be any string. Then our URLconf becomes:
+like ``hello/XXX/`` where ``XXX`` could be any string. Then our URLconf becomes:
 
 .. code-block:: python
 
    urlpatterns = [
-       path('hello/<str:my_arg>', views.hello_world, name='hello_world'),
+       path('hello/<str:my_arg>/', views.hello_world, name='hello_world'),
    ]
 
 and our view signature:
@@ -198,11 +207,23 @@ their documentation, put in a shed — or rather, a warehouse `given how much
 there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and `don't
 look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
 
+Next up - :doc:`anything`
+
+
+.. _boilerplate:
 
 Discussion - boilerplate
 ------------------------
 
-The CBV equivalent to the view I wrote above is as follows:
+The first thing to note about boilerplate is that a small amount of boilerplate
+(by which I mean repeated code that just Needs To Be There For Some Reason) is
+not a big problem in software development. We don't spend most of our time
+typing, we spend most of our time reading code, which means that clarity is much
+more important than shaving a few keystrokes. Arguments about small amounts of
+boilerplate should not be the major factor.
+
+With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
+above is as follows:
 
 .. code-block:: python
 
@@ -223,14 +244,14 @@ Why is this worse than the FBV?
 
 First of all, **it's barely any shorter**.
 
-CBVs have some massive downsides, which include a huge amount of complexity. In
-the face of this, the major selling point of CBVs is that they are supposed to
-remove duplication and boilerplate. But, we only had 2 lines to begin with, and
-we still have 2 lines. We could just about squeeze it to one long one using
+CBVs have some massive downsides, which I'll get onto. The major selling point
+of CBVs is that they are supposed to remove duplication and boilerplate. But, we
+only had 2 lines to begin with, and we still have 2 lines. We could just about
+squeeze it to one long one using
 ``TemplateView.as_view(template_name="example.html")`` but that's not how you
 normally write it.
 
-Given the downside, I expected the upside to be a lot more convincing. Maybe
+Given the downsides, I expected the upside to be a lot more convincing. Maybe
 it's better when it comes to DetailView etc? We'll see about that. (TODO)
 
 But let's add a more realistic situation – we actually want some context data.
@@ -294,13 +315,16 @@ Discussion - starting points
 ----------------------------
 
 Some people will say we can use the CBV for the really simple cases, and then
-switch to FBV later as needed. But in reality that doesn't happen... TODO
+switch to FBV later as needed. But in reality that doesn't happen. Most
+developers are much more likely to stick with the existing structure of the
+code, because that is a safe option, and usually involves less work. Plus, once
+you have started down the CBV route, you quickly gain various mixins etc. that
+make using plain functions less attractive.
 
-
-And the CBV was a bad starting point. With the FBV, we just added the context
-data right into the context dictionary we had already created. There was an
-obvious place for the thing we wanted to add, because the logic of the view
-isn't hidden away somewhere in a base class.
+So, starting points matter, and the CBV was a bad starting point. With the FBV,
+we just added the context data right into the context dictionary we had already
+created. There was an obvious place for the thing we wanted to add, because the
+logic of the view isn't hidden away somewhere in a base class.
 
 With the CBV, if you start with the minimal version, you have to do a lot more
 work to add a basic customisation.

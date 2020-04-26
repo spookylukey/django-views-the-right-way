@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>How to do anything with in a view</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding data to a template" href="context_data.html" />
+    <link rel="prev" title="The Right Way" href="thepattern.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="thepattern.html" title="Previous document">The Right Way</a>
+        </li>
+        <li>
+          <a href="context_data.html" title="Next document">Adding data to a template</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-do-anything-with-in-a-view">
+<h1>How to do anything with in a view<a class="headerlink" href="#how-to-do-anything-with-in-a-view" title="Permalink to this headline">¶</a></h1>
+<p>So, you have a template for writing a view function. There are a whole bunch of
+changes or actions you might want to do. How do you go about doing them?</p>
+<p>The answer to the question of how to do something with function based views is:</p>
+<blockquote>
+<div><p>Just do it</p>
+</div></blockquote>
+<p>That probably isn’t very clear yet, so let’s have some common examples. Next
+up - <a class="reference internal" href="context_data.html"><span class="doc">Adding data to a template</span></a>.</p>
+<div class="section" id="discussion-directness">
+<h2>Discussion - directness<a class="headerlink" href="#discussion-directness" title="Permalink to this headline">¶</a></h2>
+<p>The point of this page is to highlight that fact that class based views often
+make things far harder than needed. There is <code class="docutils literal notranslate"><span class="pre">ListView</span></code> for displaying a list
+of items, or <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> for displaying a single item, there are dozens of
+methods to override, and docs to look up, for doing the simplest things.</p>
+<p>These things are unnecessary, and make things much harder than they need to be.
+We’ll see more examples later.</p>
+<p>Developers should understand <strong>what</strong> they are doing when they write a view, and
+then the vast majority of things they need to do will be obvious, and won’t
+require docs or StackExchange answers. They already know how to program, the
+things they are doing are often not hard, they just need a context that doesn’t
+actively prevent them from doing stuff.</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="thepattern.html" title="Previous document">The Right Way</a>
+        </li>
+        <li>
+          <a href="context_data.html" title="Next document">Adding data to a template</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="thepattern.html" title="previous chapter">The Right Way</a></li>
+      <li>Next: <a href="context_data.html" title="next chapter">Adding data to a template</a></li>
+  </ul></li>
+</ul>
+</div><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to do anything with in a view</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-directness">Discussion - directness</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/anything.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

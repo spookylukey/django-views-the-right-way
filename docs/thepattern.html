@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>The Definitive Pattern</title>
+    <title>The Right Way</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to do anything with in a view" href="anything.html" />
     <link rel="prev" title="Django Views — The Right Way" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -27,14 +28,42 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="index.html" title="Previous document">Django Views — The Right Way</a>
+        </li>
+        <li>
+          <a href="anything.html" title="Next document">How to do anything with in a view</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
           
 
           <div class="body" role="main">
             
-  <div class="section" id="the-definitive-pattern">
-<h1>The Definitive Pattern<a class="headerlink" href="#the-definitive-pattern" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-right-way">
+<h1><a class="toc-backref" href="#id2">The Right Way</a><a class="headerlink" href="#the-right-way" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#the-right-way" id="id2">The Right Way</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-pattern" id="id3">The Pattern</a></p></li>
+<li><p><a class="reference internal" href="#the-explanation" id="id4">The explanation</a></p></li>
+<li><p><a class="reference internal" href="#discussion-boilerplate" id="id5">Discussion - boilerplate</a></p></li>
+<li><p><a class="reference internal" href="#discussion-starting-points" id="id6">Discussion - starting points</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="section" id="the-pattern">
-<h2>The pattern<a class="headerlink" href="#the-pattern" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2><a class="toc-backref" href="#id3">The Pattern</a><a class="headerlink" href="#the-pattern" title="Permalink to this headline">¶</a></h2>
 <p>This is how you start writing any HTML-based view in Django:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
 
@@ -42,7 +71,7 @@
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
 </pre></div>
 </div>
-<p>With the corresponding urls.py:</p>
+<p>And the corresponding urls.py:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
@@ -54,7 +83,8 @@
 </div>
 <p>Which bits do you change?</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">example_view</span></code> should be the name of your page e.g. <code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">kitten_list</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example_view</span></code> should be a function name that describes your view e.g.
+<code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">article_list</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">example.html</span></code> should be the path to the template you are using.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">{}</span></code>, the third argument to <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code>, is the context data you
 want available in your template.</p></li>
@@ -62,15 +92,21 @@ want available in your template.</p></li>
 the URL path that you are matching with a <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters">path converter</a>
 (here we used <code class="docutils literal notranslate"><span class="pre">str</span></code>) and supplying to the view function as a parameter. You
 can remove it, or add more, but have to change the URLconf to match.</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>, you change the arguments to <code class="docutils literal notranslate"><span class="pre">path</span></code> to be, respectively:</p>
+<ul>
+<li><p>the matched URL (with any arguments),</p></li>
+<li><p>your view callable defined above,</p></li>
+<li><p>and an optional name that needs to be unique across your project, e.g.
+<code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">myapp_articles_list</span></code>, to enable <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#reverse-resolution-of-urls">URL reversing</a></p></li>
+</ul>
+</li>
 </ul>
 <p>That’s it!</p>
 <p>But, you need a slightly deeper understanding if you’re going to write good
-Django views.</p>
+Django views, so this page is slightly longer than most, for an explanation.</p>
 </div>
 <div class="section" id="the-explanation">
-<h2>The explanation<a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
-<p>Most pages won’t have this longer section, but because this is foundational I’m
-spending a bit more time.</p>
+<h2><a class="toc-backref" href="#id4">The explanation</a><a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
 <p>First, it’s vital to know what a view <strong>is</strong>. As the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/views/">Django docs state</a>:</p>
 <blockquote>
 <div><p>A view…is a Python function that takes a Web request and returns a Web response</p>
@@ -107,9 +143,9 @@ in our urls.py:</p>
 <p>In many cases, we want a single view function to actually match a family of URLs
 which have some kind of parameter in them, and access that parameter in our view
 function. Django has built-in support for this. Suppose we want to match URLs
-like <code class="docutils literal notranslate"><span class="pre">hello/XXX/</span></code> where XXX could be any string. Then our URLconf becomes:</p>
+like <code class="docutils literal notranslate"><span class="pre">hello/XXX/</span></code> where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> could be any string. Then our URLconf becomes:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;hello/&lt;str:my_arg&gt;&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">hello_world</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;hello_world&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;hello/&lt;str:my_arg&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">hello_world</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;hello_world&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 </div>
@@ -181,10 +217,18 @@ trees or method flowcharts. They will only make your life harder. Print out
 their documentation, put in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how much
 there is</a> — fill the warehouse with dynamite and <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t
 look back</a>.</p>
+<p>Next up - <a class="reference internal" href="anything.html"><span class="doc">How to do anything with in a view</span></a></p>
 </div>
 <div class="section" id="discussion-boilerplate">
-<h2>Discussion - boilerplate<a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
-<p>The CBV equivalent to the view I wrote above is as follows:</p>
+<span id="boilerplate"></span><h2><a class="toc-backref" href="#id5">Discussion - boilerplate</a><a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
+<p>The first thing to note about boilerplate is that a small amount of boilerplate
+(by which I mean repeated code that just Needs To Be There For Some Reason) is
+not a big problem in software development. We don’t spend most of our time
+typing, we spend most of our time reading code, which means that clarity is much
+more important than shaving a few keystrokes. Arguments about small amounts of
+boilerplate should not be the major factor.</p>
+<p>With that in mind, let’s do a comparison. The CBV equivalent to the view I wrote
+above is as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
 
  <span class="k">class</span> <span class="nc">ExampleView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
@@ -198,13 +242,13 @@ look back</a>.</p>
 </div>
 <p>Why is this worse than the FBV?</p>
 <p>First of all, <strong>it’s barely any shorter</strong>.</p>
-<p>CBVs have some massive downsides, which include a huge amount of complexity. In
-the face of this, the major selling point of CBVs is that they are supposed to
-remove duplication and boilerplate. But, we only had 2 lines to begin with, and
-we still have 2 lines. We could just about squeeze it to one long one using
+<p>CBVs have some massive downsides, which I’ll get onto. The major selling point
+of CBVs is that they are supposed to remove duplication and boilerplate. But, we
+only had 2 lines to begin with, and we still have 2 lines. We could just about
+squeeze it to one long one using
 <code class="docutils literal notranslate"><span class="pre">TemplateView.as_view(template_name=&quot;example.html&quot;)</span></code> but that’s not how you
 normally write it.</p>
-<p>Given the downside, I expected the upside to be a lot more convincing. Maybe
+<p>Given the downsides, I expected the upside to be a lot more convincing. Maybe
 it’s better when it comes to DetailView etc? We’ll see about that. (TODO)</p>
 <p>But let’s add a more realistic situation – we actually want some context data.
 Let’s say it’s just a single piece of information, like a title, using some
@@ -252,13 +296,17 @@ and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/bl
 </ul>
 </div>
 <div class="section" id="discussion-starting-points">
-<h2>Discussion - starting points<a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Discussion - starting points</a><a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
 <p>Some people will say we can use the CBV for the really simple cases, and then
-switch to FBV later as needed. But in reality that doesn’t happen… TODO</p>
-<p>And the CBV was a bad starting point. With the FBV, we just added the context
-data right into the context dictionary we had already created. There was an
-obvious place for the thing we wanted to add, because the logic of the view
-isn’t hidden away somewhere in a base class.</p>
+switch to FBV later as needed. But in reality that doesn’t happen. Most
+developers are much more likely to stick with the existing structure of the
+code, because that is a safe option, and usually involves less work. Plus, once
+you have started down the CBV route, you quickly gain various mixins etc. that
+make using plain functions less attractive.</p>
+<p>So, starting points matter, and the CBV was a bad starting point. With the FBV,
+we just added the context data right into the context dictionary we had already
+created. There was an obvious place for the thing we wanted to add, because the
+logic of the view isn’t hidden away somewhere in a base class.</p>
 <p>With the CBV, if you start with the minimal version, you have to do a lot more
 work to add a basic customisation.</p>
 <p>You find this again and again with CBVs. As soon as you need any logic, you have
@@ -275,6 +323,21 @@ link)</p></li>
 
 
           </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="index.html" title="Previous document">Django Views — The Right Way</a>
+        </li>
+        <li>
+          <a href="anything.html" title="Next document">How to do anything with in a view</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
           
         </div>
       </div>
@@ -284,9 +347,24 @@ link)</p></li>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Django Views — The Right Way</a></li>
+      <li>Next: <a href="anything.html" title="next chapter">How to do anything with in a view</a></li>
   </ul></li>
 </ul>
-</div>
+</div><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Right Way</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-pattern">The Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-explanation">The explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-boilerplate">Discussion - boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-starting-points">Discussion - starting points</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything with in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+</ul>
+
+
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">

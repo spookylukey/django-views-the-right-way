@@ -1,0 +1,90 @@
+Adding data to a template
+=========================
+
+Suppose we have some data that we want to use in a template. We therefore need
+to pass that data into the template's “context”. It could be anything - a simple
+value or a list of objects retrieved using the ORM. Using :ref:`the-pattern` I
+described earlier, how do we do that?
+
+For the sake of argument, we are going to put today's date into the context,
+with the name ``today``, and I'm going to assume you are writing the home page
+view for your site.
+
+The answer to how do anything in a view, we said, is “Just do it”. So in
+practice that looks like this (I'll be ignoring imports that I have already
+mentioned):
+
+.. code-block:: python
+
+   from datetime import date
+
+   def home(request):
+       return TemplateResponse(request, "home.html", {
+           'today': date.today(),
+       })
+
+We're going to let the template decide how to render the date (most likely using
+the `date filter
+<https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_), so we
+just use the ``date`` object rather than a string. Our pattern already had an
+empty context dictionary sitting there, so we just put the value right in. Done!
+
+Next up: TODO
+
+
+Discussion - keep it simple!
+----------------------------
+
+This code is so simple it doesn't seem worth mentioning. Yet, with Class Based
+Views, the equivalent is anything but simple. Suppose we start with a
+``TemplateView``, or a subclass:
+
+.. code-block:: python
+
+   class HomeView(TemplateView):
+       template_name = "home.html"
+
+
+The context dictionary passed to the template is nowhere visible in your code.
+The fact that there is such as thing as a context dictionary is not obvious —
+all this has been hidden from the developer.
+
+The minimum I can possibly write as a developer is to calculate the data
+(``date.today()``) and pick a name for it (``'today'``). With the FBV, the code
+I actually end up writing is::
+
+      'today': date.today()
+
+So it's extremely hard to see how this can be improved.
+
+With a CBV, however, what you have to write this:
+
+.. code-block:: python
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['today'] = data.today()
+        return context
+
+If I'm lucky then most of this method has already been written for me (in which
+case I then have the boilerplate issue mentioned in :ref:`boilerplate`), but it
+might not have been. I have to know this API, and there is plenty that can go
+wrong — a wrong signature, or failing to call ``super()`` (which may not have
+immediate problems, but could cause problems down the road.
+
+Is this a real problem? Am I straining at a gnat here? Look at this `blog post
+about putting data on your home page
+<https://rasulkireev.com/django-get-context-data>`_. The problem solved by that
+post is exactly the same as what I showed above, with different data.
+
+The author's `first attempt
+<https://twitter.com/rasulkireev/status/1230974745644060678>`_ involved using
+template tags to solve this problem — something he was very embarrassed about.
+But he shouldn't be embarrassed — for a newbie, you would have to be a pretty
+capable developer to actually successfully pull off all the parts needed for a
+`custom template tag
+<https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/>`_.
+
+Rather, he struggled for so long because of a bad context that was making a
+trivial thing hard, and those of us responsible for that bad context should be
+the ones who are embarrassed.

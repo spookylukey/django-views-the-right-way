@@ -19,7 +19,7 @@ of it:
 * You'll learn how to make your views usually shorter and definitely much
   simpler than if you used CBVs.
 * You'll be freed from learning a whole stack of terrifying APIs that were only
-  making your life harder (and teaching you bad patterns)
+  making your life harder (and teaching you bad patterns).
 * Instead of learning a bunch of Django specific APIs, you will gain much more
   re-usable knowledge:
   * Some HTTP principles
@@ -28,8 +28,9 @@ of it:
 
 Each page is composed of two parts:
 
-1. The business - a short, definitive guide to The Right Way. As a junior
-   developer, this part is all you need.
+1. The business - a short, definitive guide to The Right Way. As a less
+   experienced developer, either in general or in terms of knowledge of Django,
+   this part is all you need.
 
 2. Discussion - a longer, in-depth explanation of why everyone else who tells
    you differently is wrong :-). It's targeted at slightly more experienced
@@ -43,6 +44,8 @@ So let's go!
    :caption: Contents:
 
    thepattern
+   anything
+   context_data
 
 Caveats and disclaimers etc.
 ============================

@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Adding data to a template</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="How to do anything with in a view" href="anything.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="anything.html" title="Previous document">How to do anything with in a view</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="adding-data-to-a-template">
+<h1>Adding data to a template<a class="headerlink" href="#adding-data-to-a-template" title="Permalink to this headline">¶</a></h1>
+<p>Suppose we have some data that we want to use in a template. We therefore need
+to pass that data into the template’s “context”. It could be anything - a simple
+value or a list of objects retrieved using the ORM. Using <a class="reference internal" href="thepattern.html#the-pattern"><span class="std std-ref">The Pattern</span></a> I
+described earlier, how do we do that?</p>
+<p>For the sake of argument, we are going to put today’s date into the context,
+with the name <code class="docutils literal notranslate"><span class="pre">today</span></code>, and I’m going to assume you are writing the home page
+view for your site.</p>
+<p>The answer to how do anything in a view, we said, is “Just do it”. So in
+practice that looks like this (I’ll be ignoring imports that I have already
+mentioned):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;home.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;today&#39;</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+<p>We’re going to let the template decide how to render the date (most likely using
+the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date">date filter</a>), so we
+just use the <code class="docutils literal notranslate"><span class="pre">date</span></code> object rather than a string. Our pattern already had an
+empty context dictionary sitting there, so we just put the value right in. Done!</p>
+<p>Next up: TODO</p>
+<div class="section" id="discussion-keep-it-simple">
+<h2>Discussion - keep it simple!<a class="headerlink" href="#discussion-keep-it-simple" title="Permalink to this headline">¶</a></h2>
+<p>This code is so simple it doesn’t seem worth mentioning. Yet, with Class Based
+Views, the equivalent is anything but simple. Suppose we start with a
+<code class="docutils literal notranslate"><span class="pre">TemplateView</span></code>, or a subclass:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HomeView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;home.html&quot;</span>
+</pre></div>
+</div>
+<p>The context dictionary passed to the template is nowhere visible in your code.
+The fact that there is such as thing as a context dictionary is not obvious —
+all this has been hidden from the developer.</p>
+<p>The minimum I can possibly write as a developer is to calculate the data
+(<code class="docutils literal notranslate"><span class="pre">date.today()</span></code>) and pick a name for it (<code class="docutils literal notranslate"><span class="pre">'today'</span></code>). With the FBV, the code
+I actually end up writing is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;today&#39;</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>So it’s extremely hard to see how this can be improved.</p>
+<p>With a CBV, however, what you have to write this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">context</span><span class="p">[</span><span class="s1">&#39;today&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+</div>
+<p>If I’m lucky then most of this method has already been written for me (in which
+case I then have the boilerplate issue mentioned in <a class="reference internal" href="thepattern.html#boilerplate"><span class="std std-ref">Discussion - boilerplate</span></a>), but it
+might not have been. I have to know this API, and there is plenty that can go
+wrong — a wrong signature, or failing to call <code class="docutils literal notranslate"><span class="pre">super()</span></code> (which may not have
+immediate problems, but could cause problems down the road.</p>
+<p>Is this a real problem? Am I straining at a gnat here? Look at this <a class="reference external" href="https://rasulkireev.com/django-get-context-data">blog post
+about putting data on your home page</a>. The problem solved by that
+post is exactly the same as what I showed above, with different data.</p>
+<p>The author’s <a class="reference external" href="https://twitter.com/rasulkireev/status/1230974745644060678">first attempt</a> involved using
+template tags to solve this problem — something he was very embarrassed about.
+But he shouldn’t be embarrassed — for a newbie, you would have to be a pretty
+capable developer to actually successfully pull off all the parts needed for a
+<a class="reference external" href="https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/">custom template tag</a>.</p>
+<p>Rather, he struggled for so long because of a bad context that was making a
+trivial thing hard, and those of us responsible for that bad context should be
+the ones who are embarrassed.</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="anything.html" title="Previous document">How to do anything with in a view</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="anything.html" title="previous chapter">How to do anything with in a view</a></li>
+  </ul></li>
+</ul>
+</div><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything with in a view</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding data to a template</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-keep-it-simple">Discussion - keep it simple!</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/context_data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
