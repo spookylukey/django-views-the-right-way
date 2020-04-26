@@ -30,14 +30,319 @@
 
           <div class="body" role="main">
             
-  <p><a class="reference external" href="https://twitter.com/rasulkireev/status/1230974745644060678">https://twitter.com/rasulkireev/status/1230974745644060678</a></p>
+  <ul class="simple">
+<li><p>The Pattern</p></li>
+<li><p>How to do X with a function based view: do X
+- It’s easy!</p></li>
+<li><p>Context data</p></li>
+<li><p>Redirect
+- HTTP response</p>
+<ul>
+<li><p>Discussion: codeless views?</p></li>
+</ul>
+</li>
+</ul>
+<p>Discussion -</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>RedirectView - rewrite example in docs - <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView">https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView</a></p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>Original::</dt><dd><p>from django.shortcuts import get_object_or_404
+from django.views.generic.base import RedirectView</p>
+<p>from articles.models import Article</p>
+<p>class ArticleCounterRedirectView(RedirectView):</p>
+<blockquote>
+<div><p>permanent = False
+query_string = True
+pattern_name = ‘article-detail’</p>
+<dl class="simple">
+<dt>def get_redirect_url(self, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs):</dt><dd><p>article = get_object_or_404(Article, pk=kwargs[‘pk’])
+article.update_counter()
+return super().get_redirect_url(<a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+<p>Function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+
+<span class="kn">from</span> <span class="nn">articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+<span class="k">def</span> <span class="nf">article_counter_redirect_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+    <span class="n">article</span><span class="o">.</span><span class="n">update_counter</span><span class="p">()</span>
+    <span class="n">query_string</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;QUERY_STRING&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;article-detail&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pk&#39;</span><span class="p">:</span> <span class="n">pk</span><span class="p">})</span>
+                                <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">query_string</span><span class="p">)</span> <span class="k">if</span> <span class="n">query_string</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function wrapper of CBV:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.base</span> <span class="kn">import</span> <span class="n">RedirectView</span>
+
+<span class="kn">from</span> <span class="nn">articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+<span class="k">def</span> <span class="nf">article_counter_redirect_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pk&#39;</span><span class="p">])</span>
+    <span class="n">article</span><span class="o">.</span><span class="n">update_counter</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">RedirectView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span>
+        <span class="n">pattern_name</span><span class="o">=</span><span class="s1">&#39;article-detail&#39;</span>
+        <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>URL parameters</p>
+<ul>
+<li><p>Discussion: checkable URLconf</p></li>
+</ul>
+</li>
+<li><p>Display an object.</p></li>
+</ul>
+<p>Discussion - DetailView vs get_object_or_404</p>
+<p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview">https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview</a></p>
+<p>Original:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="kn">import</span> <span class="n">DetailView</span>
+
+<span class="kn">from</span> <span class="nn">articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
+
+<span class="k">class</span> <span class="nc">ArticleDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;now&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+</div>
+<p>Rewritten:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="k">def</span> <span class="nf">article_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+   <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;my_app/article_detail.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+       <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">),</span>
+       <span class="s1">&#39;now&#39;</span><span class="p">:</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+   <span class="p">})</span>
+</pre></div>
+</div>
+<p>Comparisons:
+- Compare template <code class="docutils literal notranslate"><span class="pre">object</span></code>
+- Suppose we need to change CBV to be filtered QuerySet, not all objects.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">model</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">queryset</span></code></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Suppose we need it to be filtered according to something in request
+<code class="docutils literal notranslate"><span class="pre">queryset</span></code> attribute -&gt; <code class="docutils literal notranslate"><span class="pre">get_queryset</span></code> method.</p></li>
+</ul>
+<p>Discussion - shortcuts vs mixins</p>
+<p>Discussion - convention vs configuration (template name)</p>
+<ul class="simple">
+<li><p>Simple customisation
+- keyword args in the URLconf</p></li>
+<li><p>Custom logic</p>
+<ul>
+<li><p>Write some code. Do it yourself, it’s not hard.</p></li>
+<li><p>Discussion: codeless views?
+History of CBVs.</p></li>
+</ul>
+</li>
+</ul>
+<p><a class="reference external" href="https://twitter.com/rasulkireev/status/1230974745644060678">https://twitter.com/rasulkireev/status/1230974745644060678</a></p>
 <p><a class="reference external" href="https://twitter.com/rasulkireev/status/1231267109717626880">https://twitter.com/rasulkireev/status/1231267109717626880</a></p>
 <p><a class="reference external" href="https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/">https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/</a></p>
-<p>Boilerplate</p>
-<p>Starting point</p>
-<p>DetailView vs get_object_or_404
-shortcuts</p>
+<p>Discussion - Boilerplate</p>
+<dl class="simple">
+<dt>Discussion - Starting point</dt><dd><ul class="simple">
+<li><p>guy who created template tags just to add something to the context</p></li>
+</ul>
+</dd>
+</dl>
+<p>—</p>
+<p>Customising in the middle - Callbacks</p>
+<p>Discussion - Callbacks vs template method</p>
+<p>—</p>
+<p>Customising the start - pre-conditions</p>
+<p>Customising the start - delegating</p>
+<p>Customising the end</p>
 <p>Security</p>
+<p>—</p>
+<p>CCIW - Transformed PopupEmailAction to CBVs</p>
+<ul class="simple">
+<li><p>Use of <code class="docutils literal notranslate"><span class="pre">self.foo</span></code> to pass data around is eliminated - just have <code class="docutils literal notranslate"><span class="pre">foo</span></code>
+- explicitly passed</p>
+<ul>
+<li><p>closures</p></li>
+</ul>
+</li>
+<li><p>no hidden inputs</p></li>
+<li><p>everything checked by flake8, even better by mypy
+- positively and negatively - unused local variables highlighted, typos</p></li>
+</ul>
+<dl class="simple">
+<dt>Explicit contract - defined by the signature of the functions.</dt><dd><ul class="simple">
+<li><p>this is wonderful for code comprehension</p></li>
+<li><p>it also works great for static type checkers</p></li>
+</ul>
+</dd>
+</dl>
+<p>Length - not the most important measure</p>
+<p>Code got significantly more succinct:</p>
+<p>Before:
+631 tokens
+83 non-blank lines
+103 total lines</p>
+<p>After:
+542 tokens
+86 non-blank lines
+96 total lines</p>
+<p>(tokens are the most objective measure of size by my book)</p>
+<p>This is despite the fact that before, I was using only minimal CBV base classes
+that I had explicitly designed for my own purposes. It would have been more
+extreme if I had been trying to use Django’s CBVs.</p>
+<p>Accuracy - the refactor was bugless on my first attempt, which is pretty much a
+miracle for me - except it wasn’t a miracle, there were good reasons why it
+happened. Instead of common setup code that was storing data on <code class="docutils literal notranslate"><span class="pre">self</span></code> for use
+by other methods, I was just using local variables, and so my linter was pointing out
+my mistakes every step of the way - e.g. undefined and unused locals - until
+everything was in shape, at which point the code worked. (I’m using flake8 in
+emacs, but most IDEs will have just as capable linters that will catch the same
+errors).</p>
+<p>The opposite refactoring would not have worked like this.</p>
+<p>Automated static analysis that linters can do is just a sign of a deeper
+reality - the FBV is simpler and easier to understand. The fact that it reaches
+a stage where an automated process can understand it and catch most errors,
+despite Python’s dynamism, is great, but what is even better is the benefit for
+humans trying to understand this kind of code.</p>
+<p>My code is more boring now, in the best sense. There are few tricks or clever
+techniques. These are still allowed, but reserved for when you really need them
+and get benefit from them.</p>
+<p>Security:</p>
+<p>e.g. this view that shows the return page when people come back from PayPal. It
+needs <code class="docutils literal notranslate"><span class="pre">csrf_exempt</span></code> because PayPal insists on making browsers do a POST
+request to this page (even though I don’t use the POST data). But &#64;csrf_exempt
+is a red flag for security, so this needs auditing to ensure that I’m not, in
+fact, doing anything with the POST data that makes assumptions about its
+connection to the current session or logged in user.</p>
+<p>Here is the CBV I had.</p>
+<p>CBV:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BookingPayDone</span><span class="p">(</span><span class="n">BookingPayBase</span><span class="p">):</span>
+    <span class="n">metadata_title</span> <span class="o">=</span> <span class="s2">&quot;Booking - payment complete&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;cciw/bookings/pay_done.html&quot;</span>
+
+<span class="n">pay_done</span> <span class="o">=</span> <span class="n">csrf_exempt</span><span class="p">(</span><span class="n">BookingPayDone</span><span class="o">.</span><span class="n">as_view</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>BookingPayDone inherits from BookingPayBase which inherits from CciwBaseView
+which inherits from TemplateView which inherits from View (all my own base
+classes in this case). You’re going to need to investigate all those bases
+classes to be sure about what they do.</p>
+<p>Well, presumably TemplateView at least would be safe, so do I really need to
+check that? Before you answer, consider this: previously I was using Django’s
+TemplateView as a base class, and the first version of my view, which looked
+almost identical to the above, wouldn’t work at all - a fact I discovered after
+deploying to production. Can you guess why? Are you sure you know what your base
+classes are doing?</p>
+<p>Alternatively, you could audit this FBV, which is the new version and does
+everything I need:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@csrf_exempt</span>
+<span class="k">def</span> <span class="nf">pay_done</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;cciw/bookings/pay_done.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Booking - payment complete&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;stage&#39;</span><span class="p">:</span> <span class="n">BookingStage</span><span class="o">.</span><span class="n">PAY</span><span class="p">,</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+<p>Which would you rather? And this is a very simple example, real CBVs often gain
+far more base classes.</p>
+<p>URL checking</p>
+<p><a class="reference external" href="https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d">https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d</a></p>
+<p>Especially useful if you have registered a view in more than one way</p>
+<p>e.g.</p>
+<p>/foo/&lt;int:year&gt;/</p>
+<p>/foo/&lt;int:from_year&gt;-&lt;int:to_year&gt;/</p>
+<p>def show_foo(request, year=None, from_year=None, to_year=None)</p>
+<p>Type checker will ensure that you don’t accidentally have something like:</p>
+<p>def show_foo(request, year, from_year=None, to_year=None)</p>
+<p>URL conf</p>
+<p>RedirectView vs make_redirect</p>
+<p>Discussion - views in the URLconf</p>
+<hr class="docutils" />
+<p>View factory / mass produced views</p>
+<ul class="simple">
+<li><p>Redirect views for a whole family of views, each needing same kwargs passed on.</p>
+<ul>
+<li><p>Will do the same custom logic each time.</p></li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Discussion - convention or configuration</p>
+<hr class="docutils" />
+<p>MRO problem:</p>
+<p>Before:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AjaxMroFixer</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">mro</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">classes</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="n">mro</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="c1"># Move AjaxyFormMixin to one before last that has a &#39;post&#39; defined.</span>
+        <span class="n">new_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">classes</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">AjaxyFormMixin</span><span class="p">]</span>
+        <span class="n">have_post</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">new_list</span> <span class="k">if</span> <span class="s1">&#39;post&#39;</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">]</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">have_post</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">new_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">new_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">last</span><span class="p">),</span> <span class="n">AjaxyFormMixin</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_list</span>
+
+
+<span class="k">class</span> <span class="nc">BookingAccountDetails</span><span class="p">(</span><span class="n">DefaultMetaData</span><span class="p">,</span> <span class="n">AjaxyFormMixin</span><span class="p">,</span> <span class="n">TemplateResponseMixin</span><span class="p">,</span> <span class="n">BaseUpdateView</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">AjaxMroFixer</span><span class="p">):</span>
+    <span class="n">metadata_title</span> <span class="o">=</span> <span class="s2">&quot;Booking - account details&quot;</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">AccountDetailsForm</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;cciw/bookings/account_details.html&#39;</span>
+    <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s1">&#39;cciw.bookings.views.add_place&#39;</span><span class="p">)</span>
+    <span class="n">extra_context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;stage&#39;</span><span class="p">:</span> <span class="s1">&#39;account&#39;</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">booking_account</span>
+
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Account details updated, thank you.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">BookingAccountDetails</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@booking_account_required</span>
+<span class="nd">@ajax_form_validate</span><span class="p">(</span><span class="n">AccountDetailsForm</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">account_details</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">AccountDetailsForm</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">form_class</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">booking_account</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Account details updated, thank you.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">next_step</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">booking_account</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">form_class</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">booking_account</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;cciw/bookings/account_details.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Booking - account details&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;stage&#39;</span><span class="p">:</span> <span class="n">BookingStage</span><span class="o">.</span><span class="n">ACCOUNT</span><span class="p">,</span>
+        <span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">account_details</span></code> is only slightly longer than <code class="docutils literal notranslate"><span class="pre">BookingAccountDetails</span></code> (129
+tokens vs 102), despite the fact that it includes all the form flow control
+logic and all other logic, rather than delegating to base classes. However, it
+is many times easier to understand, and no crazy metaclass fixes are necessary.</p>
 
 
           </div>

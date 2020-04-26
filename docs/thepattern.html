@@ -35,8 +35,8 @@
 <h1>The Definitive Pattern<a class="headerlink" href="#the-definitive-pattern" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="the-pattern">
 <h2>The pattern<a class="headerlink" href="#the-pattern" title="Permalink to this headline">¶</a></h2>
-<p>This is how you start writing any HTML-based page in Django:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
+<p>This is how you start writing any HTML-based view in Django:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
 
 <span class="k">def</span> <span class="nf">example_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
@@ -69,6 +69,8 @@ Django views.</p>
 </div>
 <div class="section" id="the-explanation">
 <h2>The explanation<a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
+<p>Most pages won’t have this longer section, but because this is foundational I’m
+spending a bit more time.</p>
 <p>First, it’s vital to know what a view <strong>is</strong>. As the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/views/">Django docs state</a>:</p>
 <blockquote>
 <div><p>A view…is a Python function that takes a Web request and returns a Web response</p>
@@ -164,7 +166,7 @@ We’ll cover use case of this later in the guide.</p>
 value than a plain <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code>.</p>
 <p>With that substitution, we’ve arrived at the pattern you’ll want to memorise for
 views:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
 
 <span class="k">def</span> <span class="nf">example_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
@@ -175,11 +177,13 @@ the lesson</strong>. You can skip to the next part. Or you can even just stop re
 you now know all the essentials of writing HTML views in Django.</p>
 <p>You don’t need to learn any of the CBV APIs - TemplateView, RedirectView,
 ListView, DetailView, FormView, MultipleObjectMixin and all their inheritance
-trees. They will only make your life harder. Print out their documentation, put
-in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how much there is</a> — fill the warehouse with dynamite and <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t look back</a>.</p>
+trees or method flowcharts. They will only make your life harder. Print out
+their documentation, put in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how much
+there is</a> — fill the warehouse with dynamite and <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t
+look back</a>.</p>
 </div>
-<div class="section" id="discussion">
-<h2>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="discussion-boilerplate">
+<h2>Discussion - boilerplate<a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
 <p>The CBV equivalent to the view I wrote above is as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
 
@@ -246,10 +250,15 @@ and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/bl
 <li><p>The boilerplate you need for a basic CBV is bigger than for an FBV</p></li>
 <li><p>It’s so big and tedious that people use snippets library to write it for them.</p></li>
 </ul>
-<p>And this brings me to my <strong>second</strong> point: the CBV was a bad starting point.
-With the FBV, we just added the context data right into the context dictionary
-we had already created. There was an obvious place for the thing we wanted to
-add, because the logic of the view isn’t hidden away somewhere in a base class.</p>
+</div>
+<div class="section" id="discussion-starting-points">
+<h2>Discussion - starting points<a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
+<p>Some people will say we can use the CBV for the really simple cases, and then
+switch to FBV later as needed. But in reality that doesn’t happen… TODO</p>
+<p>And the CBV was a bad starting point. With the FBV, we just added the context
+data right into the context dictionary we had already created. There was an
+obvious place for the thing we wanted to add, because the logic of the view
+isn’t hidden away somewhere in a base class.</p>
 <p>With the CBV, if you start with the minimal version, you have to do a lot more
 work to add a basic customisation.</p>
 <p>You find this again and again with CBVs. As soon as you need any logic, you have

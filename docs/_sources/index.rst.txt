@@ -3,6 +3,9 @@ Django Views — The Right Way
 
 Welcome to my opinionated guide on how to write views in Django!
 
+**WORK IN PROGRESS** - this is an early draft, you should probably come back
+ later...
+
 This guide was inspired by the fact that many people on the internet seem to be
 starting with "Class Based Views" (CBVs) as the default way to write views, to
 the point that some are even scared to write "function based views" (FBVs from
@@ -16,10 +19,12 @@ of it:
 * You'll learn how to make your views usually shorter and definitely much
   simpler than if you used CBVs.
 * You'll be freed from learning a whole stack of terrifying APIs that were only
-  making your life harder.
-* You'll learn general Python techniques for good program structure, in contrast
-  to Django specific APIs that are actually teaching you bad patterns (in my
-  opinion).
+  making your life harder (and teaching you bad patterns)
+* Instead of learning a bunch of Django specific APIs, you will gain much more
+  re-usable knowledge:
+  * Some HTTP principles
+  * General OOP/multi-paradigm programming principles
+  * General Python techniques
 
 Each page is composed of two parts:
 
