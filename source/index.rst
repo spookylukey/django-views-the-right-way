@@ -22,19 +22,20 @@ of it:
   making your life harder (and teaching you bad patterns).
 * Instead of learning a bunch of Django specific APIs, you will gain much more
   re-usable knowledge:
+
   * Some HTTP principles
   * General OOP/multi-paradigm programming principles
   * General Python techniques
 
 Each page is composed of two parts:
 
-1. The business - a short, definitive guide to The Right Way. As a less
+1. The business — a short, definitive guide to The Right Way. As a less
    experienced developer, either in general or in terms of knowledge of Django,
    this part is all you need.
 
-2. Discussion - a longer, in-depth explanation of why everyone else who tells
+2. Discussion — a longer, in-depth explanation of why everyone else who tells
    you differently is wrong :-). It's targeted at slightly more experienced
-   developers. In each one I'll tackle a few different aspects of the
+   developers. In each one I'll tackle one or two different aspects of the
    comparisons between CBVs and FBVs.
 
 So let's go!

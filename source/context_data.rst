@@ -27,7 +27,8 @@ We're going to let the template decide how to render the date (most likely using
 the `date filter
 <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_), so we
 just use the ``date`` object rather than a string. Our pattern already had an
-empty context dictionary sitting there, so we just put the value right in. Done!
+empty context dictionary sitting there, waiting to be filled up, so we just put
+the value right in. Done!
 
 Next up: TODO
 

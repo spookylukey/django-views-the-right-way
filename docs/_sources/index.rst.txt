@@ -22,6 +22,7 @@ of it:
   making your life harder (and teaching you bad patterns).
 * Instead of learning a bunch of Django specific APIs, you will gain much more
   re-usable knowledge:
+
   * Some HTTP principles
   * General OOP/multi-paradigm programming principles
   * General Python techniques
