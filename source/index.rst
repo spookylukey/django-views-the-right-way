@@ -34,15 +34,15 @@ CBVs are often suggested as the solution. If you read all of it:
 
 Each page is composed of two parts:
 
-1. The business — a short, definitive guide to The Right Way. As a less
+1. The business — the **what and how** — a short, definitive guide to The Right Way. As a less
    experienced developer, either in general or in terms of knowledge of Django,
    this part is all you need.
 
-2. Discussion — a longer, in-depth explanation of why everyone else who tells
-   you differently is wrong :-). It's targeted at slightly more experienced
-   developers, and especially those who are responsible for teaching or making
-   decisions about the patterns used in a code base. In each one I'll tackle one
-   or two different aspects of the comparisons between CBVs and FBVs.
+2. Discussion — the **why** — a longer, in-depth explanation of why everyone
+   else who tells you differently is wrong :-). It's targeted at slightly more
+   experienced developers, and especially those who are responsible for teaching
+   or making decisions about the patterns used in a code base. In each one I'll
+   tackle one or two different aspects of the comparisons between CBVs and FBVs.
 
 So let's go!
 

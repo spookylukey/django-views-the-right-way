@@ -7,13 +7,26 @@
 
 - Context data
 
+  - Discussion: embarrassingly simple
+
 - Conditional context data
 
+  - Discussion: control flow
+
+  - Discussion: 
 - Common context data
 
+
+- URL parameters
+  - Discussion: checkable URLconf
+
+
+- Display an object.
+  
+  - Discussion: 
+    
 - Redirect
   - HTTP level
-
 
   - Discussion: codeless views?
 
@@ -72,14 +85,6 @@ Function wrapper of CBV::
 
         
 
-- URL parameters
-
-  - Discussion: checkable URLconf
-
-
-
-- Display an object.
-
 
 
 Discussion - DetailView vs get_object_or_404
@@ -126,12 +131,11 @@ Comparisons:
   ``queryset`` attribute -> ``get_queryset`` method.
 
 
-Discussion - shortcuts vs mixins
+  Discussion - convention vs configuration (template name)
 
+  Discussion - shortcuts vs mixins
 
-Discussion - convention vs configuration (template name)
-
-
+   - Brandon Rhodes
 
 
 
@@ -165,15 +169,26 @@ Discussion - Starting point
 
 Customising in the middle - Callbacks
 
-Discussion - Callbacks vs template method
+ - Discussion - Callbacks vs template method
+
+   - Use CCIW example of PopupEmailAction
+
+---
+Customising in the middle - Advanced callbacks 
 
 ---
 
 Customising the start - pre-conditions
 
+- Decorators
 
 Customising the start - delegating
 
+- Discussion: re-usable functionality
+
+  Classes vs functions for re-usability
+
+---
 
 Customising the end
 
