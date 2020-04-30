@@ -7,6 +7,10 @@
 
 - Context data
 
+- Conditional context data
+
+- Common context data
+
 - Redirect
   - HTTP level
 
@@ -250,10 +254,10 @@ Security:
 
 e.g. this view that shows the return page when people come back from PayPal. It
 needs ``csrf_exempt`` because PayPal insists on making browsers do a POST
-request to this page (even though I don't use the POST data). But @csrf_exempt
-is a red flag for security, so this needs auditing to ensure that I'm not, in
-fact, doing anything with the POST data that makes assumptions about its
-connection to the current session or logged in user.
+request to this page (even though I don't use the POST data). But
+``@csrf_exempt`` is a red flag for security, so this needs auditing to ensure
+that I'm not, in fact, doing anything with the POST data that makes assumptions
+about its connection to the current session or logged in user.
 
 Here is the CBV I had.
 
@@ -273,10 +277,10 @@ classes to be sure about what they do.
 
 Well, presumably TemplateView at least would be safe, so do I really need to
 check that? Before you answer, consider this: previously I was using Django's
-TemplateView as a base class, and the first version of my view, which looked
-almost identical to the above, wouldn't work at all - a fact I discovered after
-deploying to production. Can you guess why? Are you sure you know what your base
-classes are doing?
+TemplateView as a base class, rather than my own, and the first version of my
+view, which looked almost identical to the above, wouldn't work at all - a fact
+I discovered after deploying to production. Can you guess why? Are you sure you
+know what your base classes are doing?
 
 
 Alternatively, you could audit this FBV, which is the new version and does
@@ -290,7 +294,7 @@ everything I need::
         })
 
 Which would you rather? And this is a very simple example, real CBVs often gain
-far more base classes.
+far more base classes and complexity.
 
 
 
@@ -403,3 +407,49 @@ After::
 tokens vs 102), despite the fact that it includes all the form flow control
 logic and all other logic, rather than delegating to base classes. However, it
 is many times easier to understand, and no crazy metaclass fixes are necessary.
+
+
+
+------
+
+ListView
+
+https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function
+
+def listing(request):
+    contact_list = Contact.objects.all()
+    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'list.html', {'page_obj': page_obj})
+
+
+# Rewritten:
+
+def listing(request):
+    context = {}
+    context.update(paged_object_list_context(request, Contact.objects.all(), paginate_by=25))
+    return TemplateResponse(request, 'list.html', context)
+
+
+
+Writing ``paged_object_list_context`` is left as an exercise for you! I'm not
+being lazy, actually — adding these kind of utilities to your code is what every
+developer should learn to do, and in a project you would expect to have a small
+library of this kind of thing that is specific to your project and encapsulates
+your own patterns and conventions. This is far superior to contorting your code
+with method overrides that are necessary only because of the structure handed to
+you by someone else.
+
+Yes, using ``paged_object_list_context`` is very slightly longer than just
+adding a ``paginate_by`` attribute to a ``ListView``. But the benefits are huge
+— you stay in full control of your view function and it remains readable and
+extremely easy to debug or further customise. You also have a utility that is
+separately testable.
+
+
+def paged_object_list_context(request, queryset, paginate_by=25):
+    paginator = Paginator(queryset, paginate_by)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return {'page_obj': page_obj}

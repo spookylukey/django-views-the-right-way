@@ -7,14 +7,19 @@ Welcome to my opinionated guide on how to write views in Django!
  later...
 
 This guide was inspired by the fact that many people on the internet seem to be
-starting with "Class Based Views" (CBVs) as the default way to write views, to
-the point that some are even scared to write "function based views" (FBVs from
-now on), despite the fact that these are so much easier and simpler. So here I
-am to save the day, and show you The Right Way.
+starting with "Class Based Views" (CBVs from now on) as the default way to write
+views, to the point that some are even scared to write "function based views"
+(FBVs), despite the fact that these are so much easier and simpler. So here I am
+to save the day, and show you The Right Way.
 
 The essential part of this guide is very short, because FBVs are very easy and
-simple, but I've added extra bits for common patterns in FBVs. If you read all
-of it:
+simple. In fact, the `Django tutorial for views
+<https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_ already has all you
+need to know. Just read that, and skip the bits about CBVs, and you'll be fine.
+
+But if you want a different take on the same things, this guide might be for
+you. I've also added extra bits for common tasks and patterns in FBVs for which
+CBVs are often suggested as the solution. If you read all of it:
 
 * You'll learn how to make your views usually shorter and definitely much
   simpler than if you used CBVs.
@@ -35,8 +40,9 @@ Each page is composed of two parts:
 
 2. Discussion — a longer, in-depth explanation of why everyone else who tells
    you differently is wrong :-). It's targeted at slightly more experienced
-   developers. In each one I'll tackle one or two different aspects of the
-   comparisons between CBVs and FBVs.
+   developers, and especially those who are responsible for teaching or making
+   decisions about the patterns used in a code base. In each one I'll tackle one
+   or two different aspects of the comparisons between CBVs and FBVs.
 
 So let's go!
 
