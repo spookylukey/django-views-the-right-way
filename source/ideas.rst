@@ -1,4 +1,7 @@
 
+
+
+
 - The Pattern
 
 - How to do X with a function based view: do X
@@ -172,15 +175,35 @@ Discussion - Starting point
 
    
 
+---
+Customising the start - continuation
+
+- Example product list view,
+  second is like the first but a "special offers" page, with extra
+  info at the top.
+
+- Discussion: re-usable functionality
+
+  Classes vs functions for re-usability?
+  Parameters?
+
 
 ---
 
 Customising in the middle - Callbacks
 
+- Example - for the special offer page, after filter paging the list,
+  we do some extra logging of which products were displayed to the user.
+
+
  - Discussion - Callbacks vs template method
 
 ---
 Advanced callbacks - closures
+
+- Example: our extra logging needs access to a parameter from
+  the outer view function
+
 
 Discussion - closures vs instances
 
@@ -193,11 +216,6 @@ Customising the start - pre-conditions
 
 - Decorators
 
-Customising the start - delegating
-
-- Discussion: re-usable functionality
-
-  Classes vs functions for re-usability
 
 ---
 
@@ -481,3 +499,9 @@ def paged_object_list_context(request, queryset, paginate_by=25):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return {'page_obj': page_obj}
+
+
+
+----
+
+https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/

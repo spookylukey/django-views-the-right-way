@@ -7,6 +7,10 @@
 
 - Context data
 
+- Conditional context data
+
+- Common context data
+
 - Redirect
   - HTTP level
 

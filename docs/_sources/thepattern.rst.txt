@@ -2,7 +2,7 @@ The Right Way
 =============
 
 .. contents:: Contents
-
+   :local:
 
 .. _the-pattern:
 
@@ -159,7 +159,6 @@ loading a template, rendering it and putting it into a response — `render()
 
 .. code-block:: python
 
-   from django.http import HttpResponse
    from django.shortcuts import render
 
 
