@@ -53,6 +53,8 @@ So let's go!
    thepattern
    anything
    context_data
+   common_context_data
+   
 
 Caveats and disclaimers etc.
 ============================

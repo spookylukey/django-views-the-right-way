@@ -9,29 +9,35 @@
 
   - Discussion: embarrassingly simple
 
-- Conditional context data
-
-  - Discussion: control flow
-
-  - Discussion: 
 - Common context data
 
+  Discussion: testable code vs mixins
 
-- URL parameters
+
+- Accept a URL parameter
+  - Discussion: perils of generic code
   - Discussion: checkable URLconf
 
 
 - Display an object.
   
-  - Discussion: 
-    
+  - Discussion: DetailView vs get_object_or_404
+
+- Display a list of objects
+  - Discussion: discovering reusable units (pagination)
+
+
 - Redirect
   - HTTP level
 
   - Discussion: codeless views?
 
-Discussion -
 
+
+  Discussion -
+
+
+  
   - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView
 
 Original::
@@ -135,6 +141,8 @@ Comparisons:
 
   Discussion - shortcuts vs mixins
 
+   - RPR - Xls generation - layer violation - init - request parameter
+  
    - Brandon Rhodes
 
 
@@ -171,10 +179,13 @@ Customising in the middle - Callbacks
 
  - Discussion - Callbacks vs template method
 
+---
+Advanced callbacks - closures
+
+Discussion - closures vs instances
+
    - Use CCIW example of PopupEmailAction
 
----
-Customising in the middle - Advanced callbacks 
 
 ---
 
@@ -189,6 +200,8 @@ Customising the start - delegating
   Classes vs functions for re-usability
 
 ---
+
+Adva
 
 Customising the end
 

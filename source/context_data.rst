@@ -2,7 +2,7 @@ Adding data to a template
 =========================
 
 Suppose we have some data that we want to use in a template. We therefore need
-to pass that data into the template's “context”. It could be anything - a simple
+to pass that data into the template's “context”. It could be anything — a simple
 value or a list of objects retrieved using the ORM. Using :ref:`the-pattern` I
 described earlier, how do we do that?
 
@@ -30,7 +30,20 @@ just use the ``date`` object rather than a string. Our pattern already had an
 empty context dictionary sitting there, waiting to be filled up, so we just put
 the value right in. Done!
 
-Next up: TODO
+There is a variation on this, which is also very simple and to some people may
+be completely obvious, which is that sometimes it helps to pull out the context
+data into a variable first, especially if we are conditionally adding data to
+it:
+
+.. code-block:: python
+
+   def home(request):
+       context = {}
+       if date.today().weekday() == 0:
+           context['special_message'] = 'Happy Monday!'
+       return TemplateResponse(request, "home.html", context)
+
+Next up: :doc:`common_context_data`
 
 
 Discussion — embarrassingly simple?

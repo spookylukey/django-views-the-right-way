@@ -25,7 +25,7 @@ want you to remember is:
 Next up - :doc:`context_data`.
 
 
-Discussion - directness
+Discussion — directness
 -----------------------
 
 The point of this page is to highlight that fact that class based views often

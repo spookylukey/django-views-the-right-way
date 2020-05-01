@@ -216,10 +216,16 @@ Discussion - boilerplate
 
 The first thing to note about boilerplate is that a small amount of boilerplate
 (by which I mean repeated code that just Needs To Be There For Some Reason) is
-not a big problem in software development. We don't spend most of our time
-typing, we spend most of our time reading code, which means that clarity is much
-more important than shaving a few keystrokes. Arguments about small amounts of
+not a big problem in software development. **We don't spend most of our time
+typing, we spend most of our time reading code. This means that clarity is much
+more important than shaving a few keystrokes**. Arguments about small amounts of
 boilerplate should not be the major factor.
+
+The real issue with boilerplate, in fact, is not how typing it involves, but
+that verbose code hinders comprehension due to the low signal-to-noise ratio.
+**Boilerplate reduction should only ever be about noise reduction, not typing
+reduction.**
+
 
 With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
 above is as follows:
@@ -239,11 +245,15 @@ above is as follows:
    ]
 
 
-Why is this worse than the FBV?
+How does this compare?
 
-First of all, **it's barely any shorter**.
+On the plus side, it has a certain kind of clarity — it is clear from reading it
+that ``ExampleView`` will render a template, and it tells us exactly which one.
 
-CBVs have some massive downsides, which I'll get onto. The major selling point
+On the negative side, however, we should note that **it's barely any shorter**
+than the FBV.
+
+CBVs have some very big downsides, which I'll get onto. The major selling point
 of CBVs is that they are supposed to remove duplication and boilerplate. But, we
 only had 2 lines to begin with, and we still have 2 lines. We could just about
 squeeze it to one long one using
@@ -253,7 +263,7 @@ normally write it.
 Given the downsides, I expected the upside to be a lot more convincing. Maybe
 it's better when it comes to DetailView etc? We'll see about that. (TODO)
 
-But let's add a more realistic situation – we actually want some context data.
+But let's add a more realistic situation — we actually want some context data.
 Let's say it's just a single piece of information, like a title, using some
 generic 'page' template.
 
