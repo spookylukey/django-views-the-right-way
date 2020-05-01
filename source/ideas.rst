@@ -1,3 +1,5 @@
+DONE
+====
 
 - The Pattern
 
@@ -14,17 +16,131 @@
   Discussion: testable code vs mixins
 
 
+
+TODO
+====
+
 - Accept a URL parameter
   - Discussion: perils of generic code
   - Discussion: checkable URLconf
 
 
+
 - Display an object.
+  - Show full pattern with raise Http404
+    
   
   - Discussion: DetailView vs get_object_or_404
 
+
+Discussion - DetailView vs get_object_or_404
+
+https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview
+
+
+Original::
+
+    from django.utils import timezone
+    from django.views.generic.detail import DetailView
+
+    from articles.models import Article
+
+    class ArticleDetailView(DetailView):
+
+        model = Article
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context['now'] = timezone.now()
+            return context
+
+Rewritten::
+
+    from django.template.response import TemplateResponse
+    from django.shortcuts import get_object_or_404
+    from django.utils import timezone
+
+    def article_view(request, slug):
+       return TemplateResponse(request, "my_app/article_detail.html", {
+           'article': get_object_or_404(Article.objects.all(), slug=slug),
+           'now': timezone.now(),
+       })
+
+
+Comparisons:
+- Compare template ``object``
+- Suppose we need to change CBV to be filtered QuerySet, not all objects.
+
+  ``model`` -> ``queryset``
+
+- Suppose we need it to be filtered according to something in request
+  ``queryset`` attribute -> ``get_queryset`` method.
+
+
+  Discussion - convention vs configuration (template name)
+
+
+
+  Discussion - shortcuts vs mixins
+
+   - RPR - Xls generation - layer violation - init - request parameter
+
+   - Brandon Rhodes
+
+
+
+
 - Display a list of objects
-  - Discussion: discovering reusable units (pagination)
+
+https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function
+
+def listing(request):
+    contact_list = Contact.objects.all()
+    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'list.html', {'page_obj': page_obj})
+
+
+# Rewritten:
+
+def listing(request):
+    context = {}
+    context.update(paged_object_list_context(request, Contact.objects.all(), paginate_by=25))
+    return TemplateResponse(request, 'list.html', context)
+
+
+Writing ``paged_object_list_context`` is left as an exercise for you!
+
+
+
+Discussion - comparison to ListView
+
+
+
+Adding these kind of utilities to your code is what every developer should learn
+to do, and in a project you would expect to have a small library of this kind of
+thing that is specific to your project and encapsulates your own patterns and
+conventions. This is far superior to contorting your code with method overrides
+that are necessary only because of the structure handed to you by someone else.
+
+
+Yes, using ``paged_object_list_context`` is very slightly longer than just
+adding a ``paginate_by`` attribute to a ``ListView``. But the benefits are huge
+— you stay in full control of your view function and it remains readable and
+extremely easy to debug or further customise. You also have a utility that is
+separately testable.
+
+
+- Discussion: discovering reusable units (pagination)
+
+
+def paged_object_list_context(request, queryset, paginate_by=25):
+    paginator = Paginator(queryset, paginate_by)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return {'page_obj': page_obj}
+
 
 
 - Redirect
@@ -37,7 +153,7 @@
   Discussion -
 
 
-  
+
   - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView
 
 Original::
@@ -89,61 +205,7 @@ Function wrapper of CBV::
         )(request, pk=pk)
 
 
-        
 
-
-
-Discussion - DetailView vs get_object_or_404
-
-https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview
-
-
-Original::
-
-    from django.utils import timezone
-    from django.views.generic.detail import DetailView
-
-    from articles.models import Article
-
-    class ArticleDetailView(DetailView):
-
-        model = Article
-
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            context['now'] = timezone.now()
-            return context
-
-Rewritten::
-
-    from django.template.response import TemplateResponse
-    from django.shortcuts import get_object_or_404
-    from django.utils import timezone
-
-    def article_view(request, slug):
-       return TemplateResponse(request, "my_app/article_detail.html", {
-           'article': get_object_or_404(Article.objects.all(), slug=slug),
-           'now': timezone.now(),
-       })
-
-
-Comparisons:
-- Compare template ``object``
-- Suppose we need to change CBV to be filtered QuerySet, not all objects.
-
-  ``model`` -> ``queryset``
-
-- Suppose we need it to be filtered according to something in request
-  ``queryset`` attribute -> ``get_queryset`` method.
-
-
-  Discussion - convention vs configuration (template name)
-
-  Discussion - shortcuts vs mixins
-
-   - RPR - Xls generation - layer violation - init - request parameter
-  
-   - Brandon Rhodes
 
 
 
@@ -154,24 +216,7 @@ Comparisons:
 
   - Write some code. Do it yourself, it's not hard.
   - Discussion: codeless views?
-    History of CBVs. 
-
-https://twitter.com/rasulkireev/status/1230974745644060678
-
-https://twitter.com/rasulkireev/status/1231267109717626880
-
-https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/
-
-
-Discussion - Boilerplate
-
-Discussion - Starting point
- - guy who created template tags just to add something to the context
-   
-
-
-   
-
+    History of CBVs.
 
 ---
 
@@ -232,7 +277,7 @@ Explicit contract - defined by the signature of the functions.
  - it also works great for static type checkers
 
 
-    
+
 Length - not the most important measure
 
 Code got significantly more succinct:
@@ -351,7 +396,7 @@ def show_foo(request, year, from_year=None, to_year=None)
 -----
 Redirects
  - HTTP
-   
+
 
 URL conf
 
@@ -367,7 +412,7 @@ View factory / mass produced views
 - Redirect views for a whole family of views, each needing same kwargs passed on.
 
   - Will do the same custom logic each time.
-  
+
 -----
 
 Discussion - convention or configuration
@@ -410,7 +455,7 @@ Before::
 
 
 After::
-  
+
     @booking_account_required
     @ajax_form_validate(AccountDetailsForm)
     def account_details(request):
@@ -440,44 +485,8 @@ is many times easier to understand, and no crazy metaclass fixes are necessary.
 
 ------
 
-ListView
+https://twitter.com/rasulkireev/status/1230974745644060678
 
-https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function
+https://twitter.com/rasulkireev/status/1231267109717626880
 
-def listing(request):
-    contact_list = Contact.objects.all()
-    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'list.html', {'page_obj': page_obj})
-
-
-# Rewritten:
-
-def listing(request):
-    context = {}
-    context.update(paged_object_list_context(request, Contact.objects.all(), paginate_by=25))
-    return TemplateResponse(request, 'list.html', context)
-
-
-
-Writing ``paged_object_list_context`` is left as an exercise for you! I'm not
-being lazy, actually — adding these kind of utilities to your code is what every
-developer should learn to do, and in a project you would expect to have a small
-library of this kind of thing that is specific to your project and encapsulates
-your own patterns and conventions. This is far superior to contorting your code
-with method overrides that are necessary only because of the structure handed to
-you by someone else.
-
-Yes, using ``paged_object_list_context`` is very slightly longer than just
-adding a ``paginate_by`` attribute to a ``ListView``. But the benefits are huge
-— you stay in full control of your view function and it remains readable and
-extremely easy to debug or further customise. You also have a utility that is
-separately testable.
-
-
-def paged_object_list_context(request, queryset, paginate_by=25):
-    paginator = Paginator(queryset, paginate_by)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return {'page_obj': page_obj}
+https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/
