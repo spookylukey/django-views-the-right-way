@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Common context data</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Adding data to a template" href="context_data.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="context_data.html" title="Previous document">Adding data to a template</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="common-context-data">
+<h1>Common context data<a class="headerlink" href="#common-context-data" title="Permalink to this headline">¶</a></h1>
+<p>Suppose we have a bunch of views that end up all needing the same bits of
+context data. A common example is some data that will be used by the navigation
+parts of your templates.</p>
+<p>If the data is going to be needed by pretty much every page in your site, the
+answer is <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext">context processors</a>.
+If you have context processors that are expensive to evaluate, and are used in
+lots of places but not everywhere, one technique is to use <a class="reference external" href="https://stackoverflow.com/a/28146359/182604">lazily evaluation in
+your context processor</a>.</p>
+<p>But let’s say you have some data that is just used for a sub-set of a pages —
+perhaps it’s navigation data for the help sub-section of your site. We can use
+the simple technique below of pulling out the code that returns the common data
+into a function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">help_index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">help_section_context_data</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;help/index.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">help_section_context_data</span><span class="p">():</span>
+    <span class="c1"># This might be loaded from a database or something...</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;help_pages&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s1">&#39;Help index&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Getting started&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Contact us&#39;</span><span class="p">,</span>
+            <span class="c1"># etc.</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Just add <code class="docutils literal notranslate"><span class="pre">context.update(help_section_context_data())</span></code> into every view that
+needs it.</p>
+<p>This is a perfectly adequate technique that is very easy to use, easy to
+understand and flexible. You can add parameters to the function if necessary
+(e.g. <code class="docutils literal notranslate"><span class="pre">request</span></code> or some data from it), combine common sets of these helpers
+into bigger helpers, as per your requirements. And you can write tests for these
+helpers if they have any significant logic in them.</p>
+<p>Next up: TODO</p>
+<p>(You may be interested in a fancy technique, based on TemplateResponse and
+decorators - TODO - but it really isn’t necessary).</p>
+<div class="section" id="discussion-the-helper-vs-the-mixin">
+<h2>Discussion: the helper vs the mixin<a class="headerlink" href="#discussion-the-helper-vs-the-mixin" title="Permalink to this headline">¶</a></h2>
+<p>The solution above is simple and direct. But some might protest it is a bit
+ugly, and has involved a bit of boilerplate. A CBV solution using a mixin is
+surely more elegant:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HelpPageMixin</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;help_pages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># etc.</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+</div>
+<p>You simply have to include <code class="docutils literal notranslate"><span class="pre">HelpPageMixin</span></code> in your base classes, which is less
+typing than <code class="docutils literal notranslate"><span class="pre">context.update(help_section_context_data())</span></code>. This kind of base
+class or mixin might also provide some other functionality, like doing some
+permission checks for this sub-set of pages etc.</p>
+<p>My response would be, first, a reminder that a small reduction in typing is a
+poor trade-off if it obfuscates your code even a small amount, due to the amount
+of time we spend reading versus writing code.</p>
+<p>Second, the mixin has several significant disadvantages:</p>
+<ul>
+<li><p>It hides the source of the context data. Any of your base classes could
+potentially be overriding <code class="docutils literal notranslate"><span class="pre">get_context_data</span></code>, you have to look at all of
+them to get the whole picture, which in general is harder than just following
+function definitions.</p></li>
+<li><p>Your mixin is not separately testable. This is a major problem with mixins in
+general.</p></li>
+<li><p>Lack of testability is just an indication of a deeper problem — the mixin does
+not have a well defined interface, and this always hinders comprehension. If
+you think of <code class="docutils literal notranslate"><span class="pre">get_context_data</span></code> not as a method, but as a function whose
+first parameter is <code class="docutils literal notranslate"><span class="pre">self</span></code>, you’ll quickly see how complicated its interface
+is.</p></li>
+<li><p>Over time, mixins defined like this quickly becomes tangled, due to that
+problematic <code class="docutils literal notranslate"><span class="pre">self</span></code> parameter, which can have all kinds of things attached to
+it. Very quickly you can end up with a mixin that works in one context, but
+not in another, due to different expectations about what is attached to
+<code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+<p>In contrast, all the parameters to a function are usually well defined, and
+you can usually have a very high level of confidence that it will work in all
+contexts. There is no <code class="docutils literal notranslate"><span class="pre">self</span></code> parameter which you can you use to sneak things
+in to a method. (See “shortcuts vs mixins” for a more treatment of this TODO)</p>
+</li>
+<li><p>Mixins often tie you into inheritance trees for organising things. In reality,
+instead of tree want trees, you often want a mix-and-match approach to
+including this kind of data. Mixins do support that, at least in this case,
+but if you imagine that you’ll have a neat hierarchy involving a
+<code class="docutils literal notranslate"><span class="pre">HelpPageMixin</span></code> that provides both context data and some other
+functionality, you’ll quickly be disappointed when things don’t turn out that
+simple, and you find yourself in a tangle.</p></li>
+</ul>
+<p>The simple solution is the best!</p>
+<p>This example is part of a larger principle for the best way to write views, and
+any similar functions:</p>
+<blockquote class="pull-quote">
+<div><p>Building up behaviour by explicitly <strong>composing</strong> smaller, testable units of
+functionality (whether functions or classes) is far better than building up
+behaviour via <strong>inheritance</strong>.</p>
+</div></blockquote>
+<p>For more on this, see Brandon Rhodes’ treatment of <a class="reference external" href="https://python-patterns.guide/gang-of-four/composition-over-inheritance/">The Composition Over
+Inheritance Principle</a>,
+which also mentions mixins.</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="context_data.html" title="Previous document">Adding data to a template</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Common context data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-the-helper-vs-the-mixin">Discussion: the helper vs the mixin</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="context_data.html" title="previous chapter">Adding data to a template</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/common_context_data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

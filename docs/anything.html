@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>How to do anything with in a view</title>
+    <title>How to do anything in a view</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -47,22 +47,33 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="how-to-do-anything-with-in-a-view">
-<h1>How to do anything with in a view<a class="headerlink" href="#how-to-do-anything-with-in-a-view" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="how-to-do-anything-in-a-view">
+<h1>How to do anything in a view<a class="headerlink" href="#how-to-do-anything-in-a-view" title="Permalink to this headline">¶</a></h1>
 <p>So, you have a template for writing a view function. There are a whole bunch of
 changes or actions you might want to do. How do you go about doing them?</p>
 <p>The answer to the question of how to do something with function based views is:</p>
 <blockquote>
 <div><p>Just do it</p>
 </div></blockquote>
-<p>That probably isn’t very clear yet, so let’s have some common examples. Next
-up - <a class="reference internal" href="context_data.html"><span class="doc">Adding data to a template</span></a>.</p>
+<p>That probably isn’t very clear yet, so I’ll cover some common examples. What I
+want you to remember is:</p>
+<ul class="simple">
+<li><p>You are in charge. It’s your view function. You make it do whatever you want
+it to do, without trying to fit into someone else’s pattern. Just do it.</p></li>
+<li><p>It’s probably not hard and you can probably do it already.</p></li>
+<li><p>Sometimes you might have to write a little bit of code to make it do what you
+want, rather than being able to find something already written. But you are a
+software developer, you write code. Take responsibility and just do it. In
+time you’ll find ways to make your code more concise if you find yourself
+writing the same things over and over.</p></li>
+</ul>
+<p>Next up - <a class="reference internal" href="context_data.html"><span class="doc">Adding data to a template</span></a>.</p>
 <div class="section" id="discussion-directness">
-<h2>Discussion - directness<a class="headerlink" href="#discussion-directness" title="Permalink to this headline">¶</a></h2>
+<h2>Discussion — directness<a class="headerlink" href="#discussion-directness" title="Permalink to this headline">¶</a></h2>
 <p>The point of this page is to highlight that fact that class based views often
 make things far harder than needed. There is <code class="docutils literal notranslate"><span class="pre">ListView</span></code> for displaying a list
 of items, or <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> for displaying a single item, there are dozens of
-methods to override, and docs to look up, for doing the simplest things.</p>
+methods to override, and docs to look up, all for doing the simplest things.</p>
 <p>These things are unnecessary, and make things much harder than they need to be.
 We’ll see more examples later.</p>
 <p>Developers should understand <strong>what</strong> they are doing when they write a view, and
@@ -70,6 +81,8 @@ then the vast majority of things they need to do will be obvious, and won’t
 require docs or StackExchange answers. They already know how to program, the
 things they are doing are often not hard, they just need a context that doesn’t
 actively prevent them from doing stuff.</p>
+<p>Many of the problems with CBVs also stem, ultimately, from people trying to
+avoid writing any code at all. TODO see “codeless views”.</p>
 </div>
 </div>
 
@@ -94,23 +107,16 @@ actively prevent them from doing stuff.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="thepattern.html" title="previous chapter">The Right Way</a></li>
-      <li>Next: <a href="context_data.html" title="next chapter">Adding data to a template</a></li>
-  </ul></li>
-</ul>
-</div><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to do anything with in a view</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-directness">Discussion - directness</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to do anything in a view</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-directness">Discussion — directness</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
 </ul>
 
 
@@ -123,7 +129,15 @@ actively prevent them from doing stuff.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="thepattern.html" title="previous chapter">The Right Way</a></li>
+      <li>Next: <a href="context_data.html" title="next chapter">Adding data to a template</a></li>
+  </ul></li>
+</ul>
+</div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -132,7 +146,7 @@ actively prevent them from doing stuff.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Django Views — The Right Way</title>
@@ -50,13 +50,16 @@
 </dd>
 </dl>
 <p>This guide was inspired by the fact that many people on the internet seem to be
-starting with “Class Based Views” (CBVs) as the default way to write views, to
-the point that some are even scared to write “function based views” (FBVs from
-now on), despite the fact that these are so much easier and simpler. So here I
-am to save the day, and show you The Right Way.</p>
+starting with “Class Based Views” (CBVs from now on) as the default way to write
+views, to the point that some are even scared to write “function based views”
+(FBVs), despite the fact that these are so much easier and simpler. So here I am
+to save the day, and show you The Right Way.</p>
 <p>The essential part of this guide is very short, because FBVs are very easy and
-simple, but I’ve added extra bits for common patterns in FBVs. If you read all
-of it:</p>
+simple. In fact, the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial03/">Django tutorial for views</a> already has all you
+need to know. Just read that, and skip the bits about CBVs, and you’ll be fine.</p>
+<p>But if you want a different take on the same things, this guide might be for
+you. I’ve also added extra bits for common tasks and patterns in FBVs for which
+CBVs are often suggested as the solution. If you read all of it:</p>
 <ul class="simple">
 <li><p>You’ll learn how to make your views usually shorter and definitely much
 simpler than if you used CBVs.</p></li>
@@ -73,13 +76,14 @@ re-usable knowledge:</p>
 </ul>
 <p>Each page is composed of two parts:</p>
 <ol class="arabic simple">
-<li><p>The business - a short, definitive guide to The Right Way. As a less
+<li><p>The business — the <strong>what and how</strong> — a short, definitive guide to The Right Way. As a less
 experienced developer, either in general or in terms of knowledge of Django,
 this part is all you need.</p></li>
-<li><p>Discussion - a longer, in-depth explanation of why everyone else who tells
-you differently is wrong :-). It’s targeted at slightly more experienced
-developers. In each one I’ll tackle a few different aspects of the
-comparisons between CBVs and FBVs.</p></li>
+<li><p>Discussion — the <strong>why</strong> — a longer, in-depth explanation of why everyone
+else who tells you differently is wrong :-). It’s targeted at slightly more
+experienced developers, and especially those who are responsible for teaching
+or making decisions about the patterns used in a code base. In each one I’ll
+tackle one or two different aspects of the comparisons between CBVs and FBVs.</p></li>
 </ol>
 <p>So let’s go!</p>
 <div class="toctree-wrapper compound">
@@ -92,12 +96,16 @@ comparisons between CBVs and FBVs.</p></li>
 <li class="toctree-l2"><a class="reference internal" href="thepattern.html#discussion-starting-points">Discussion - starting points</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything with in a view</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="anything.html#discussion-directness">Discussion - directness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="anything.html#discussion-directness">Discussion — directness</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="context_data.html#discussion-keep-it-simple">Discussion - keep it simple!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_data.html#discussion-embarrassingly-simple">Discussion — embarrassingly simple?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="common_context_data.html#discussion-the-helper-vs-the-mixin">Discussion: the helper vs the mixin</a></li>
 </ul>
 </li>
 </ul>
@@ -147,19 +155,13 @@ things I’m expressing now.</p></li>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="thepattern.html" title="next chapter">The Right Way</a></li>
-  </ul></li>
-</ul>
-</div><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
-<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything with in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
 </ul>
 
 
@@ -172,7 +174,14 @@ things I’m expressing now.</p></li>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="thepattern.html" title="next chapter">The Right Way</a></li>
+  </ul></li>
+</ul>
+</div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -181,7 +190,7 @@ things I’m expressing now.</p></li>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
