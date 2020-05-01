@@ -1,6 +1,9 @@
 DONE
 ====
 
+
+
+
 - The Pattern
 
 - How to do X with a function based view: do X
@@ -219,13 +222,34 @@ Function wrapper of CBV::
     History of CBVs.
 
 ---
+Customising the start - continuation
+
+- Example product list view,
+  second is like the first but a "special offers" page, with extra
+  info at the top.
+
+- Discussion: re-usable functionality
+
+  Classes vs functions for re-usability?
+  Parameters?
+
+
+---
 
 Customising in the middle - Callbacks
+
+- Example - for the special offer page, after filter paging the list,
+  we do some extra logging of which products were displayed to the user.
+
 
  - Discussion - Callbacks vs template method
 
 ---
 Advanced callbacks - closures
+
+- Example: our extra logging needs access to a parameter from
+  the outer view function
+
 
 Discussion - closures vs instances
 
@@ -238,11 +262,6 @@ Customising the start - pre-conditions
 
 - Decorators
 
-Customising the start - delegating
-
-- Discussion: re-usable functionality
-
-  Classes vs functions for re-usability
 
 ---
 
