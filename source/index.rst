@@ -36,7 +36,9 @@ Each page is composed of two parts:
 
 1. The business — the **what and how**: a short, definitive guide to The Right
    Way. As a less experienced developer, either in general or in terms of
-   knowledge of Django, this part is all you need.
+   knowledge of Django, this part is all you need. Since this guide is not
+   intended to be reference documentation, I'll include various links to the
+   official Django reference docs.
 
 2. Discussion — the **why**: a longer, in-depth explanation of why everyone else
    who tells you differently is wrong :-). It's targeted at slightly more
@@ -54,7 +56,8 @@ So let's go!
    anything
    context_data
    common_context_data
-   
+   url_parameters
+
 
 Caveats and disclaimers etc.
 ============================

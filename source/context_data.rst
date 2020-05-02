@@ -46,10 +46,10 @@ it:
 Next up: :doc:`common_context_data`
 
 
-Discussion — embarrassingly simple?
------------------------------------
+Discussion: embarrassingly simple?
+----------------------------------
 
-This code is so simple it doesn't seem worth mentioning. Yet, with Class Based
+This code is so simple it might not seem worth mentioning. Yet, with Class Based
 Views, the equivalent is anything but simple. Suppose we start with a
 ``TemplateView``, or a subclass:
 
@@ -71,7 +71,7 @@ I actually end up adding is::
 
 So it's extremely hard to see how this can be improved.
 
-With a CBV, however, what you have to write this:
+With a CBV, however, what you have to write is this:
 
 .. code-block:: python
 
@@ -86,8 +86,8 @@ might not have been. I have to know this API, and there is plenty that can go
 wrong — a wrong signature, or failing to call ``super()`` (which may not have
 immediate problems, but could cause problems down the road).
 
-Is this a real problem? Am I straining at a gnat here? Look at this `blog post
-about putting data on your home page
+Is this a real problem? Am I making a mountain out of a molehill? Look at this
+`blog post about putting data on your home page
 <https://rasulkireev.com/django-get-context-data>`_. The problem solved by that
 post is exactly the same as what I showed above, with different data.
 
@@ -100,5 +100,5 @@ capable developer to actually successfully pull off all the parts needed for a
 <https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/>`_.
 
 Rather, he struggled for so long because of a bad context that was making a
-trivial thing hard, and those of us responsible for that bad context should be
+simple thing hard, and those of us responsible for that bad context should be
 the ones who are embarrassed.

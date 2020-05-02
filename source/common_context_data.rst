@@ -9,7 +9,7 @@ If the data is going to be needed by pretty much every page in your site, the
 answer is `context processors
 <https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext>`_.
 If you have context processors that are expensive to evaluate, and are used in
-lots of places but not everywhere, one technique is to use `lazily evaluation in
+lots of places but not everywhere, one technique is to use `lazy evaluation in
 your context processor <https://stackoverflow.com/a/28146359/182604>`_.
 
 But let's say you have some data that is just used for a sub-set of a pages —
@@ -45,7 +45,7 @@ understand and flexible. You can add parameters to the function if necessary
 into bigger helpers, as per your requirements. And you can write tests for these
 helpers if they have any significant logic in them.
 
-Next up: TODO
+Next up: :doc:`url_parameters`
 
 (You may be interested in a fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn't necessary).

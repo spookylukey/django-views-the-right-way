@@ -6,7 +6,7 @@ changes or actions you might want to do. How do you go about doing them?
 
 The answer to the question of how to do something with function based views is:
 
-   Just do it
+   Just do it.
 
 That probably isn't very clear yet, so I'll cover some common examples. What I
 want you to remember is:
@@ -25,8 +25,8 @@ want you to remember is:
 Next up - :doc:`context_data`.
 
 
-Discussion — directness
------------------------
+Discussion: directness
+----------------------
 
 The point of this page is to highlight that fact that class based views often
 make things far harder than needed. There is ``ListView`` for displaying a list
