@@ -35,7 +35,8 @@ Which bits do you change?
 
 * ``example_view`` should be a function name that describes your view e.g.
   ``home`` or ``article_list``.
-* ``example.html`` should be the path to the template you are using.
+* ``example.html`` should be the path to the template you are using. I'm not going to cover
+  how to write templates anywhere in this guide. Please see the `Django tutorial on views and templates <https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_, and the 
 * ``{}``, the third argument to ``TemplateResponse``, is the context data you
   want available in your template.
 * ``arg`` is a placeholder for any number of optional URL arguments — parts of
@@ -46,10 +47,10 @@ Which bits do you change?
 * In ``urls.py``, you change the arguments to ``path`` to be, respectively:
 
   * the matched URL (with any arguments),
-  * your view callable defined above,
+  * your view function defined above,
   * and an optional name that needs to be unique across your project, e.g.
     ``home`` or ``myapp_articles_list``, to enable `URL reversing
-    <https://docs.djangoproject.com/en/3.0/topics/http/urls/#reverse-resolution-of-urls>`_
+    <https://docs.djangoproject.com/en/3.0/topics/http/urls/#reverse-resolution-of-urls>`_.
 
 That's it!
 
@@ -132,8 +133,8 @@ dynamic web site, not a static one — and we want to build it up in an ordered
 way that will handle HTML escaping, and also provide a common set of page
 elements (like navigation) for our different pages. So we'll almost always want
 to use Django's template engine — covered in the `Django tutorial part 3
-<https://docs.djangoproject.com/en/stable/intro/tutorial03/#write-views-that-actually-do-something>`_
-. Instead of passing that "Hello world" string, we're going to have a
+<https://docs.djangoproject.com/en/stable/intro/tutorial03/#write-views-that-actually-do-something>`_.
+Instead of passing that "Hello world" string, we're going to have a
 ``hello_world.html`` template, and pass it some "context data" — any dynamic
 information that needs to appear in the page.
 
@@ -179,10 +180,13 @@ it's "made of" — something that stores the template it is from, and the contex
 This can be really useful in testing, but also if we want to something outside
 of our view function (such as decorators or middleware) to check or even change
 whats in the response before it finally gets 'rendered' and sent to the user.
-We'll cover use case of this later in the guide.
+We'll cover use cases of this later in the guide.
 
 For now, you can just accept that ``TemplateResponse`` is a more useful return
-value than a plain ``HttpResponse``.
+value than a plain ``HttpResponse``. (If you are already using ``render``
+everywhere, there is absolutely no need to go and change it though, and almost
+everything in this guide will work exactly the same with ``render`` instead of
+``TemplateResponse``).
 
 With that substitution, we've arrived at the pattern you'll want to memorise for
 views:
@@ -206,7 +210,7 @@ their documentation, put in a shed — or rather, a warehouse `given how much
 there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and `don't
 look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
 
-Next up - :doc:`anything`
+Next up - :doc:`anything`.
 
 
 .. _boilerplate:
@@ -214,18 +218,17 @@ Next up - :doc:`anything`
 Discussion - boilerplate
 ------------------------
 
-The first thing to note about boilerplate is that a small amount of boilerplate
-(by which I mean repeated code that just Needs To Be There For Some Reason) is
-not a big problem in software development. **We don't spend most of our time
-typing, we spend most of our time reading code. This means that clarity is much
-more important than shaving a few keystrokes**. Arguments about small amounts of
+The first thing to note about boilerplate (by which I mean repeated code that
+just Needs To Be There For Some Reason) is that a small amount of it is not a
+big problem in software development. **We don't spend most of our time typing,
+we spend most of our time reading code. This means that clarity is much more
+important than shaving a few keystrokes**. Arguments about small amounts of
 boilerplate should not be the major factor.
 
 The real issue with boilerplate, in fact, is not how typing it involves, but
 that verbose code hinders comprehension due to the low signal-to-noise ratio.
 **Boilerplate reduction should only ever be about noise reduction, not typing
 reduction.**
-
 
 With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
 above is as follows:

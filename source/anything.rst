@@ -20,7 +20,8 @@ want you to remember is:
   want, rather than being able to find something already written. But you are a
   software developer, you write code. Take responsibility and just do it. In
   time you'll find ways to make your code more concise if you find yourself
-  writing the same things over and over.
+  writing the same things over and over, and don't be afraid to make some
+  mistakes along the way.
 
 Next up - :doc:`context_data`.
 

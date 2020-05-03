@@ -9,8 +9,11 @@ if you want to capture part of a URL to be used in a view function, you can do
 it by configuring your URLs.
 
 Let's say you have some kind of e-commerce site where you want to display
-products on individual pages. You can have product pages that all live under the
-``/product/`` prefix as follows:
+products on individual pages. We want ``/product/`` to be the prefix for all
+these pages, and the next part to be the “slug” for the product — a URL-friendly
+version of the name (e.g ``white-t-shirt`` instead of "White T-Shirt").
+
+We can do that as follow:
 
 .. code-block:: python
 
@@ -21,20 +24,23 @@ products on individual pages. You can have product pages that all live under the
    from . import views
 
    urlpatterns = [
-       path('products/<str:name>/', views.product_detail, name='product_detail'),
+       path('products/<slug:product_slug>/', views.product_detail, name='product_detail'),
    ]
+
+.. code-block:: python
 
    # views.py
 
-   def product_details(request, name):
+   def product_details(request, product_slug):
        return TemplateResponse(request, 'products/product_detail.html', {})
 
 
-Note how the ``name`` parameter has to be added to view function signature. (We
-didn't actually use this name parameter yet, that will be covered in the next
-section). If you don't modify the view like this, it simply won't work — you'll
-get an exception, because Django will attempt to call your function with
-parameters that your function doesn't accept, which is an error in Python.
+Note how the ``product_slug`` parameter has to be added to view function
+signature, as well as in the URL conf. (We didn't actually use this
+``product_slug`` parameter yet, that will be covered in the next section). If
+you don't modify the view like this, it simply won't work — you'll get an
+exception, because Django will attempt to call your function with parameters
+that your function doesn't accept, which is an error in Python.
 
 If you are used to CBVs, this is one of the more obvious differences. With a
 CBV, you don't have to modify the function signature — because there isn't one
@@ -42,9 +48,9 @@ to modify. But with the CBV you have to write more code to get hold of that
 parameter.
 
 Be sure to check the Django docs about `path converters
-<https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters>`_. If
-you are into type hints, see below for more tips on how you can enhance the
-pattern above.
+<https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters>`_ for
+the different kind of things you might add into your URLs. If you are into type
+hints, also see below for tips on how you can enhance this pattern.
 
 Otherwise, onto :doc:`detail_view`.
 

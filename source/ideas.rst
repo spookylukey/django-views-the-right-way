@@ -32,11 +32,7 @@ TODO
 - Display an object.
   - Show full pattern with raise Http404
     
-  
-  - Discussion: DetailView vs get_object_or_404
-
-
-Discussion - DetailView vs get_object_or_404
+  - Discussion - DetailView vs get_object_or_404
 
 https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview
 

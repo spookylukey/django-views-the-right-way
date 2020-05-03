@@ -30,8 +30,7 @@ just use the ``date`` object rather than a string. Our pattern already had an
 empty context dictionary sitting there, waiting to be filled up, so we just put
 the value right in. Done!
 
-There is a variation on this, which is also very simple and to some people may
-be completely obvious, which is that sometimes it helps to pull out the context
+There is a variation on this, which is that sometimes it helps to pull out the context
 data into a variable first, especially if we are conditionally adding data to
 it:
 

@@ -57,6 +57,7 @@ So let's go!
    context_data
    common_context_data
    url_parameters
+   detail_view
 
 
 Caveats and disclaimers etc.
