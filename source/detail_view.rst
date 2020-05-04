@@ -23,7 +23,6 @@ exception.
 
 The combined code would look like this:
 
-
 .. code-block:: python
 
    try:
@@ -190,8 +189,8 @@ programmer will have to instead define ``get_queryset()`` to get access to the
 request data and dynamically respond to it, rather than have a static definition
 on the class.
 
-This means we now have 3 different ways of doing the same thing, and you have to
-be comfortable switching between them.
+This means you now have 3 different ways of doing the same thing, and you have
+to be comfortable switching between them.
 
 There is also a subtlety with querysets: suppose your
 ``ProductQuerySet.visible()`` method goes from being a simple filter on a field
@@ -279,6 +278,67 @@ some typing, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn't hurt your code base, this is vital.
 
+I find looking at views — whether CBVs or FBVs — through the lens of “layering”
+is slightly tricky.
 
+We could look at the list of methods on ``DetailView``, which includes the
+following:
 
+* ``dispatch``
+* ``get``
+* ``options``
+* ``get_context_data``
+* ``get_context_object_name``
+* ``get_object``
+* ``get_queryset``
+* ``get_slug_field``
+* ``get_template_names``
+* ``http_method_not_allowed``
+* ``render_to_response``
+* ``setup``
 
+These methods certainly span a more than one layer. We've got methods that deal
+very much with the HTTP layer (dispatching on different verbs, extracting data
+out of a URL), and others that deal with retrieving database objects and others
+with templates.
+
+On the other hand, you could say the same about any view function. By their very
+nature, views have to work in terms of HTTP requests and responses, but they
+also have to arrange to get data from the database (or somewhere), and this CBV
+is just a class-based equivalent to the view function.
+
+Perhaps a better way is to think about it is the “the single responsibility
+principle” for class design. Through that lens, this class doesn't look very
+good at all. It has far too many different directions you might want to take it.
+
+But the most convincing to me is too look what happens when you carry on this
+pattern.
+
+I recently came across a family of views that had the following methods:
+
+* TODO
+
+These views generate Excel spreadsheets. You'll see it has a whole bunch of
+methods that relate only to XLS generation, with others that relate to HTTP
+handling, and other to retrieving data the from the database. As you can guess,
+the implementation was significantly complicated by its hybrid nature.
+
+What is needed is a separate set of classes that handle just XLS generation,
+which should then be used by our view functions (or classes). Such properly
+decoupled code will make your life much easier — so that, for instance, when you
+realise that you need to generate these XLS reports offline, completely outside
+the context of a web request, it will be a very easy task. Or so that you can
+test some aspect of the XLS generation without having to set up a web request.
+
+So where did the design go wrong? Look back at the views provided by Django, and
+you'll see this design is simply carrying on the same pattern.
+
+This is a fundamental difference between a shortcut and a mixin. The shortcut is
+a convenient way to reduce some boilerplate with only local effects on your
+code, while mixins set up a pattern for your code which determines its structure
+— and not in a good way. The coupling becomes totally out of control.
+
+Brandon Rhodes has `an excellent discussion on mixins in his talk on Python
+anti-patterns <https://youtu.be/S0No2zSJmks?t=3095>`_. He also specifically
+calls out Django CBV mixins (though manages to avoid saying ‘Django’), and in my
+opinion his analysis is spot on.

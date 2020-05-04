@@ -230,6 +230,14 @@ that verbose code hinders comprehension due to the low signal-to-noise ratio.
 **Boilerplate reduction should only ever be about noise reduction, not typing
 reduction.**
 
+For example, if we wanted, we could reduce the “repetition” of having
+``request`` as an argument to each view function using threadlocals and an
+import. We could go further, and remove the import using some magic like web.py
+does. But `we recognise this as a bad idea
+<https://youtu.be/S0No2zSJmks?t=1716>`_, because it reduces clarity. Those
+functions have ``request`` as an argument because it is an argument. Making it
+an implicit one, instead of an explicit one, would not help clarity.
+
 With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
 above is as follows:
 
