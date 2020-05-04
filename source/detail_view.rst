@@ -86,12 +86,17 @@ this:
 
 This CBV is shorter, at least in terms of token count, than my version, although
 not by much. It suffers from the common disadvantages that CBVs have, such as by
-default not having an easy way to add extra data into the context
+default not having an easy way to add extra data into the context, which makes a
+big difference. The essential logic ``DetailView`` adds is equivalent to the
+single line ``'product': get_object_or_404(Product.objects.all(),
+slug=product_slug),`` in my FBV, so there is a question about how much value for
+money you are getting.
 
-You could make it shorter still, but not in good ways. Each alternative way to
+You could make it more concise, but not in good ways. Each alternative way to
 write this brings up some issues that I'll discuss in turn, and finally I'll
 look at one of the biggest issues with CBVs — the layering violations they
 encourage.
+
 
 Discussion: ``template_name`` — convention vs configuration
 -----------------------------------------------------------
@@ -145,7 +150,7 @@ have “convention over configuration” to deal with.
 So these typing-savers hurt maintenance, and therefore hurt your project because
 most software development is maintenance. If you do use CBVs, do yourself a
 favour and always add ``template_name``, even if you are sticking to the naming
-convention.
+convention as I have done here.
 
 The same “convention over configuration” logic is also present in the way
 ``DetailView`` looks up its object: it looks for a named URL parameter called
@@ -157,8 +162,9 @@ if you want different behaviour. You have to read the docs in detail.
 Proponents of Ruby-on-Rail-style “convention over configuration” will point to
 some super-verbose Java framework as an example of all the boilerplate you can
 save. But this is a false dichotomy. With dynamic languages, we can very often
-avoid as much configuration as we want to, and make sure we stop if it makes
-code harder maintain for the sake of saving a tiny bit of typing.
+avoid as much configuration as we want to. We should make sure we restrain
+ourselves if we are going to make code harder maintain for the sake of saving a
+tiny bit of typing.
 
 Discussion: static vs dynamic?
 ------------------------------
@@ -209,7 +215,7 @@ which FBVs are constructed.
 On the other hand, there are some benefits with the statically defined class
 attributes, in addition to being more concise and declarative. For example, the
 Django admin classes has attributes like ``fieldsets`` for the static case, with
-``get_fieldsets`` for the dynamic case. If you use the attribute, the Django
+``get_fieldsets()`` for the dynamic case. If you use the attribute, the Django
 checks framework is able to check it for you before you even access the admin.
 
 Some of the trade-offs here also depend on how often the static attribute is
@@ -241,5 +247,38 @@ because you don't inherit local variable names.
 
 Discussion: layering violations — shortcuts vs mixins
 -----------------------------------------------------
+
+``get_object_or_404`` is an example of a “shortcut” function. `Django's docs for
+shortcut functions
+<https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/>`_ defines them
+like this:
+
+    The package django.shortcuts collects helper functions and classes that
+    “span” multiple levels of MVC. In other words, these functions/classes
+    introduce controlled coupling for convenience’s sake.
+
+And the `tutorial
+<https://docs.djangoproject.com/en/3.0/intro/tutorial03/#a-shortcut-get-object-or-404>`_
+has a helpful comment about them:
+
+    **Philosophy**
+
+    Why do we use a helper function ``get_object_or_404()`` instead of
+    automatically catching the ``ObjectDoesNotExist`` exceptions at a higher level,
+    or having the model API raise ``Http404`` instead of ``ObjectDoesNotExist?``
+
+    Because that would couple the model layer to the view layer. One of the
+    foremost design goals of Django is to maintain loose coupling. Some
+    controlled coupling is introduced in the ``django.shortcuts`` module.
+
+
+An important property of well designed shortcut functions is that they only have
+local effects on your code. For example, when we introduced
+``get_object_or_404``, we replaced 4 lines in the original function and saved
+some typing, but there were no effects on the external behaviour of that view
+function, or on the interface of any function or method. If you want
+“controlled” coupling that doesn't hurt your code base, this is vital.
+
+
 
 
