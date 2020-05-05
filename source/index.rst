@@ -9,8 +9,18 @@ Welcome to my opinionated guide on how to write views in Django!
 This guide was inspired by the fact that many people on the internet seem to be
 starting with "Class Based Views" (CBVs from now on) as the default way to write
 views, to the point that some are even scared to write "function based views"
-(FBVs), despite the fact that these are so much easier and simpler. So here I am
-to save the day, and show you The Right Way.
+(FBVs), despite the fact that these are so much easier and simpler.
+
+I've also come across various blog posts advising ways to do things that are
+much more complex than necessary, and, perhaps worst of all, some official
+Django documentation which amounts to `well-intentioned advise on how to
+continue the torture of mixins without actually killing yourself
+<https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/>`_.
+(After a bit of “git blaming” it turns out that I'm `credited
+<https://github.com/django/django/commit/c4c7fbcc0d9264beb931b45969fc0d8d655c4f83>`_
+in the commit log. I hate it when that happens…)
+
+So, in view of all this, here I am to save the day, and show you The Right Way.
 
 The essential part of this guide is very short, because FBVs are very easy and
 simple. In fact, the `Django tutorial for views
@@ -34,17 +44,17 @@ CBVs are often suggested as the solution. If you read all of it:
 
 Each page is composed of two parts:
 
-1. The business — the **what and how**: a short, definitive guide to The Right
-   Way. As a less experienced developer, either in general or in terms of
-   knowledge of Django, this part is all you need. Since this guide is not
-   intended to be reference documentation, I'll include various links to the
-   official Django reference docs.
+First, the business — the **what and how**: a short, definitive guide to The
+Right Way. As a less experienced developer, either in general or in terms of
+knowledge of Django, this part is all you need. Since this guide is not intended
+to be reference documentation, I'll include various links to the official Django
+reference docs.
 
-2. Discussion — the **why**: a longer, in-depth explanation of why everyone else
-   who tells you differently is wrong :-). It's targeted at slightly more
-   experienced developers, and especially those who are responsible for teaching
-   or making decisions about the patterns used in a code base. In each one I'll
-   tackle one or two different aspects of the comparisons between CBVs and FBVs.
+Second, discussion — the **why**: a longer, in-depth explanation of why everyone
+else who tells you differently is wrong :-). It's targeted at slightly more
+experienced developers, and especially those who are responsible for teaching or
+making decisions about the patterns used in a code base. In each one I'll tackle
+one or two different aspects of the comparisons between CBVs and FBVs.
 
 So let's go!
 
@@ -58,6 +68,7 @@ So let's go!
    common_context_data
    url_parameters
    detail_view
+   list_view
 
 
 Caveats and disclaimers etc.

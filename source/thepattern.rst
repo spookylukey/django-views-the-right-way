@@ -35,8 +35,12 @@ Which bits do you change?
 
 * ``example_view`` should be a function name that describes your view e.g.
   ``home`` or ``article_list``.
-* ``example.html`` should be the path to the template you are using. I'm not going to cover
-  how to write templates anywhere in this guide. Please see the `Django tutorial on views and templates <https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_, and the 
+* ``example.html`` should be the path to the template you are using. I'm not
+  going to cover how to write templates anywhere in this guide. Please see the
+  `Django tutorial on views and templates
+  <https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_, and the `Django
+  template language topic
+  <https://docs.djangoproject.com/en/3.0/ref/templates/language/>`_.
 * ``{}``, the third argument to ``TemplateResponse``, is the context data you
   want available in your template.
 * ``arg`` is a placeholder for any number of optional URL arguments — parts of
@@ -46,7 +50,7 @@ Which bits do you change?
   can remove it, or add more, but have to change the URLconf to match.
 * In ``urls.py``, you change the arguments to ``path`` to be, respectively:
 
-  * the matched URL (with any arguments),
+  * the matched URL (with any captured parts),
   * your view function defined above,
   * and an optional name that needs to be unique across your project, e.g.
     ``home`` or ``myapp_articles_list``, to enable `URL reversing
@@ -188,8 +192,8 @@ everywhere, there is absolutely no need to go and change it though, and almost
 everything in this guide will work exactly the same with ``render`` instead of
 ``TemplateResponse``).
 
-With that substitution, we've arrived at the pattern you'll want to memorise for
-views:
+With that substitution, we've arrived at the pattern you'll want to start with
+for views:
 
 .. code-block:: python
 
@@ -272,7 +276,8 @@ squeeze it to one long one using
 normally write it.
 
 Given the downsides, I expected the upside to be a lot more convincing. Maybe
-it's better when it comes to DetailView etc? We'll see about that. (TODO)
+it's better when it comes to DetailView etc? :ref:`We'll see about that
+<DetailView comparison>`.
 
 But let's add a more realistic situation — we actually want some context data.
 Let's say it's just a single piece of information, like a title, using some

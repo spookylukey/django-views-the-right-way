@@ -58,6 +58,8 @@ template, the final, concise version of our view will look like this:
 
 That's it! Next up: :doc:`list_view.rst`
 
+.. _DetailView comparison:
+
 Discussion: Comparison to DetailView
 ------------------------------------
 
@@ -86,10 +88,15 @@ this:
 This CBV is shorter, at least in terms of token count, than my version, although
 not by much. It suffers from the common disadvantages that CBVs have, such as by
 default not having an easy way to add extra data into the context, which makes a
-big difference. The essential logic ``DetailView`` adds is equivalent to the
-single line ``'product': get_object_or_404(Product.objects.all(),
-slug=product_slug),`` in my FBV, so there is a question about how much value for
-money you are getting.
+big difference — put ``get_context_data`` in and it's longer again.
+
+The essential logic that ``DetailView`` adds is equivalent to a single line in
+my FBV::
+
+  'product': get_object_or_404(Product.objects.all(), slug=product_slug),
+
+For a mixin plus two lines of configuration, you are not getting much value for
+money.
 
 You could make it more concise, but not in good ways. Each alternative way to
 write this brings up some issues that I'll discuss in turn, and finally I'll
@@ -109,9 +116,13 @@ lived in was called ``products``.
 This kind of behaviour is called “convention over configuration”. It's popular
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
 it is pretty much directly against the “Zen of Python” maxim “Explicit is better
-than implicit”. This is a good thing, because convention over configuration is
-one of the those things that seems great when you are writing code, and is often
-a nightmare when it comes to maintenance.
+than implicit”.
+
+But it does appear in some parts of Django, and the `docs for DetailView
+<https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview>`_
+encourage this particular shortcut. This is unfortunate, in my opinion, because
+convention over configuration is one of the those things that seems great when
+you are writing code, and is often a nightmare when it comes to maintenance.
 
 Consider the maintenance programmer who comes along and needs to make
 modifications to a template. We do not assume a maintenance programmer is an
@@ -323,12 +334,15 @@ methods that relate only to XLS generation, with others that relate to HTTP
 handling, and other to retrieving data the from the database. As you can guess,
 the implementation was significantly complicated by its hybrid nature.
 
+Even for the job it was doing, it was awkward, but when new requirements come
+along — like you need to generate XLS reports offline, outside of a web context
+— then you really are in a mess.
+
 What is needed is a separate set of classes that handle just XLS generation,
-which should then be used by our view functions (or classes). Such properly
-decoupled code will make your life much easier — so that, for instance, when you
-realise that you need to generate these XLS reports offline, completely outside
-the context of a web request, it will be a very easy task. Or so that you can
-test some aspect of the XLS generation without having to set up a web request.
+which should then be used by our view functions (or classes). These will also
+have the advantage of being able to test some aspect of the XLS generation
+without having to set up a web request, or even necessarily getting data from
+the database.
 
 So where did the design go wrong? Look back at the views provided by Django, and
 you'll see this design is simply carrying on the same pattern.
@@ -342,3 +356,5 @@ Brandon Rhodes has `an excellent discussion on mixins in his talk on Python
 anti-patterns <https://youtu.be/S0No2zSJmks?t=3095>`_. He also specifically
 calls out Django CBV mixins (though manages to avoid saying ‘Django’), and in my
 opinion his analysis is spot on.
+
+As a positive example... TODO

@@ -19,133 +19,28 @@ DONE
   Discussion: testable code vs mixins
 
 
-
-TODO
-====
-
 - Accept a URL parameter
   - Discussion: perils of generic code
   - Discussion: checkable URLconf
 
 
 
+
 - Display an object.
   - Show full pattern with raise Http404
-    
+
   - Discussion - DetailView vs get_object_or_404
-
-https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview
-
-
-Original::
-
-    from django.utils import timezone
-    from django.views.generic.detail import DetailView
-
-    from articles.models import Article
-
-    class ArticleDetailView(DetailView):
-
-        model = Article
-
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            context['now'] = timezone.now()
-            return context
-
-Rewritten::
-
-    from django.template.response import TemplateResponse
-    from django.shortcuts import get_object_or_404
-    from django.utils import timezone
-
-    def article_view(request, slug):
-       return TemplateResponse(request, "my_app/article_detail.html", {
-           'article': get_object_or_404(Article.objects.all(), slug=slug),
-           'now': timezone.now(),
-       })
-
-
-Comparisons:
-- Compare template ``object``
-- Suppose we need to change CBV to be filtered QuerySet, not all objects.
-
-  ``model`` -> ``queryset``
-
-- Suppose we need it to be filtered according to something in request
-  ``queryset`` attribute -> ``get_queryset`` method.
-
-
-  Discussion - convention vs configuration (template name)
-
-
-
-  Discussion - shortcuts vs mixins
-
-   - RPR - Xls generation - layer violation - init - request parameter
-
-   - Brandon Rhodes
-
-
 
 
 - Display a list of objects
 
-https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function
-
-def listing(request):
-    contact_list = Contact.objects.all()
-    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'list.html', {'page_obj': page_obj})
+TODO
+====
 
 
-# Rewritten:
-
-def listing(request):
-    context = {}
-    context.update(paged_object_list_context(request, Contact.objects.all(), paginate_by=25))
-    return TemplateResponse(request, 'list.html', context)
-
-
-Writing ``paged_object_list_context`` is left as an exercise for you!
-
-
-
-Discussion - comparison to ListView
-
-
-
-Adding these kind of utilities to your code is what every developer should learn
-to do, and in a project you would expect to have a small library of this kind of
-thing that is specific to your project and encapsulates your own patterns and
-conventions. This is far superior to contorting your code with method overrides
-that are necessary only because of the structure handed to you by someone else.
-
-
-Yes, using ``paged_object_list_context`` is very slightly longer than just
-adding a ``paginate_by`` attribute to a ``ListView``. But the benefits are huge
-— you stay in full control of your view function and it remains readable and
-extremely easy to debug or further customise. You also have a utility that is
-separately testable.
-
-
-- Discussion: discovering reusable units (pagination)
-
-
-def paged_object_list_context(request, queryset, paginate_by=25):
-    paginator = Paginator(queryset, paginate_by)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return {'page_obj': page_obj}
-
-
-
-- Redirect
+- Redirects
   - HTTP level
-
-  - Discussion: codeless views?
+  - Discussion: codeless views? or “look ma, no code!”
 
 
 
@@ -323,19 +218,25 @@ everything was in shape, at which point the code worked. (I'm using flake8 in
 emacs, but most IDEs will have just as capable linters that will catch the same
 errors).
 
-The opposite refactoring would not have worked like this.
+The opposite refactoring would not have worked like this. In Python, if you are
+sticking attributes onto ``self`` at various points, and reading them at others,
+it's going to be extremely hard for any static analysis to work out of you are
+doing that correctly.
 
 
 Automated static analysis that linters can do is just a sign of a deeper
 reality - the FBV is simpler and easier to understand. The fact that it reaches
-a stage where an automated process can understand it and catch most errors,
-despite Python's dynamism, is great, but what is even better is the benefit for
-humans trying to understand this kind of code.
+a stage where, despite Python's dynamism, an automated process can understand it
+and catch most errors is great, but what is even better is the benefit for
+humans trying to understand or modify this kind of code.
 
 
 My code is more boring now, in the best sense. There are few tricks or clever
 techniques. These are still allowed, but reserved for when you really need them
-and get benefit from them.
+and get benefit from them. Instead of feeling smug about getting to use some OOP
+trick or eliminating a few keystrokes of typing, I can instead feel smug about
+just wonderfully simple this code is to maintain, even when I come back to it
+years later.
 
 
 Security:
@@ -496,6 +397,22 @@ tokens vs 102), despite the fact that it includes all the form flow control
 logic and all other logic, rather than delegating to base classes. However, it
 is many times easier to understand, and no crazy metaclass fixes are necessary.
 
+
+------
+Forms
+
+Ways in which it will fail you:
+
+1) Multiple forms on same page (alternatives to each other)
+
+2) Special flow. For example, in some cases, you want extra confirmation.
+   Like "This will create an Foo with the same name as an existing Foo, are you sure?".
+   In this case you need to re-display the form but differently, with a "confirm" button
+   instead of just "save", and then need to be able to detect the "confirm" button
+   was pressed.
+
+   Totally straightforward if you are in charge of the control flow yourself, horrible
+   if you are trying to fit into FormView
 
 
 ------
