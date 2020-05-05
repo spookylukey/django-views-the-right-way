@@ -52,7 +52,7 @@ Next up: TODO
 
 
 Discussion: discovering re-usable units of code
-===============================================
+-----------------------------------------------
 
 I very deliberately left “write some code yourself” as an exercise. Adding these
 kind of utilities to your code is what every developer should learn to do, and
