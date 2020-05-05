@@ -56,7 +56,7 @@ template, the final, concise version of our view will look like this:
        })
 
 
-That's it! Next up: :doc:`list_view.rst`
+That's it! Next up: :doc:`list_view`
 
 .. _DetailView comparison:
 
