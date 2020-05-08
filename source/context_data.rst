@@ -56,7 +56,7 @@ it:
 That's it! Next up: :doc:`common_context_data`.
 
 
-Discussion: embarrassingly simple?
+Discussion: Embarrassingly simple?
 ----------------------------------
 
 This code is so simple it might not seem worth mentioning. Yet, with Class Based

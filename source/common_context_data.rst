@@ -51,8 +51,8 @@ Next up: :doc:`url_parameters`
 decorators - TODO - but it really isn't necessary).
 
 
-Discussion: the helper vs the mixin
------------------------------------
+Discussion: Helpers vs Mixins
+-----------------------------
 
 The solution above is simple and direct. But some might protest it is a bit
 ugly, and has involved a bit of boilerplate. A CBV solution using a mixin is

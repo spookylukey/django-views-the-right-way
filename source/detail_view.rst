@@ -104,8 +104,8 @@ look at one of the biggest issues with CBVs — the layering violations they
 encourage.
 
 
-Discussion: ``template_name`` — convention vs configuration
------------------------------------------------------------
+Discussion: Convention vs configuration
+---------------------------------------
 
 The first way we could shorten the CBV version is by omitting ``template_name``.
 The generic CBVs have some logic built in to derive a template name from the
@@ -176,8 +176,8 @@ avoid as much configuration as we want to. We should make sure we restrain
 ourselves if we are going to make code harder maintain for the sake of saving a
 tiny bit of typing.
 
-Discussion: static vs dynamic?
-------------------------------
+Discussion: Static vs dynamic
+-----------------------------
 
 For the case of statically defining what query to start with, we have two options:
 
@@ -229,7 +229,7 @@ Some of the trade-offs here also depend on how often the static attribute is
 enough, compared to how often you need the dynamic version.
 
 
-Discussion: generic code and variable names
+Discussion: Generic code and variable names
 -------------------------------------------
 
 A third way to shorten the CBV is to omit ``context_object_name``. In that case,
@@ -255,7 +255,7 @@ doesn't exist, because you don't inherit local variable names.
 
 .. _shortcuts-vs-mixins:
 
-Discussion: layering violations — shortcuts vs mixins
+Discussion: Layering violations — shortcuts vs mixins
 -----------------------------------------------------
 
 ``get_object_or_404`` is an example of a “shortcut” function. `Django's docs for

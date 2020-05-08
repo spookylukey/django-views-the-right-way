@@ -54,7 +54,7 @@ hints, also see below for tips on how you can enhance this pattern.
 
 Otherwise, onto :doc:`detail_view`.
 
-Discussion: generic code and function signatures
+Discussion: Generic code and function signatures
 ------------------------------------------------
 
 Django's URL-to-function dispatching mechanism is very elegant and powerful,

@@ -50,7 +50,7 @@ a bit shorter:
 Next up: :doc:`delegation`
 
 
-Discussion: discovering re-usable units of code
+Discussion: Discovering re-usable units of code
 -----------------------------------------------
 
 I very deliberately left “write some code yourself” as an exercise. Adding these

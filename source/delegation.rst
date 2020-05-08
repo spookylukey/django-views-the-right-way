@@ -101,7 +101,7 @@ At the template level, we'll probably do a similar refactoring, using `include
 factor out duplication.
 
 That's it! See below for some more discussion about how this delegation pattern
-might evolve. Otherwise, onto TODO.
+might evolve. Otherwise, onto :doc:`callbacks`.
 
 .. _function-based-generic-views:
 
@@ -168,13 +168,13 @@ If there is some functionality written, we should always make it re-usable
 rather than re-implement, and we've somehow failed as software developers if we
 can't.
 
-You can see this is the design of the CBVs. A lot of the complexity in the
+You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
 line. `But that shouldn't be our primary aim
 <https://verraes.net/2014/08/dry-is-about-knowledge/>`_.
 
-There are plenty of things worse than copy-paste programming, and the wrong or
-premature abstraction is one of them.
+There are plenty of things worse than copy-paste programming, and unhelpful
+abstractions are among them.
 
 I recently wrote several implementations of Mozilla's `Fluent
 <https://projectfluent.org/>`_ localisation language, all of them in Python. One
@@ -184,17 +184,17 @@ second, I did so with `one big copy-paste job
 <https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee>`_.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
-bases still share a huge amount in terms of structure, even with some identical
-functions. In a few places they have identical bits of code. But the
-code bases have also diverged, at many, many points, both in small details and
-in more fundamental ways.
+bases still share a huge amount in terms of structure. In a few places they
+still significant chunks of identical code. But the code bases have also
+diverged at many, many points, both in small details and in more fundamental
+ways.
 
 The decision to copy-paste was overwhelming the right decision. Attempting to
 avoid duplicating anything while I was developing the second would have been an
-absolute killer in terms of complexity, and may still have failed. Once or twice
-I actually copied fixes or changes directly from one to the other, but most
-times when I had “equivalent” bug fixes or feature additions to do, they looked
-significantly different in the two projects. Having to do them twice from
+absolute killer in terms of complexity, and may have failed completely. Once or
+twice I actually copied fixes or changes directly from one to the other, but
+most times when I had “equivalent” bug fixes or feature additions to do, they
+looked significantly different in the two projects. Having to do them twice from
 scratch cost far, far less than attempting to write the two projects with a
 common abstraction layer.
 
@@ -211,12 +211,18 @@ Discussion: Multiple mixins?
 When doing both a single object lookup and a list of objects, contrast the
 simplicity of the above FBV code with `trying to wrangle CBVs into doing this
 <https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview>`_.
-These Django docs do come up with a solution for this case, while thankfully
-adding a “don't try this at home kids” warning and mentioning that many mixins
-don't actually work together. But we need to add to those warnings:
+These Django docs do come up with a solution for this case, but it is a house of
+cards that requires lots of extremely careful thinking and knowing the
+implementation as well as interface of all the mixins involved.
+
+Thankfully the docs do add a “don't try this at home kids” warning and mention
+that many mixins don't actually work together. But we need to add to those
+warnings:
 
 * It's virtually impossible to know ahead of time which combinations are likely
-  to turn out bad.
+  to turn out bad. It's pretty much the point of mixins that you can “mix and
+  match” behaviour. Except it turns out you can't.
+
 
 * Simple things often turn into complicated things. If you have started with
   CBVs, you will most likely want to continue, and you'll find yourself rather
@@ -224,3 +230,4 @@ don't actually work together. But we need to add to those warnings:
   code, working out how to implement for yourself the things the CBVs were doing
   for you. As we mentioned before, the CBV is a :ref:`bad starting point
   <bad-starting-point>`.
+

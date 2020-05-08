@@ -219,8 +219,8 @@ Next up - :doc:`anything`.
 
 .. _boilerplate:
 
-Discussion - boilerplate
-------------------------
+Discussion: Boilerplate
+-----------------------
 
 The first thing to note about boilerplate (by which I mean repeated code that
 just Needs To Be There For Some Reason) is that a small amount of it is not a
@@ -338,7 +338,7 @@ In other words:
 
 .. _bad-starting-point:
 
-Discussion: starting points
+Discussion: Starting points
 ---------------------------
 
 Some people will say we can use the CBV for the really simple cases, and then

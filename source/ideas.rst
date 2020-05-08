@@ -76,7 +76,6 @@ Custom logic in the middle - Callbacks
  - Discussion - Callbacks vs template method
 
 
-
 Discussion - closures vs instances
 
    - Use CCIW example of PopupEmailAction
@@ -168,7 +167,6 @@ Function wrapper of CBV::
     History of CBVs.
 
 
-Adva
 
 Customising the end
 
