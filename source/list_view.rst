@@ -38,7 +38,6 @@ paging, you could pull some of this boilerplate out into a utility like
 ``paged_object_list_context`` (left as an exercise for you) to produce something
 a bit shorter:
 
-
 .. code-block:: python
 
    def product_list(request):
@@ -48,7 +47,7 @@ a bit shorter:
        return TemplateResponse(request, 'products/product_list.html', context)
 
 
-Next up: TODO
+Next up: :doc:`delegation`
 
 
 Discussion: discovering re-usable units of code

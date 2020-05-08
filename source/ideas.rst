@@ -37,6 +37,77 @@ DONE
 TODO
 ====
 
+---
+Custom logic at the start - delegation
+
+- Example product list view,
+  second is like the first but a "special offers" page, with extra
+  info at the top.
+
+
+- Discussion:
+
+  Doing multiple things:
+   - this view is a DetailView and a ListView combined. Easy with FBV
+
+
+[ 
+  
+  Generic function based code
+
+  re-usable functionality
+
+  Explicit parameters.
+
+  Classes vs functions for re-usability?
+  Parameters?
+]
+
+---
+
+Custom logic in the middle - Callbacks
+
+- Example, our product listing page actually uses some different services
+  for getting product lists, not QuerySet based. Could be some other ORM,
+  or external HTTP service.
+
+ 
+  We've been given this function:
+
+  get_product_list(filter_dict, sort_spec)
+
+  For special offers, we have to pass {'special_offer': '<special-offer-name>'} in filter_dict
+
+  Main product_list function will build filter_dict, we need to somehow add to it.
+
+  Also, for the special offer case, just after we call ``get_product_list``, we
+  also want to do some extra logging of the product list that got returned, for
+  some reason, along with with some data from the request (like user etc.)
+  
+  and want 
+  Could pass the extra arguments through, but that is ugly.
+
+
+
+ - Discussion - Callbacks vs template method
+
+
+
+Discussion - closures vs instances
+
+   - Use CCIW example of PopupEmailAction
+
+
+---
+
+Customising the start - pre-conditions
+
+- Decorators
+
+
+---
+
+
 
 - Redirects
   - HTTP level
@@ -112,49 +183,6 @@ Function wrapper of CBV::
   - Discussion: codeless views?
     History of CBVs.
 
----
-Customising the start - continuation
-
-- Example product list view,
-  second is like the first but a "special offers" page, with extra
-  info at the top.
-
-- Discussion: re-usable functionality
-
-  Classes vs functions for re-usability?
-  Parameters?
-
-
----
-
-Customising in the middle - Callbacks
-
-- Example - for the special offer page, after filter paging the list,
-  we do some extra logging of which products were displayed to the user.
-
-
- - Discussion - Callbacks vs template method
-
----
-Advanced callbacks - closures
-
-- Example: our extra logging needs access to a parameter from
-  the outer view function
-
-
-Discussion - closures vs instances
-
-   - Use CCIW example of PopupEmailAction
-
-
----
-
-Customising the start - pre-conditions
-
-- Decorators
-
-
----
 
 Adva
 
@@ -192,6 +220,7 @@ Length - not the most important measure
 
 Code got significantly more succinct:
 
+(as formatted by ``black``:
 Before:
 631 tokens
 83 non-blank lines
@@ -230,13 +259,12 @@ a stage where, despite Python's dynamism, an automated process can understand it
 and catch most errors is great, but what is even better is the benefit for
 humans trying to understand or modify this kind of code.
 
-
-My code is more boring now, in the best sense. There are few tricks or clever
-techniques. These are still allowed, but reserved for when you really need them
-and get benefit from them. Instead of feeling smug about getting to use some OOP
-trick or eliminating a few keystrokes of typing, I can instead feel smug about
-just wonderfully simple this code is to maintain, even when I come back to it
-years later.
+In doing this refactoring, I had just one twinge of sadness — my code seems a
+little bit plain now. I have fewer OOP hierarchies and clever tricks to feel
+smug about. But this is misplaced sadness. If you are into smugness-driven
+development, you need to be aiming for the feeling you get when you come back to
+some code 3 months or 3 years later and find it's so easy to work with that
+after doing ``git praise`` you feel the need to give yourself a little hug.
 
 
 Security:
