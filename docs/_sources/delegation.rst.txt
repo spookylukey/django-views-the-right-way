@@ -149,8 +149,8 @@ As FBVs they will probably be better for you than your own custom CBVs:
   points would be the same, but hidden from you in the form of lots of mixins
   each with their own attributes and methods. With the function, your problem is
   more visible, and can prompt you factor things out. For example, if you have
-  several parameters related to filtering a list, do you actually need a
-  ``Filterer``.
+  several parameters related to filtering a list, perhaps you actually need a
+  ``Filterer``?
 
 Discussion: Copy-paste Programming Bad, Classes Good?
 -----------------------------------------------------
@@ -162,11 +162,11 @@ more customisable.
 
 Our answer to this problem ought to have been this: if these generic views don't
 do what you want, write your own. You can easily copy-paste the functionality
-you need and start from there. Why didn't we just say that? I think we somehow
-had the idea that copy-paste is the ultimate disaster in software development.
-If there is some functionality written, we should always make it re-usable
-rather than re-implement, and we've somehow failed as software developers if we
-can't.
+you need and start from there. So why didn't we just say that? I think we
+somehow had the idea that copy-paste is the ultimate disaster in software
+development. If there is some functionality written, we should always make it
+re-usable rather than re-implement, and we've somehow failed as software
+developers if we can't.
 
 You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
@@ -184,19 +184,18 @@ second, I did so with `one big copy-paste job
 <https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee>`_.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
-bases still share a huge amount in terms of structure. In a few places they
-still significant chunks of identical code. But the code bases have also
+bases still share a huge amount in terms of structure. In a few places they even
+still have significant chunks of identical code. But the code bases have also
 diverged at many, many points, both in small details and in more fundamental
 ways.
 
 The decision to copy-paste was overwhelming the right decision. Attempting to
 avoid duplicating anything while I was developing the second would have been an
 absolute killer in terms of complexity, and may have failed completely. Once or
-twice I actually copied fixes or changes directly from one to the other, but
-most times when I had “equivalent” bug fixes or feature additions to do, they
-looked significantly different in the two projects. Having to do them twice from
-scratch cost far, far less than attempting to write the two projects with a
-common abstraction layer.
+twice I copied fixes or changes directly from one to the other, but most times
+when I had “equivalent” changes to do, they looked significantly different in
+the two projects. Having to do them twice from scratch cost far, far less than
+attempting to write the two projects with a common abstraction layer.
 
 Before you can abstract commonality, you actually need at least two examples,
 preferably three, and abstracting before then is premature. The commonalities

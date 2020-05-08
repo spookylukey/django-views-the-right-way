@@ -1,5 +1,5 @@
-Custom logic at the start — callbacks
-=====================================
+Custom logic in the middle — callbacks
+======================================
 
 TODO
 

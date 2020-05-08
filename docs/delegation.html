@@ -14,7 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Custom logic at the start — callbacks" href="callbacks.html" />
+    <link rel="next" title="Custom logic in the middle — callbacks" href="callbacks.html" />
     <link rel="prev" title="Displaying a list of objects" href="list_view.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -37,7 +37,7 @@
           <a href="list_view.html" title="Previous document">Displaying a list of objects</a>
         </li>
         <li>
-          <a href="callbacks.html" title="Next document">Custom logic at the start — callbacks</a>
+          <a href="callbacks.html" title="Next document">Custom logic in the middle — callbacks</a>
           &rarr;
         </li>
     </ul>
@@ -136,7 +136,7 @@ sensible default, but also need to avoid the mutable arguments bug.</p>
 <p>At the template level, we’ll probably do a similar refactoring, using <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include">include</a> to
 factor out duplication.</p>
 <p>That’s it! See below for some more discussion about how this delegation pattern
-might evolve. Otherwise, onto <a class="reference internal" href="callbacks.html"><span class="doc">Custom logic at the start — callbacks</span></a>.</p>
+might evolve. Otherwise, onto <a class="reference internal" href="callbacks.html"><span class="doc">Custom logic in the middle — callbacks</span></a>.</p>
 <div class="section" id="discussion-function-based-generic-views">
 <span id="function-based-generic-views"></span><h2>Discussion: Function based generic views<a class="headerlink" href="#discussion-function-based-generic-views" title="Permalink to this headline">¶</a></h2>
 <p>What happens if you keep going with this parameterisation pattern? Let’s say you
@@ -173,8 +173,8 @@ this is a good thing. For your class-based equivalent, the number of extension
 points would be the same, but hidden from you in the form of lots of mixins
 each with their own attributes and methods. With the function, your problem is
 more visible, and can prompt you factor things out. For example, if you have
-several parameters related to filtering a list, do you actually need a
-<code class="docutils literal notranslate"><span class="pre">Filterer</span></code>.</p></li>
+several parameters related to filtering a list, perhaps you actually need a
+<code class="docutils literal notranslate"><span class="pre">Filterer</span></code>?</p></li>
 </ul>
 </div>
 <div class="section" id="discussion-copy-paste-programming-bad-classes-good">
@@ -185,11 +185,11 @@ extend generic views to do one more thing, and we wanted to provide something
 more customisable.</p>
 <p>Our answer to this problem ought to have been this: if these generic views don’t
 do what you want, write your own. You can easily copy-paste the functionality
-you need and start from there. Why didn’t we just say that? I think we somehow
-had the idea that copy-paste is the ultimate disaster in software development.
-If there is some functionality written, we should always make it re-usable
-rather than re-implement, and we’ve somehow failed as software developers if we
-can’t.</p>
+you need and start from there. So why didn’t we just say that? I think we
+somehow had the idea that copy-paste is the ultimate disaster in software
+development. If there is some functionality written, we should always make it
+re-usable rather than re-implement, and we’ve somehow failed as software
+developers if we can’t.</p>
 <p>You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
 line. <a class="reference external" href="https://verraes.net/2014/08/dry-is-about-knowledge/">But that shouldn’t be our primary aim</a>.</p>
@@ -201,18 +201,17 @@ These two projects are clearly very similar in nature. So when I started the
 second, I did so with <a class="reference external" href="https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee">one big copy-paste job</a>.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
-bases still share a huge amount in terms of structure. In a few places they
-still significant chunks of identical code. But the code bases have also
+bases still share a huge amount in terms of structure. In a few places they even
+still have significant chunks of identical code. But the code bases have also
 diverged at many, many points, both in small details and in more fundamental
 ways.</p>
 <p>The decision to copy-paste was overwhelming the right decision. Attempting to
 avoid duplicating anything while I was developing the second would have been an
 absolute killer in terms of complexity, and may have failed completely. Once or
-twice I actually copied fixes or changes directly from one to the other, but
-most times when I had “equivalent” bug fixes or feature additions to do, they
-looked significantly different in the two projects. Having to do them twice from
-scratch cost far, far less than attempting to write the two projects with a
-common abstraction layer.</p>
+twice I copied fixes or changes directly from one to the other, but most times
+when I had “equivalent” changes to do, they looked significantly different in
+the two projects. Having to do them twice from scratch cost far, far less than
+attempting to write the two projects with a common abstraction layer.</p>
 <p>Before you can abstract commonality, you actually need at least two examples,
 preferably three, and abstracting before then is premature. The commonalities
 may be very different from what you thought, and when you have enough
@@ -253,7 +252,7 @@ for you. As we mentioned before, the CBV is a <a class="reference internal" href
           <a href="list_view.html" title="Previous document">Displaying a list of objects</a>
         </li>
         <li>
-          <a href="callbacks.html" title="Next document">Custom logic at the start — callbacks</a>
+          <a href="callbacks.html" title="Next document">Custom logic in the middle — callbacks</a>
           &rarr;
         </li>
     </ul>
@@ -279,7 +278,7 @@ for you. As we mentioned before, the CBV is a <a class="reference internal" href
 <li class="toctree-l2"><a class="reference internal" href="#discussion-multiple-mixins">Discussion: Multiple mixins?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Custom logic at the start — callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Custom logic in the middle — callbacks</a></li>
 </ul>
 
 
@@ -297,7 +296,7 @@ for you. As we mentioned before, the CBV is a <a class="reference internal" href
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="list_view.html" title="previous chapter">Displaying a list of objects</a></li>
-      <li>Next: <a href="callbacks.html" title="next chapter">Custom logic at the start — callbacks</a></li>
+      <li>Next: <a href="callbacks.html" title="next chapter">Custom logic in the middle — callbacks</a></li>
   </ul></li>
 </ul>
 </div>
