@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>URL parameters in views</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Displaying a single database object" href="detail_view.html" />
+    <link rel="prev" title="Common context data" href="common_context_data.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="common_context_data.html" title="Previous document">Common context data</a>
+        </li>
+        <li>
+          <a href="detail_view.html" title="Next document">Displaying a single database object</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="url-parameters-in-views">
+<h1>URL parameters in views<a class="headerlink" href="#url-parameters-in-views" title="Permalink to this headline">¶</a></h1>
+<p>As described in the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial03/">Django tutorial for views</a> and the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#how-django-processes-a-request">request
+handling docs</a>,
+if you want to capture part of a URL to be used in a view function, you can do
+it by configuring your URLs.</p>
+<p>Let’s say you have some kind of e-commerce site where you want to display
+products on individual pages. We want <code class="docutils literal notranslate"><span class="pre">/product/</span></code> to be the prefix for all
+these pages, and the next part to be the “slug” for the product — a URL-friendly
+version of the name (e.g <code class="docutils literal notranslate"><span class="pre">white-t-shirt</span></code> instead of “White T-Shirt”).</p>
+<p>We can do that as follow:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
+
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;products/&lt;slug:product_slug&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">product_detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;product_detail&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># views.py</span>
+
+<span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+<p>Note how the <code class="docutils literal notranslate"><span class="pre">product_slug</span></code> parameter has to be added to view function
+signature, as well as in the URL conf. (We didn’t actually use this
+<code class="docutils literal notranslate"><span class="pre">product_slug</span></code> parameter yet, that will be covered in the next section). If
+you don’t modify the view like this, it simply won’t work — you’ll get an
+exception, because Django will attempt to call your function with parameters
+that your function doesn’t accept, which is an error in Python.</p>
+<p>If you are used to CBVs, this is one of the more obvious differences. With a
+CBV, you don’t have to modify the function signature — because there isn’t one
+to modify. But with the CBV you have to write more code to get hold of that
+parameter.</p>
+<p>Be sure to check the Django docs about <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters">path converters</a> for
+the different kind of things you might add into your URLs. If you are into type
+hints, also see below for tips on how you can enhance this pattern.</p>
+<p>Otherwise, onto <a class="reference internal" href="detail_view.html"><span class="doc">Displaying a single database object</span></a>.</p>
+<div class="section" id="discussion-generic-code-and-function-signatures">
+<h2>Discussion: generic code and function signatures<a class="headerlink" href="#discussion-generic-code-and-function-signatures" title="Permalink to this headline">¶</a></h2>
+<p>Django’s URL-to-function dispatching mechanism is very elegant and powerful,
+converting parts of the URL into a function parameter that’s just ready and
+waiting to be used.</p>
+<p>With the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters">path converters</a>
+functionality added in 2.0 it got a whole lot better, because it will
+automatically convert things to the correct type for you, reducing the amount of
+type conversion you have to do in your function.</p>
+<p>You can additionally make use of this by adding type hints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">pass</span>  <span class="c1"># etc</span>
+
+<span class="c1"># OR</span>
+<span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">pass</span>  <span class="c1"># etc</span>
+</pre></div>
+</div>
+<p>Now, you now longer have to check the URLconf to be sure of the type of the
+argument, it’s right there in your function.</p>
+<p>Of course, wouldn’t it be even cooler if we could automatically ensure that the
+URL configuration matched the view function, both in terms of names and types of
+arguments?</p>
+<p><a class="reference external" href="https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d">OK, you’ve persuaded me, go on then!</a> (This
+code is pretty functional as it is already, but needs a fair amount of work to
+be a proper package. If anyone would like to take that on as a project, please
+go ahead, and I’ll link it here!).</p>
+<p>Unfortunately, you lose a number of these advantages if you are using CBVs:</p>
+<ul>
+<li><p>The code to get hold of the parameter is bulkier:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>It can be easy to make a typo here, without it being immediately obvious, especially
+if for some reason you write it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you use functions, you will almost always get an immediate error if your
+URL doesn’t match your function signature.</p>
+</li>
+<li><p>You don’t have a signature that you can decorate with type hints. The
+signature that is externally visible for your view is <code class="docutils literal notranslate"><span class="pre">view(request,</span> <span class="pre">*args,</span>
+<span class="pre">**kwargs)</span></code>, so it is impossible for the above code to type check, or check
+that you are attempting to get the right thing out of <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p></li>
+</ul>
+<p>The fundamental issue here is <strong>generic code</strong>. Generic code is useful precisely
+because of its breadth — it can be used in a wide range of situations. However,
+the downside of generic code is that it has to cater for every situation,
+instead of just yours. So it has to have a dictionary <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>, which isn’t
+really what you wanted. Generic code by definition lacks the personal touch.</p>
+<p>Of course, there can be times when the advantages outweigh the disadvantages.
+But make sure you know what you are missing!</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="common_context_data.html" title="Previous document">Common context data</a>
+        </li>
+        <li>
+          <a href="detail_view.html" title="Next document">Displaying a single database object</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">URL parameters in views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-generic-code-and-function-signatures">Discussion: generic code and function signatures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start - delegation</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="common_context_data.html" title="previous chapter">Common context data</a></li>
+      <li>Next: <a href="detail_view.html" title="next chapter">Displaying a single database object</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/url_parameters.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

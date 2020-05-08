@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Custom logic at the start - delegation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Displaying a list of objects" href="list_view.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="list_view.html" title="Previous document">Displaying a list of objects</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="custom-logic-at-the-start-delegation">
+<h1>Custom logic at the start - delegation<a class="headerlink" href="#custom-logic-at-the-start-delegation" title="Permalink to this headline">¶</a></h1>
+<p>The next few pages address the problem of needing to re-use some logic from one
+view in another view. We’ve thought about how we can use utility functions and
+classes, but sometimes these don’t cut it — sometimes the majority of the body
+of the view needs to be re-used. How can we do that with FBVs?</p>
+<p>Continuing our <a class="reference internal" href="list_view.html"><span class="doc">example</span></a> of a list of products, let’s add a
+variation. As well as the main product list page, we’ve also got a “special
+offers” page — or rather, a set of them, because we can have a <code class="docutils literal notranslate"><span class="pre">SpecialOffers</span></code>
+model that allows us to have many different ones. Each of these pages needs to
+display some details about the special offer, and then the list of products
+associated with that offer. This product list should have <strong>all</strong> the features
+of the normal product list (filtering, sorting etc.) so we want to re-use the
+logic.</p>
+<p>So our view will need to do two things: it will shows a single object, and also
+shows a list. The answer of how to do two things with FBVs is: <strong>do two
+things</strong>: Let’s start with a simple version of our view:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;special-offers/&lt;slug:slug&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">special_offer_detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;special_offer_detail&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># views.py</span>
+
+<span class="k">def</span> <span class="nf">special_offer_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="n">special_offer</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">SpecialOffer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;products/special_offer_detail.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;special_offer&#39;</span><span class="p">:</span> <span class="n">special_offer</span><span class="p">,</span>
+        <span class="s1">&#39;products&#39;</span><span class="p">:</span> <span class="n">special_offer</span><span class="o">.</span><span class="n">get_products</span><span class="p">(),</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+<p>I’ve assumed the <code class="docutils literal notranslate"><span class="pre">SpecialOffer.get_products()</span></code> method exists and returns a
+<code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>. If you have an appropriate <code class="docutils literal notranslate"><span class="pre">ManyToMany</span></code> relationships the
+implementation might be as simple as <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">self.products.all()</span></code>.</p>
+<p>But now we want to change this view to re-use the logic in our normal
+<code class="docutils literal notranslate"><span class="pre">product_list</span></code> view, whether it is filtering/sorting/paging or anything else
+it has built up by now. How should we do that?</p>
+<p>The easiest way to answer to this is to look at our old <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view
+and apply <a class="reference external" href="https://www.toptal.com/python/python-parameterized-design-patterns">parameterisation</a>.</p>
+<p>(Template level - use includes)</p>
+<div class="section" id="discussion-function-based-generic-views">
+<span id="function-based-generic-views"></span><h2>Discussion: Function based generic views<a class="headerlink" href="#discussion-function-based-generic-views" title="Permalink to this headline">¶</a></h2>
+<p>What happens if you keep going with this parameterisation pattern? Let’s say you
+have not one model, but lots of models where you want to display a list, with
+the same kind of filtering/sorting/paging logic applied?</p>
+<p>You might end up with an <code class="docutils literal notranslate"><span class="pre">object_list</span></code> function and a bunch of parameters,
+instead of <code class="docutils literal notranslate"><span class="pre">product_list</span></code>. In other words, you’ll end up with your own
+function based generic views, <a class="reference external" href="https://django.readthedocs.io/en/1.3.X/topics/generic-views.html#generic-views-of-objects">just like the ones that used to exist in Django</a>.</p>
+<p>Isn’t that a step backwards? I’d argue no. With the benefit of hindsight, I’d
+argue that the move from these function based generic views to class based
+generic views was actually the backwards step.</p>
+<p>But that is in the past. Looking forward, the generic <code class="docutils literal notranslate"><span class="pre">object_list</span></code> you might
+develop will be better than both Django’s old generic FBVs and the newer generic
+CBVs in several ways:</p>
+<ul class="simple">
+<li><p>They will have all the functionality you need built-in.</p></li>
+<li><p>Importantly, they will have none of the functionality you don’t need.</p></li>
+<li><p>You will be able to change them <strong>whenever you want</strong>, <strong>however you want</strong>.</p></li>
+</ul>
+<p>In other words, they will be both specific (to your project) and generic (across
+your project) in all the right ways. They won’t suffer from Django’s limitations
+in trying to be all things to all men.</p>
+<p>As FBVs they will also be better then custom CBVs</p>
+<p>TODO interface, local variables. Long parameter lists.</p>
+</div>
+<div class="section" id="discussion-copy-paste-programming-bad-classes-good">
+<h2>Discussion: Copy-paste Programming Bad, Classes Good?<a class="headerlink" href="#discussion-copy-paste-programming-bad-classes-good" title="Permalink to this headline">¶</a></h2>
+<p>Why didn’t we stop with function based generic views? The problem was that there
+was an endless list of requests to extend generic views to do one more thing,
+and we wanted to provide something more customisable.</p>
+<p>Our answer to this problem should have been: if these generic views don’t do
+what you want, write your own. You can easily copy-paste the functionality you
+need and start from there. Why didn’t we just say that? I think we somehow had
+the idea that copy-paste is the ultimate disaster in software development. If
+there is some functionality written, we should always make it re-usable rather
+than re-implement, and we’ve somehow failed as software developers if we can’t.</p>
+<p>You can see this is the design of the CBVs. A lot of the complexity in the
+hierarchy looks like it was introduced in order to avoid a single duplicate
+line. <a class="reference external" href="https://verraes.net/2014/08/dry-is-about-knowledge/">But that shouldn’t be our primary aim</a>.</p>
+<p>There are plenty of times when the evils of copy-paste programming are much
+better than the alternatives.</p>
+<p>I recently wrote several implementations of Mozilla’s <a class="reference external" href="https://projectfluent.org/">Fluent</a> localisation language, all of them in Python. One
+of them was a Fluent-to-Python compiler, another was a Fluent-to-Elm compiler.
+These two projects are clearly very similar in nature. So when I started the
+second, I did so with <a class="reference external" href="https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee">one big copy-paste job</a>.
+I knew that although there were many, many similarities between the two
+projects, there would also be many, many differences. I was right — the two code
+bases still share a huge amount in terms of structure, even with some identical
+functions. In a few places they have identical bits of code. But the
+code bases have also diverged, at many, many points, both in small details and
+in more fundamental ways.</p>
+<p>The decision to copy-paste was overwhelming the right decision. Attempting to
+avoid duplicating anything while I was developing the second would have been an
+absolute killer in terms of complexity, and may still have failed. Once or twice
+I actually copied fixes or changes directly from one to the other, but most
+times when I had to “equivalent” bug fixes or feature additions, they looked
+significantly different in the two code bases. Having to do them twice from
+scratch cost far, far less than attempting to build an abstraction layer that
+would have made that unnecessary.</p>
+<p>Before you can abstract commonality, you actually need at least two examples.
+The common abstractions may be very different from what you thought, and when
+you have enough information to make that decision you might decide that its not
+worth it. Avoiding duplication at all costs is a terrible idea.</p>
+</div>
+<div class="section" id="discussion-multiple-mixins">
+<h2>Discussion: Multiple mixins?<a class="headerlink" href="#discussion-multiple-mixins" title="Permalink to this headline">¶</a></h2>
+<p>When doing both a single object lookup and a list of objects, contrast the
+simplicity of the above FBV code with <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview">trying to wrangle CBVs into doing this</a>.
+These Django docs do come up with a solution for this case, while thankfully
+adding a “don’t try this at home kids” warning and mentioning that many mixins
+don’t actually work together. But we need to add to those warnings:</p>
+<ul class="simple">
+<li><p>It’s virtually impossible to know ahead of time which combinations are likely
+to turn out bad.</p></li>
+<li><p>Simple things often turn into complicated things. If you have started with
+CBVs, you will most likely want to continue, and you’ll find yourself rather
+snarled up. You will then have to retrace, and completely restructure your
+code, working out how to implement for yourself the things the CBVs were doing
+for you. As we mentioned before, the CBV is a <a class="reference internal" href="thepattern.html#bad-starting-point"><span class="std std-ref">bad starting point</span></a>.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="list_view.html" title="Previous document">Displaying a list of objects</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Custom logic at the start - delegation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-function-based-generic-views">Discussion: Function based generic views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-copy-paste-programming-bad-classes-good">Discussion: Copy-paste Programming Bad, Classes Good?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-multiple-mixins">Discussion: Multiple mixins?</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="list_view.html" title="previous chapter">Displaying a list of objects</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/delegation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
