@@ -52,9 +52,10 @@ reference docs.
 
 Second, discussion — the **why**: a longer, in-depth explanation of why everyone
 else who tells you differently is wrong :-). It's targeted at slightly more
-experienced developers, and especially those who are responsible for teaching or
-making decisions about the patterns used in a code base. In each one I'll tackle
-one or two different aspects of the comparisons between CBVs and FBVs.
+experienced developers, and especially those who are responsible for teaching
+other people, or making decisions about the patterns used in a code base. In
+each one I'll tackle one or two different aspects of the comparisons between
+CBVs and FBVs, and more general programming principles.
 
 So let's go!
 
@@ -70,6 +71,7 @@ So let's go!
    detail_view
    list_view
    delegation
+   callbacks
 
 
 Caveats and disclaimers etc.

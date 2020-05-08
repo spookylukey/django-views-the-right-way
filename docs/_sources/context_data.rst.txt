@@ -21,7 +21,18 @@ As we said, the answer to how do anything in a view is “Just do it”:
            'today': date.today(),   # This is the line you add
        })
 
-(Ignoring imports we already added)
+
+.. note::
+
+   **Formatting:** I'm formatting my code examples in line with PEP8, and after
+   that for clarity, especially to highlight things that have changed. So this
+   example adds one line to our pattern, and I've formatted it accordingly.
+   There is no need to following the formatting, and you (or your tools) might
+   have other ideas!
+
+.. note::
+
+   **Imports:** For brevity I'll omit any imports I've mentioned already.
 
 We're going to let the template decide how to format the date (most likely using
 the `date filter
@@ -42,10 +53,10 @@ it:
            context['special_message'] = 'Happy Monday!'
        return TemplateResponse(request, "home.html", context)
 
-Next up: :doc:`common_context_data`
+That's it! Next up: :doc:`common_context_data`.
 
 
-Discussion: embarrassingly simple?
+Discussion: Embarrassingly simple?
 ----------------------------------
 
 This code is so simple it might not seem worth mentioning. Yet, with Class Based
@@ -99,5 +110,5 @@ capable developer to actually successfully pull off all the parts needed for a
 <https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/>`_.
 
 Rather, he struggled for so long because of a bad context that was making a
-simple thing hard, and those of us responsible for that bad context should be
-the ones who are embarrassed.
+simple thing hard, and those of us responsible for that bad context are the ones
+who should be embarrassed.

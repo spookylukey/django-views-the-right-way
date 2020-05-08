@@ -123,8 +123,8 @@ write this brings up some issues that I’ll discuss in turn, and finally I’ll
 look at one of the biggest issues with CBVs — the layering violations they
 encourage.</p>
 </div>
-<div class="section" id="discussion-template-name-convention-vs-configuration">
-<h2>Discussion: <code class="docutils literal notranslate"><span class="pre">template_name</span></code> — convention vs configuration<a class="headerlink" href="#discussion-template-name-convention-vs-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="discussion-convention-vs-configuration">
+<h2>Discussion: Convention vs configuration<a class="headerlink" href="#discussion-convention-vs-configuration" title="Permalink to this headline">¶</a></h2>
 <p>The first way we could shorten the CBV version is by omitting <code class="docutils literal notranslate"><span class="pre">template_name</span></code>.
 The generic CBVs have some logic built in to derive a template name from the
 model name and the type of view, which in this case would result in
@@ -182,7 +182,7 @@ ourselves if we are going to make code harder maintain for the sake of saving a
 tiny bit of typing.</p>
 </div>
 <div class="section" id="discussion-static-vs-dynamic">
-<h2>Discussion: static vs dynamic?<a class="headerlink" href="#discussion-static-vs-dynamic" title="Permalink to this headline">¶</a></h2>
+<h2>Discussion: Static vs dynamic<a class="headerlink" href="#discussion-static-vs-dynamic" title="Permalink to this headline">¶</a></h2>
 <p>For the case of statically defining what query to start with, we have two options:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">Product</span></code></p></li>
@@ -225,7 +225,7 @@ checks framework is able to check it for you before you even access the admin.</
 enough, compared to how often you need the dynamic version.</p>
 </div>
 <div class="section" id="discussion-generic-code-and-variable-names">
-<h2>Discussion: generic code and variable names<a class="headerlink" href="#discussion-generic-code-and-variable-names" title="Permalink to this headline">¶</a></h2>
+<h2>Discussion: Generic code and variable names<a class="headerlink" href="#discussion-generic-code-and-variable-names" title="Permalink to this headline">¶</a></h2>
 <p>A third way to shorten the CBV is to omit <code class="docutils literal notranslate"><span class="pre">context_object_name</span></code>. In that case,
 instead of having our <code class="docutils literal notranslate"><span class="pre">Product</span></code> object having the name <code class="docutils literal notranslate"><span class="pre">product</span></code> in the
 template, it would have the name <code class="docutils literal notranslate"><span class="pre">object</span></code>. Don’t do that! <code class="docutils literal notranslate"><span class="pre">object</span></code> is a very
@@ -244,7 +244,7 @@ could have chosen a much better name, but your code wasn’t in charge.</p>
 doesn’t exist, because you don’t inherit local variable names.</p>
 </div>
 <div class="section" id="discussion-layering-violations-shortcuts-vs-mixins">
-<h2>Discussion: layering violations — shortcuts vs mixins<a class="headerlink" href="#discussion-layering-violations-shortcuts-vs-mixins" title="Permalink to this headline">¶</a></h2>
+<span id="shortcuts-vs-mixins"></span><h2>Discussion: Layering violations — shortcuts vs mixins<a class="headerlink" href="#discussion-layering-violations-shortcuts-vs-mixins" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code> is an example of a “shortcut” function. <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/">Django’s docs for
 shortcut functions</a> defines them
 like this:</p>
@@ -288,7 +288,7 @@ following:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">render_to_response</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">setup</span></code></p></li>
 </ul>
-<p>These methods certainly span a more than one layer. We’ve got methods that deal
+<p>These methods certainly span more than one layer. We’ve got methods that deal
 very much with the HTTP layer (dispatching on different verbs, extracting data
 out of a URL, building responses), and others that deal with retrieving database
 objects and others with templates.</p>
@@ -301,7 +301,8 @@ principle” for class design. Through that lens, this class doesn’t look very
 good at all. It has far too many different directions you might want to take it.</p>
 <p>But the most convincing to me is too look what happens when you carry on this
 pattern.</p>
-<p>I recently came across a family of views that had the following methods:</p>
+<p>I recently came across a family of views that had the following methods and
+class attributes (including all the base classes):</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">as_view</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">basic_styles</span></code></p></li>
@@ -354,10 +355,17 @@ pattern.</p>
 <p>These views generate Excel spreadsheets. For the methods you don’t recognise,
 most of them relate to XLS generation, or to retrieving data the from the
 database. As you can guess, the implementation was significantly complicated by
-the hybrid nature of this class.</p>
-<p>Even for the job it is doing, code like this is awkward, but when new
-requirements come along — like you need to generate XLS reports offline, outside
-of a web context — then you really are in a mess.</p>
+the hybrid nature of this class (with method like <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> trying to cope
+with lack of a sensible <code class="docutils literal notranslate"><span class="pre">__init__</span></code> that the developer was in control of).</p>
+<p>It furthered suffered from the fact that all the methods had access to <code class="docutils literal notranslate"><span class="pre">self</span></code>,
+and via <code class="docutils literal notranslate"><span class="pre">self.request</span></code> they had access to the HTTP request object. This meant
+there was no clear separation of request processing from anything else — the
+layers had all merged. This happens very easily with classes like this, because
+you never have to explicitly pass the <code class="docutils literal notranslate"><span class="pre">request</span></code> parameter around to make it
+available, it’s implicitly available via <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+<p>This kind of code is painful to work with even for the job it is doing. But when
+new requirements come along — like you need to generate XLS reports offline,
+outside of a web context — then you really are in a mess.</p>
 <p>What is needed is a separate set of classes that handle just XLS generation,
 which should then be used by our view functions (or classes). These will also
 have the advantage of being able to test some aspect of the XLS generation
@@ -408,14 +416,15 @@ opinion his analysis is spot on.</p>
 <li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Displaying a single database object</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-comparison-to-detailview">Discussion: Comparison to DetailView</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-template-name-convention-vs-configuration">Discussion: <code class="docutils literal notranslate"><span class="pre">template_name</span></code> — convention vs configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-static-vs-dynamic">Discussion: static vs dynamic?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-generic-code-and-variable-names">Discussion: generic code and variable names</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-layering-violations-shortcuts-vs-mixins">Discussion: layering violations — shortcuts vs mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-convention-vs-configuration">Discussion: Convention vs configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-static-vs-dynamic">Discussion: Static vs dynamic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-generic-code-and-variable-names">Discussion: Generic code and variable names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-layering-violations-shortcuts-vs-mixins">Discussion: Layering violations — shortcuts vs mixins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start - delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Custom logic at the start — callbacks</a></li>
 </ul>
 
 

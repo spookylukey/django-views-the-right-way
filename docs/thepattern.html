@@ -54,8 +54,8 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#the-pattern" id="id2">The Pattern</a></p></li>
 <li><p><a class="reference internal" href="#the-explanation" id="id3">The explanation</a></p></li>
-<li><p><a class="reference internal" href="#discussion-boilerplate" id="id4">Discussion - boilerplate</a></p></li>
-<li><p><a class="reference internal" href="#discussion-starting-points" id="id5">Discussion: starting points</a></p></li>
+<li><p><a class="reference internal" href="#discussion-boilerplate" id="id4">Discussion: Boilerplate</a></p></li>
+<li><p><a class="reference internal" href="#discussion-starting-points" id="id5">Discussion: Starting points</a></p></li>
 </ul>
 </div>
 <div class="section" id="the-pattern">
@@ -64,7 +64,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
 
 <span class="k">def</span> <span class="nf">example_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;example.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
 </pre></div>
 </div>
 <p>And the corresponding urls.py:</p>
@@ -102,7 +102,7 @@ can remove it, or add more, but have to change the URLconf to match.</p></li>
 </ul>
 <p>That’s it!</p>
 <p>But, you need a slightly deeper understanding if you’re going to write good
-Django views, so this page is slightly longer than most, for an explanation.</p>
+Django views, so this page is quite a bit longer than most, for an explanation.</p>
 </div>
 <div class="section" id="the-explanation">
 <h2><a class="toc-backref" href="#id3">The explanation</a><a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
@@ -115,7 +115,7 @@ for Hello World! In your views.py, you’d have this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 
 <span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">&#39;Hello world!&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This function expects to receive a ‘request’ object as its argument. This will
@@ -124,7 +124,7 @@ which contains all the information about the request that the user’s browser
 sent. It then returns an <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponse">HttpResponse</a>
 object as its return value. This contains all the data to be sent back to the
 user’s browser — HTTP headers and body, which is typically a web page. In our
-case, we sent just the text “Hello world!”. This request-response cycle is the
+case, we sent just the text <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">world!</span></code>. This request-response cycle is the
 heart of the Django web framework.</p>
 <p>In order to get Django to actually call our view function, we have to hook it
 into a <code class="docutils literal notranslate"><span class="pre">urlconf</span></code> somewhere. This is covered in the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial01/#write-your-first-view">Django tutorial part 1</a>,
@@ -142,7 +142,7 @@ in our urls.py:</p>
 <p>In many cases, we want a single view function to actually match a family of URLs
 which have some kind of parameter in them, and access that parameter in our view
 function. Django has built-in support for this. Suppose we want to match URLs
-like <code class="docutils literal notranslate"><span class="pre">hello/XXX/</span></code> where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> could be any string. Then our URLconf becomes:</p>
+like <code class="docutils literal notranslate"><span class="pre">/hello/XXX/</span></code> where <code class="docutils literal notranslate"><span class="pre">XXX</span></code> could be any string. Then our URLconf becomes:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">path</span><span class="p">(</span><span class="s1">&#39;hello/&lt;str:my_arg&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">hello_world</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;hello_world&#39;</span><span class="p">),</span>
 <span class="p">]</span>
@@ -159,7 +159,7 @@ dynamic web site, not a static one — and we want to build it up in an ordered
 way that will handle HTML escaping, and also provide a common set of page
 elements (like navigation) for our different pages. So we’ll almost always want
 to use Django’s template engine — covered in the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/#write-views-that-actually-do-something">Django tutorial part 3</a>.
-Instead of passing that “Hello world” string, we’re going to have a
+Instead of passing that <code class="docutils literal notranslate"><span class="pre">&quot;Hello</span> <span class="pre">world&quot;</span></code> string, we’re going to have a
 <code class="docutils literal notranslate"><span class="pre">hello_world.html</span></code> template, and pass it some “context data” — any dynamic
 information that needs to appear in the page.</p>
 <p>So our revised view might look like this:</p>
@@ -206,38 +206,38 @@ for views:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
 
 <span class="k">def</span> <span class="nf">example_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;example.html&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;example.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
 </pre></div>
 </div>
 <p>You need to know what each bit is, as described above. <strong>But that is the end of
 the lesson</strong>. You can skip to the next part. Or you can even just stop reading —
 you now know all the essentials of writing HTML views in Django.</p>
-<p>You don’t need to learn any of the CBV APIs - TemplateView, RedirectView,
-ListView, DetailView, FormView, MultipleObjectMixin and all their inheritance
-trees or method flowcharts. They will only make your life harder. Print out
-their documentation, put in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how much
-there is</a> — fill the warehouse with dynamite and <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t
-look back</a>.</p>
+<p>You don’t need to learn any of the CBV APIs - <code class="docutils literal notranslate"><span class="pre">TemplateView</span></code>, <code class="docutils literal notranslate"><span class="pre">ListView</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DetailView</span></code>, <code class="docutils literal notranslate"><span class="pre">FormView</span></code>, <code class="docutils literal notranslate"><span class="pre">MultipleObjectMixin</span></code> etc. etc. and all their
+inheritance trees or method flowcharts. They will only make your life harder.
+Print out their documentation, put in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how
+much there is</a> — fill the warehouse with dynamite and
+<a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t look back</a>.</p>
 <p>Next up - <a class="reference internal" href="anything.html"><span class="doc">How to do anything in a view</span></a>.</p>
 </div>
 <div class="section" id="discussion-boilerplate">
-<span id="boilerplate"></span><h2><a class="toc-backref" href="#id4">Discussion - boilerplate</a><a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
+<span id="boilerplate"></span><h2><a class="toc-backref" href="#id4">Discussion: Boilerplate</a><a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
 <p>The first thing to note about boilerplate (by which I mean repeated code that
 just Needs To Be There For Some Reason) is that a small amount of it is not a
 big problem in software development. <strong>We don’t spend most of our time typing,
 we spend most of our time reading code. This means that clarity is much more
 important than shaving a few keystrokes</strong>. Arguments about small amounts of
 boilerplate should not be the major factor.</p>
-<p>The real issue with boilerplate, in fact, is not how typing it involves, but
-that verbose code hinders comprehension due to the low signal-to-noise ratio.
-<strong>Boilerplate reduction should only ever be about noise reduction, not typing
-reduction.</strong></p>
+<p>The real issue with boilerplate, in fact, is not how much typing it involves,
+but that verbose code hinders comprehension due to the low signal-to-noise
+ratio. <strong>Boilerplate reduction should be almost entirely about noise reduction,
+not typing reduction.</strong></p>
 <p>For example, if we wanted, we could reduce the “repetition” of having
 <code class="docutils literal notranslate"><span class="pre">request</span></code> as an argument to each view function using threadlocals and an
-import. We could go further, and remove the import using some magic like web.py
+import. We could go further, and remove the import using some magic like web2py
 does. But <a class="reference external" href="https://youtu.be/S0No2zSJmks?t=1716">we recognise this as a bad idea</a>, because it reduces clarity. Those
 functions have <code class="docutils literal notranslate"><span class="pre">request</span></code> as an argument because it is an argument. Making it
-an implicit one, instead of an explicit one, would not help clarity.</p>
+an implicit one, instead of an explicit one, would hurt you in lots of ways.</p>
 <p>With that in mind, let’s do a comparison. The CBV equivalent to the view I wrote
 above is as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
@@ -310,9 +310,9 @@ and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/bl
 </ul>
 </div>
 <div class="section" id="discussion-starting-points">
-<span id="bad-starting-point"></span><h2><a class="toc-backref" href="#id5">Discussion: starting points</a><a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
+<span id="bad-starting-point"></span><h2><a class="toc-backref" href="#id5">Discussion: Starting points</a><a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
 <p>Some people will say we can use the CBV for the really simple cases, and then
-switch to FBV later as needed. But in reality that doesn’t happen. Most
+switch to an FBV later as needed. But in reality that doesn’t happen. Most
 developers are much more likely to stick with the existing structure of the
 code, because that is a safe option, and usually involves less work. Plus, once
 you have started down the CBV route, you quickly gain various mixins etc. that
@@ -328,9 +328,9 @@ to start defining methods, which brings you pain:</p>
 <ul class="simple">
 <li><p>You’ve got to know which methods to define, which involves knowing this
 massive API.</p></li>
-<li><p>You could easily get it wrong in a way which introduces terrifying bugs. (TODO
+<li><p>You could easily get it wrong in a way which introduces serious bugs. (TODO
 link)</p></li>
-<li><p>You’ve got to add the method, which is a whole bunch of boilerplate.</p></li>
+<li><p>You’ve got to add the method, which is extra boilerplate.</p></li>
 </ul>
 </div>
 </div>
@@ -362,8 +362,8 @@ link)</p></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">The Right Way</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-pattern">The Pattern</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-explanation">The explanation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-boilerplate">Discussion - boilerplate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-starting-points">Discussion: starting points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-boilerplate">Discussion: Boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-starting-points">Discussion: Starting points</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -372,7 +372,8 @@ link)</p></li>
 <li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start - delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Custom logic at the start — callbacks</a></li>
 </ul>
 
 

@@ -16,7 +16,7 @@ This is how you start writing any HTML-based view in Django:
    from django.template.response import TemplateResponse
 
    def example_view(request, arg):
-       return TemplateResponse(request, "example.html", {})
+       return TemplateResponse(request, 'example.html', {})
 
 And the corresponding urls.py:
 
@@ -59,7 +59,7 @@ Which bits do you change?
 That's it!
 
 But, you need a slightly deeper understanding if you're going to write good
-Django views, so this page is slightly longer than most, for an explanation.
+Django views, so this page is quite a bit longer than most, for an explanation.
 
 The explanation
 ---------------
@@ -78,7 +78,7 @@ for Hello World! In your views.py, you'd have this:
    from django.http import HttpResponse
 
    def hello_world(request):
-       return HttpResponse("Hello world!")
+       return HttpResponse('Hello world!')
 
 
 This function expects to receive a ‘request’ object as its argument. This will
@@ -89,7 +89,7 @@ sent. It then returns an `HttpResponse
 <https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponse>`_
 object as its return value. This contains all the data to be sent back to the
 user's browser — HTTP headers and body, which is typically a web page. In our
-case, we sent just the text "Hello world!". This request-response cycle is the
+case, we sent just the text ``Hello world!``. This request-response cycle is the
 heart of the Django web framework.
 
 In order to get Django to actually call our view function, we have to hook it
@@ -114,7 +114,7 @@ in our urls.py:
 In many cases, we want a single view function to actually match a family of URLs
 which have some kind of parameter in them, and access that parameter in our view
 function. Django has built-in support for this. Suppose we want to match URLs
-like ``hello/XXX/`` where ``XXX`` could be any string. Then our URLconf becomes:
+like ``/hello/XXX/`` where ``XXX`` could be any string. Then our URLconf becomes:
 
 .. code-block:: python
 
@@ -138,8 +138,8 @@ way that will handle HTML escaping, and also provide a common set of page
 elements (like navigation) for our different pages. So we'll almost always want
 to use Django's template engine — covered in the `Django tutorial part 3
 <https://docs.djangoproject.com/en/stable/intro/tutorial03/#write-views-that-actually-do-something>`_.
-Instead of passing that "Hello world" string, we're going to have a
-``hello_world.html`` template, and pass it some "context data" — any dynamic
+Instead of passing that ``"Hello world"`` string, we're going to have a
+``hello_world.html`` template, and pass it some “context data” — any dynamic
 information that needs to appear in the page.
 
 So our revised view might look like this:
@@ -180,7 +180,7 @@ sleeve, however — `TemplateResponse
 The issue with just using ``render`` is that you get a plain ``HttpResponse``
 object back that has no memory that it ever came from a template. Sometimes,
 however, it is useful to have functions return a value that does remember what
-it's "made of" — something that stores the template it is from, and the context.
+it's “made of” — something that stores the template it is from, and the context.
 This can be really useful in testing, but also if we want to something outside
 of our view function (such as decorators or middleware) to check or even change
 whats in the response before it finally gets 'rendered' and sent to the user.
@@ -200,27 +200,27 @@ for views:
    from django.template.response import TemplateResponse
 
    def example_view(request, arg):
-       return TemplateResponse(request, "example.html", {})
+       return TemplateResponse(request, 'example.html', {})
 
 
 You need to know what each bit is, as described above. **But that is the end of
 the lesson**. You can skip to the next part. Or you can even just stop reading —
 you now know all the essentials of writing HTML views in Django.
 
-You don't need to learn any of the CBV APIs - TemplateView, RedirectView,
-ListView, DetailView, FormView, MultipleObjectMixin and all their inheritance
-trees or method flowcharts. They will only make your life harder. Print out
-their documentation, put in a shed — or rather, a warehouse `given how much
-there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and `don't
-look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
+You don't need to learn any of the CBV APIs - ``TemplateView``, ``ListView``,
+``DetailView``, ``FormView``, ``MultipleObjectMixin`` etc. etc. and all their
+inheritance trees or method flowcharts. They will only make your life harder.
+Print out their documentation, put in a shed — or rather, a warehouse `given how
+much there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and
+`don't look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
 
 Next up - :doc:`anything`.
 
 
 .. _boilerplate:
 
-Discussion - boilerplate
-------------------------
+Discussion: Boilerplate
+-----------------------
 
 The first thing to note about boilerplate (by which I mean repeated code that
 just Needs To Be There For Some Reason) is that a small amount of it is not a
@@ -229,18 +229,18 @@ we spend most of our time reading code. This means that clarity is much more
 important than shaving a few keystrokes**. Arguments about small amounts of
 boilerplate should not be the major factor.
 
-The real issue with boilerplate, in fact, is not how typing it involves, but
-that verbose code hinders comprehension due to the low signal-to-noise ratio.
-**Boilerplate reduction should only ever be about noise reduction, not typing
-reduction.**
+The real issue with boilerplate, in fact, is not how much typing it involves,
+but that verbose code hinders comprehension due to the low signal-to-noise
+ratio. **Boilerplate reduction should be almost entirely about noise reduction,
+not typing reduction.**
 
 For example, if we wanted, we could reduce the “repetition” of having
 ``request`` as an argument to each view function using threadlocals and an
-import. We could go further, and remove the import using some magic like web.py
+import. We could go further, and remove the import using some magic like web2py
 does. But `we recognise this as a bad idea
 <https://youtu.be/S0No2zSJmks?t=1716>`_, because it reduces clarity. Those
 functions have ``request`` as an argument because it is an argument. Making it
-an implicit one, instead of an explicit one, would not help clarity.
+an implicit one, instead of an explicit one, would hurt you in lots of ways.
 
 With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
 above is as follows:
@@ -338,11 +338,11 @@ In other words:
 
 .. _bad-starting-point:
 
-Discussion: starting points
+Discussion: Starting points
 ---------------------------
 
 Some people will say we can use the CBV for the really simple cases, and then
-switch to FBV later as needed. But in reality that doesn't happen. Most
+switch to an FBV later as needed. But in reality that doesn't happen. Most
 developers are much more likely to stick with the existing structure of the
 code, because that is a safe option, and usually involves less work. Plus, once
 you have started down the CBV route, you quickly gain various mixins etc. that
@@ -361,6 +361,6 @@ to start defining methods, which brings you pain:
 
 * You've got to know which methods to define, which involves knowing this
   massive API.
-* You could easily get it wrong in a way which introduces terrifying bugs. (TODO
+* You could easily get it wrong in a way which introduces serious bugs. (TODO
   link)
-* You've got to add the method, which is a whole bunch of boilerplate.
+* You've got to add the method, which is extra boilerplate.

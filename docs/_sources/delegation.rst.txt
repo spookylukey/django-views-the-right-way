@@ -1,4 +1,4 @@
-Custom logic at the start - delegation
+Custom logic at the start — delegation
 ======================================
 
 The next few pages address the problem of needing to re-use some logic from one
@@ -8,16 +8,17 @@ of the view needs to be re-used. How can we do that with FBVs?
 
 Continuing our :doc:`example <list_view>` of a list of products, let's add a
 variation. As well as the main product list page, we've also got a “special
-offers” page — or rather, a set of them, because we can have a ``SpecialOffers``
+offers” page — or rather, a set of them, because we can have a ``SpecialOffer``
 model that allows us to have many different ones. Each of these pages needs to
 display some details about the special offer, and then the list of products
-associated with that offer. This product list should have **all** the features
-of the normal product list (filtering, sorting etc.) so we want to re-use the
-logic.
+associated with that offer. Our feature requirements say this product list
+should have **all** the features of the normal product list (filtering, sorting
+etc.), so we want to re-use the logic as much as possible.
 
-So our view will need to do two things: it will shows a single object, and also
+So our view will need to do two things: it will show a single object, and also
 shows a list. The answer of how to do two things with FBVs is: **do two
-things**: Let's start with a simple version of our view:
+things**: No special tricks needed for that. Let's start with a simple version
+of our view:
 
 .. code-block:: python
 
@@ -35,28 +36,72 @@ things**: Let's start with a simple version of our view:
 
    def special_offer_detail(request, slug):
        special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
-       return TemplateResponse(request, "products/special_offer_detail.html", {
+       return TemplateResponse(request, 'products/special_offer_detail.html', {
            'special_offer': special_offer,
            'products': special_offer.get_products(),
        })
 
 I've assumed the ``SpecialOffer.get_products()`` method exists and returns a
 ``QuerySet``. If you have an appropriate ``ManyToMany`` relationships the
-implementation might be as simple as ``return self.products.all()``.
+implementation might be as simple as ``return self.products.all()``, but it
+might be different.
 
 But now we want to change this view to re-use the logic in our normal
 ``product_list`` view, whether it is filtering/sorting/paging or anything else
 it has built up by now. How should we do that?
 
+The simplest way is to look at our old ``product_list`` view and apply
+`parameterisation
+<https://www.toptal.com/python/python-parameterized-design-patterns>`_. The
+parameters we need to pass are: the product list ``QuerySet``; the name of the
+template to use; and something to pass in some extra context. With those in
+place we can easily pull out a ``display_product_list`` function, and call it
+from our two functions. I'm calling this pattern **delegation** — our entry
+point view is delegating the rest of the work to another function.
 
-The easiest way to answer to this is to look at our old ``product_list`` view
-and apply `parameterisation
-<https://www.toptal.com/python/python-parameterized-design-patterns>`_.
+.. code-block:: python
+
+   def product_list(request):
+       return display_product_list(
+           request,
+           queryset=Product.objects.all(),
+           template_name='products/product_list.html',
+       )
 
 
+   def special_offer_detail(request, slug):
+       special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
+       return display_product_list(
+           request,
+           context={
+               'special_offer': special_offer,
+           },
+           queryset=special_offer.get_products(),
+           template_name='products/special_offer_detail.html',
+       })
 
-(Template level - use includes)
 
+   def display_product_list(request, context=None, *, queryset, template_name):
+       if context is None:
+           context = {}
+       context.update(paged_object_list_context(request, queryset, paginate_by=25))
+       return TemplateResponse(request, template_name, context)
+
+
+.. note::
+
+   For those unfamiliar with the signature on ``display_product_list``, here
+   ``queryset`` and ``template_name`` are “keyword only” arguments (lacking
+   defaults, because we don't have any good defaults), because we want to ensure
+   that people will pass them by name for clarity. For ``context`` we do have a
+   sensible default, but also need to avoid the mutable arguments bug.
+
+At the template level, we'll probably do a similar refactoring, using `include
+<https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include>`_ to
+factor out duplication.
+
+That's it! See below for some more discussion about how this delegation pattern
+might evolve. Otherwise, onto :doc:`callbacks`.
 
 .. _function-based-generic-views:
 
@@ -88,31 +133,48 @@ In other words, they will be both specific (to your project) and generic (across
 your project) in all the right ways. They won't suffer from Django's limitations
 in trying to be all things to all men.
 
-As FBVs they will also be better then custom CBVs
+As FBVs they will probably be better for you than your own custom CBVs:
 
-TODO interface, local variables. Long parameter lists.
+* They will have a well defined interface, which is visible right there in the
+  function signature, which is great for usability.
+
+* The generic code will be properly separated from the specific. For example,
+  inside your ``object_list`` function, local variable names will be very
+  generic, but these won't bleed out into functions that might call
+  ``object_list``, because you don't inherit local variable names (in contrast
+  to classes where you do inherit instance variable names).
+
+* At some point you might find you have too many parameters to a function. But
+  this is a good thing. For your class-based equivalent, the number of extension
+  points would be the same, but hidden from you in the form of lots of mixins
+  each with their own attributes and methods. With the function, your problem is
+  more visible, and can prompt you factor things out. For example, if you have
+  several parameters related to filtering a list, do you actually need a
+  ``Filterer``.
 
 Discussion: Copy-paste Programming Bad, Classes Good?
 -----------------------------------------------------
 
-Why didn't we stop with function based generic views? The problem was that there
-was an endless list of requests to extend generic views to do one more thing,
-and we wanted to provide something more customisable.
+Where do Django's generic CBVs come from? Why didn't we stop with function based
+generic views? The problem was that there was an endless list of requests to
+extend generic views to do one more thing, and we wanted to provide something
+more customisable.
 
-Our answer to this problem should have been: if these generic views don't do
-what you want, write your own. You can easily copy-paste the functionality you
-need and start from there. Why didn't we just say that? I think we somehow had
-the idea that copy-paste is the ultimate disaster in software development. If
-there is some functionality written, we should always make it re-usable rather
-than re-implement, and we've somehow failed as software developers if we can't.
+Our answer to this problem ought to have been this: if these generic views don't
+do what you want, write your own. You can easily copy-paste the functionality
+you need and start from there. Why didn't we just say that? I think we somehow
+had the idea that copy-paste is the ultimate disaster in software development.
+If there is some functionality written, we should always make it re-usable
+rather than re-implement, and we've somehow failed as software developers if we
+can't.
 
-You can see this is the design of the CBVs. A lot of the complexity in the
+You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
 line. `But that shouldn't be our primary aim
 <https://verraes.net/2014/08/dry-is-about-knowledge/>`_.
 
-There are plenty of times when the evils of copy-paste programming are much
-better than the alternatives.
+There are plenty of things worse than copy-paste programming, and unhelpful
+abstractions are among them.
 
 I recently wrote several implementations of Mozilla's `Fluent
 <https://projectfluent.org/>`_ localisation language, all of them in Python. One
@@ -122,24 +184,25 @@ second, I did so with `one big copy-paste job
 <https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee>`_.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
-bases still share a huge amount in terms of structure, even with some identical
-functions. In a few places they have identical bits of code. But the
-code bases have also diverged, at many, many points, both in small details and
-in more fundamental ways.
+bases still share a huge amount in terms of structure. In a few places they
+still significant chunks of identical code. But the code bases have also
+diverged at many, many points, both in small details and in more fundamental
+ways.
 
 The decision to copy-paste was overwhelming the right decision. Attempting to
 avoid duplicating anything while I was developing the second would have been an
-absolute killer in terms of complexity, and may still have failed. Once or twice
-I actually copied fixes or changes directly from one to the other, but most
-times when I had to “equivalent” bug fixes or feature additions, they looked
-significantly different in the two code bases. Having to do them twice from
-scratch cost far, far less than attempting to build an abstraction layer that
-would have made that unnecessary.
+absolute killer in terms of complexity, and may have failed completely. Once or
+twice I actually copied fixes or changes directly from one to the other, but
+most times when I had “equivalent” bug fixes or feature additions to do, they
+looked significantly different in the two projects. Having to do them twice from
+scratch cost far, far less than attempting to write the two projects with a
+common abstraction layer.
 
-Before you can abstract commonality, you actually need at least two examples.
-The common abstractions may be very different from what you thought, and when
-you have enough information to make that decision you might decide that its not
-worth it. Avoiding duplication at all costs is a terrible idea.
+Before you can abstract commonality, you actually need at least two examples,
+preferably three, and abstracting before then is premature. The commonalities
+may be very different from what you thought, and when you have enough
+information to make that decision you might decide that it's not worth it. So
+avoiding all duplication at any cost is not the aim we should have.
 
 
 Discussion: Multiple mixins?
@@ -148,12 +211,18 @@ Discussion: Multiple mixins?
 When doing both a single object lookup and a list of objects, contrast the
 simplicity of the above FBV code with `trying to wrangle CBVs into doing this
 <https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview>`_.
-These Django docs do come up with a solution for this case, while thankfully
-adding a “don't try this at home kids” warning and mentioning that many mixins
-don't actually work together. But we need to add to those warnings:
+These Django docs do come up with a solution for this case, but it is a house of
+cards that requires lots of extremely careful thinking and knowing the
+implementation as well as interface of all the mixins involved.
+
+Thankfully the docs do add a “don't try this at home kids” warning and mention
+that many mixins don't actually work together. But we need to add to those
+warnings:
 
 * It's virtually impossible to know ahead of time which combinations are likely
-  to turn out bad.
+  to turn out bad. It's pretty much the point of mixins that you can “mix and
+  match” behaviour. Except it turns out you can't.
+
 
 * Simple things often turn into complicated things. If you have started with
   CBVs, you will most likely want to continue, and you'll find yourself rather
@@ -161,3 +230,4 @@ don't actually work together. But we need to add to those warnings:
   code, working out how to implement for yourself the things the CBVs were doing
   for you. As we mentioned before, the CBV is a :ref:`bad starting point
   <bad-starting-point>`.
+

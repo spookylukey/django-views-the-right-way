@@ -65,7 +65,18 @@ view for your site.</p>
     <span class="p">})</span>
 </pre></div>
 </div>
-<p>(Ignoring imports we already added)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Formatting:</strong> I’m formatting my code examples in line with PEP8, and after
+that for clarity, especially to highlight things that have changed. So this
+example adds one line to our pattern, and I’ve formatted it accordingly.
+There is no need to following the formatting, and you (or your tools) might
+have other ideas!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Imports:</strong> For brevity I’ll omit any imports I’ve mentioned already.</p>
+</div>
 <p>We’re going to let the template decide how to format the date (most likely using
 the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date">date filter</a>), so we
 just use the <code class="docutils literal notranslate"><span class="pre">date</span></code> object rather than a string. Our pattern already had an
@@ -81,9 +92,9 @@ it:</p>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;home.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Next up: <a class="reference internal" href="common_context_data.html"><span class="doc">Common context data</span></a></p>
+<p>That’s it! Next up: <a class="reference internal" href="common_context_data.html"><span class="doc">Common context data</span></a>.</p>
 <div class="section" id="discussion-embarrassingly-simple">
-<h2>Discussion: embarrassingly simple?<a class="headerlink" href="#discussion-embarrassingly-simple" title="Permalink to this headline">¶</a></h2>
+<h2>Discussion: Embarrassingly simple?<a class="headerlink" href="#discussion-embarrassingly-simple" title="Permalink to this headline">¶</a></h2>
 <p>This code is so simple it might not seem worth mentioning. Yet, with Class Based
 Views, the equivalent is anything but simple. Suppose we start with a
 <code class="docutils literal notranslate"><span class="pre">TemplateView</span></code>, or a subclass:</p>
@@ -109,7 +120,7 @@ I actually end up adding is:</p>
 </pre></div>
 </div>
 <p>If I’m lucky then most of this method has already been written for me (in which
-case I then have the boilerplate issue mentioned in <a class="reference internal" href="thepattern.html#boilerplate"><span class="std std-ref">Discussion - boilerplate</span></a>), but it
+case I then have the boilerplate issue mentioned in <a class="reference internal" href="thepattern.html#boilerplate"><span class="std std-ref">Discussion: Boilerplate</span></a>), but it
 might not have been. I have to know this API, and there is plenty that can go
 wrong — a wrong signature, or failing to call <code class="docutils literal notranslate"><span class="pre">super()</span></code> (which may not have
 immediate problems, but could cause problems down the road).</p>
@@ -122,8 +133,8 @@ But he shouldn’t be embarrassed — for a newbie, you would have to be a prett
 capable developer to actually successfully pull off all the parts needed for a
 <a class="reference external" href="https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/">custom template tag</a>.</p>
 <p>Rather, he struggled for so long because of a bad context that was making a
-simple thing hard, and those of us responsible for that bad context should be
-the ones who are embarrassed.</p>
+simple thing hard, and those of us responsible for that bad context are the ones
+who should be embarrassed.</p>
 </div>
 </div>
 
@@ -154,14 +165,15 @@ the ones who are embarrassed.</p>
 <li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Adding data to a template</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-embarrassingly-simple">Discussion: embarrassingly simple?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-embarrassingly-simple">Discussion: Embarrassingly simple?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start - delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Custom logic at the start — callbacks</a></li>
 </ul>
 
 

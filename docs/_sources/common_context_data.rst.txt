@@ -51,8 +51,8 @@ Next up: :doc:`url_parameters`
 decorators - TODO - but it really isn't necessary).
 
 
-Discussion: the helper vs the mixin
------------------------------------
+Discussion: Helpers vs Mixins
+-----------------------------
 
 The solution above is simple and direct. But some might protest it is a bit
 ugly, and has involved a bit of boilerplate. A CBV solution using a mixin is
@@ -100,18 +100,19 @@ Second, the mixin has several significant disadvantages:
   not in another, due to different expectations about what is attached to
   ``self``.
 
-  In contrast, all the parameters to a function are usually well defined, and
-  you can usually have a very high level of confidence that it will work in all
+  In contrast, all the parameters to functions are usually well defined, and you
+  can usually have a very high level of confidence that they will work in all
   contexts. There is no ``self`` parameter which you can you use to sneak things
-  in to a method. (See "shortcuts vs mixins" for a more treatment of this TODO)
+  in. (See :ref:`shortcuts vs mixins <shortcuts-vs-mixins>` for a more in-depth
+  treatment of this)
 
 * Mixins often tie you into inheritance trees for organising things. In reality,
-  instead of tree want trees, you often want a mix-and-match approach to
-  including this kind of data. Mixins do support that, at least in this case,
-  but if you imagine that you'll have a neat hierarchy involving a
-  ``HelpPageMixin`` that provides both context data and some other
-  functionality, you'll quickly be disappointed when things don't turn out that
-  simple, and you find yourself in a tangle.
+  instead of trees you often want a mix-and-match approach to including data or
+  functionality. Mixins do support that, at least in this case, but if you
+  imagine that you'll have a neat hierarchy involving a ``HelpPageMixin`` that
+  provides both context data and some other functionality, you'll quickly be
+  disappointed when things don't turn out that simple, and you find yourself in
+  a tangle.
 
 The simple solution is the best!
 
@@ -123,7 +124,6 @@ any similar functions:
    Building up behaviour by explicitly **composing** smaller, testable units of
    functionality (whether functions or classes) is far better than building up
    behaviour via **inheritance**.
-
 
 For more on this, see Brandon Rhodes' treatment of `The Composition Over
 Inheritance Principle

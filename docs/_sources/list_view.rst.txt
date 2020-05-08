@@ -2,7 +2,7 @@ Displaying a list of objects
 ============================
 
 To continue the example of an e-commerce site, let's implement our product
-listing page. The code is just this:
+listing page. Our first version of the code is just this:
 
 .. code-block:: python
 
@@ -50,7 +50,7 @@ a bit shorter:
 Next up: :doc:`delegation`
 
 
-Discussion: discovering re-usable units of code
+Discussion: Discovering re-usable units of code
 -----------------------------------------------
 
 I very deliberately left “write some code yourself” as an exercise. Adding these
