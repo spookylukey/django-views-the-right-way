@@ -252,6 +252,9 @@ This is a problem that is specific to **class based** generic code. If you write
 :ref:`function based generic code <function-based-generic-views>`, the problem
 doesn't exist, because you don't inherit local variable names.
 
+
+.. _shortcuts-vs-mixins:
+
 Discussion: layering violations — shortcuts vs mixins
 -----------------------------------------------------
 
@@ -305,7 +308,7 @@ following:
 * ``render_to_response``
 * ``setup``
 
-These methods certainly span a more than one layer. We've got methods that deal
+These methods certainly span more than one layer. We've got methods that deal
 very much with the HTTP layer (dispatching on different verbs, extracting data
 out of a URL, building responses), and others that deal with retrieving database
 objects and others with templates.
@@ -322,7 +325,8 @@ good at all. It has far too many different directions you might want to take it.
 But the most convincing to me is too look what happens when you carry on this
 pattern.
 
-I recently came across a family of views that had the following methods:
+I recently came across a family of views that had the following methods and
+class attributes (including all the base classes):
 
 * ``as_view``
 * ``basic_styles``
@@ -375,11 +379,19 @@ I recently came across a family of views that had the following methods:
 These views generate Excel spreadsheets. For the methods you don't recognise,
 most of them relate to XLS generation, or to retrieving data the from the
 database. As you can guess, the implementation was significantly complicated by
-the hybrid nature of this class.
+the hybrid nature of this class (with method like ``pre_init`` trying to cope
+with lack of a sensible ``__init__`` that the developer was in control of).
 
-Even for the job it is doing, code like this is awkward, but when new
-requirements come along — like you need to generate XLS reports offline, outside
-of a web context — then you really are in a mess.
+It furthered suffered from the fact that all the methods had access to ``self``,
+and via ``self.request`` they had access to the HTTP request object. This meant
+there was no clear separation of request processing from anything else — the
+layers had all merged. This happens very easily with classes like this, because
+you never have to explicitly pass the ``request`` parameter around to make it
+available, it's implicitly available via ``self``.
+
+This kind of code is painful to work with even for the job it is doing. But when
+new requirements come along — like you need to generate XLS reports offline,
+outside of a web context — then you really are in a mess.
 
 What is needed is a separate set of classes that handle just XLS generation,
 which should then be used by our view functions (or classes). These will also

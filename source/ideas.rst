@@ -34,8 +34,7 @@ DONE
 
 - Display a list of objects
 
-TODO
-====
+
 
 ---
 Custom logic at the start - delegation
@@ -44,24 +43,9 @@ Custom logic at the start - delegation
   second is like the first but a "special offers" page, with extra
   info at the top.
 
-
-- Discussion:
-
-  Doing multiple things:
-   - this view is a DetailView and a ListView combined. Easy with FBV
-
-
-[ 
   
-  Generic function based code
-
-  re-usable functionality
-
-  Explicit parameters.
-
-  Classes vs functions for re-usability?
-  Parameters?
-]
+TODO
+====
 
 ---
 

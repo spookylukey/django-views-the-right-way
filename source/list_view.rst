@@ -2,7 +2,7 @@ Displaying a list of objects
 ============================
 
 To continue the example of an e-commerce site, let's implement our product
-listing page. The code is just this:
+listing page. Our first version of the code is just this:
 
 .. code-block:: python
 

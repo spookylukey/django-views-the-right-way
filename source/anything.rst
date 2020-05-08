@@ -1,10 +1,10 @@
 How to do anything in a view
 ============================
 
-So, you have a template for writing a view function. There are a whole bunch of
-changes or actions you might want to do. How do you go about doing them?
+So, you have a template for writing a view function. There is something
+different you want to do. How should you go about it?
 
-The answer to the question of how to do something with function based views is:
+The answer is:
 
    Just do it.
 
@@ -18,10 +18,11 @@ want you to remember is:
 
 * Sometimes you might have to write a little bit of code to make it do what you
   want, rather than being able to find something already written. But you are a
-  software developer, you write code. Take responsibility and just do it. In
-  time you'll find ways to make your code more concise if you find yourself
-  writing the same things over and over, and don't be afraid to make some
-  mistakes along the way.
+  software developer, you write code. Take responsibility and just do it.
+
+* It doesn't have to be perfect yet. In time you'll find ways to make your code
+  more concise if you find yourself writing the same things over and over. Don't
+  be afraid to make some mistakes along the way.
 
 Next up - :doc:`context_data`.
 
