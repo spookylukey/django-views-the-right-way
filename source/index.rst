@@ -69,6 +69,7 @@ So let's go!
    url_parameters
    detail_view
    list_view
+   delegation
 
 
 Caveats and disclaimers etc.

@@ -336,8 +336,10 @@ In other words:
 * The boilerplate you need for a basic CBV is bigger than for an FBV
 * It's so big and tedious that people use snippets library to write it for them.
 
-Discussion - starting points
-----------------------------
+.. _bad-starting-point:
+
+Discussion: starting points
+---------------------------
 
 Some people will say we can use the CBV for the really simple cases, and then
 switch to FBV later as needed. But in reality that doesn't happen. Most

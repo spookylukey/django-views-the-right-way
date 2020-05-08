@@ -179,16 +179,16 @@ tiny bit of typing.
 Discussion: static vs dynamic?
 ------------------------------
 
-We could shorten the CBV by changing ``queryset = Product.models.all()`` to
-``model = Product``, which, in this case will do the same thing.
+For the case of statically defining what query to start with, we have two options:
 
-But it will hurt the maintenance programmer. Suppose the requirement comes along
-to only allow “visible” products to be seen in this view, which has been
-encapsulated in a custom QuerySet method ``visible()``, so they can write
-``Product.objects.visible()``. The maintenance programmer has to know they can
-switch ``model = <model>`` to ``queryset = <queryset>`` — they have to know the
-API of ``DetailView`` very well, instead of just being able to modify the code
-in front of them.
+* ``model = Product``
+* ``queryset = Product.objects.all()``
+
+The former is a shortcut for the latter. I avoided it in my CBV version above
+because it will hurt the maintenance programmer — if the requirements change
+(for example to limit listed products to ‘visible’ products), starting with
+``queryset`` will make it easy — it can just be changed to
+``Product.objects.visible()`` or something similar.
 
 (For the same reason, in my FBV above I wrote
 ``get_object_or_404(Product.objects.all(), …)`` instead of
@@ -198,10 +198,7 @@ function).
 If, however, the queryset needed depends on the ``request`` object, the
 programmer will have to instead define ``get_queryset()`` to get access to the
 request data and dynamically respond to it, rather than have a static definition
-on the class.
-
-This means you now have 3 different ways of doing the same thing, and you have
-to be comfortable switching between them.
+on the class, and they will need to know this API exists, or look up the docs.
 
 There is also a subtlety with querysets: suppose your
 ``ProductQuerySet.visible()`` method goes from being a simple filter on a field
@@ -212,11 +209,11 @@ to gaining some additional time based logic e.g.:
    def visible(self):
        return self.filter(visible=True).exclude(visible_until__lt=date.today())
 
-If you have ``queryset = Products.objects.visible()`` attribute, rather than a
-``get_queryset()`` method, due to the fact that this is a class attribute which
-gets executed at module import time, the ``date.today()`` call happens when your
-app starts up, not when your view is called. So it seems to work, but you a get
-a surprise on the second day in production!
+If you have ``queryset = Products.objects.visible()``, due to the fact that this
+is a class attribute which gets executed at module import time, the
+``date.today()`` call happens when your app starts up, not when your view is
+called. So it seems to work, but you a get a surprise on the second day in
+production!
 
 None of these are massive issues — they are small bits of friction, but these
 things do add up, and it happens that all of them are avoided by the way in
@@ -237,23 +234,23 @@ Discussion: generic code and variable names
 
 A third way to shorten the CBV is to omit ``context_object_name``. In that case,
 instead of having our ``Product`` object having the name ``product`` in the
-template, it would have the name ``object``.  Don't do that! ``object`` is
-a very choice of name for something unless you really have no idea what type it
-is, and is going to hurt maintenance in various ways.
+template, it would have the name ``object``. Don't do that! ``object`` is a very
+bad choice of name for something unless you really have no idea what type it is,
+and is going to hurt maintenance in various ways.
 
 It's good that ``context_object_name`` exists, but unfortunate that it is
 optional. For the instance variable on the view, however, things are worse — it
 is always ``self.object``. This is probably a good thing when you are writing
 CBVs, but a bad thing when doing maintenance.
 
-The issue here is again the problem of generic code. For the view code, it's
+The issue here is again the problem of generic code. For the view code, it's an
 unusually tricky problem — you are inheriting from generic code that doesn't
 know a better name than ``object``. However, **your** code is not generic, and
 could have chosen a much better name, but your code wasn't in charge.
 
-This is a problem that is specific to class based generic code. If you write
-generic **function** based generic code (see TODO), the problem doesn't exist,
-because you don't inherit local variable names.
+This is a problem that is specific to **class based** generic code. If you write
+:ref:`function based generic code <function-based-generic-views>`, the problem
+doesn't exist, because you don't inherit local variable names.
 
 Discussion: layering violations — shortcuts vs mixins
 -----------------------------------------------------
@@ -289,8 +286,8 @@ some typing, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn't hurt your code base, this is vital.
 
-I find looking at views — whether CBVs or FBVs — through the lens of “layering”
-is slightly tricky.
+What about CBVs? I find it quite tricky to analyse these classes in terms of
+“layering”.
 
 We could look at the list of methods on ``DetailView``, which includes the
 following:
@@ -310,8 +307,8 @@ following:
 
 These methods certainly span a more than one layer. We've got methods that deal
 very much with the HTTP layer (dispatching on different verbs, extracting data
-out of a URL), and others that deal with retrieving database objects and others
-with templates.
+out of a URL, building responses), and others that deal with retrieving database
+objects and others with templates.
 
 On the other hand, you could say the same about any view function. By their very
 nature, views have to work in terms of HTTP requests and responses, but they
@@ -327,16 +324,62 @@ pattern.
 
 I recently came across a family of views that had the following methods:
 
-* TODO
+* ``as_view``
+* ``basic_styles``
+* ``blue_font``
+* ``cells_to_merge``
+* ``check_token``
+* ``columns_static_width``
+* ``content_type``
+* ``context_object_name``
+* ``dispatch``
+* ``empty_field``
+* ``empty_row``
+* ``extra_context``
+* ``filename``
+* ``freeze_panes``
+* ``get``
+* ``get_context_data``
+* ``get_context_object_name``
+* ``get_object``
+* ``get_queryset``
+* ``get_slug_field``
+* ``get_template_names``
+* ``http_method_names``
+* ``http_method_not_allowed``
+* ``merge_cells``
+* ``model``
+* ``options``
+* ``pk_url_kwarg``
+* ``pre_init``
+* ``query_pk_and_slug``
+* ``queryset``
+* ``render_to_response``
+* ``report_data``
+* ``response_class``
+* ``set_cell_style``
+* ``set_header``
+* ``set_rows``
+* ``set_title``
+* ``setup``
+* ``sheet_names``
+* ``slug_field``
+* ``slug_url_kwarg``
+* ``template_engine``
+* ``template_name``
+* ``template_name_field``
+* ``template_name_suffix``
+* ``thin_border``
+* ``token_class``
 
-These views generate Excel spreadsheets. You'll see it has a whole bunch of
-methods that relate only to XLS generation, with others that relate to HTTP
-handling, and other to retrieving data the from the database. As you can guess,
-the implementation was significantly complicated by its hybrid nature.
+These views generate Excel spreadsheets. For the methods you don't recognise,
+most of them relate to XLS generation, or to retrieving data the from the
+database. As you can guess, the implementation was significantly complicated by
+the hybrid nature of this class.
 
-Even for the job it was doing, it was awkward, but when new requirements come
-along — like you need to generate XLS reports offline, outside of a web context
-— then you really are in a mess.
+Even for the job it is doing, code like this is awkward, but when new
+requirements come along — like you need to generate XLS reports offline, outside
+of a web context — then you really are in a mess.
 
 What is needed is a separate set of classes that handle just XLS generation,
 which should then be used by our view functions (or classes). These will also
@@ -345,7 +388,7 @@ without having to set up a web request, or even necessarily getting data from
 the database.
 
 So where did the design go wrong? Look back at the views provided by Django, and
-you'll see this design is simply carrying on the same pattern.
+you'll see it is simply carrying on the same pattern.
 
 This is a fundamental difference between a shortcut and a mixin. The shortcut is
 a convenient way to reduce some boilerplate with only local effects on your
