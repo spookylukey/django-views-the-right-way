@@ -71,8 +71,7 @@ the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/re
 just use the <code class="docutils literal notranslate"><span class="pre">date</span></code> object rather than a string. Our pattern already had an
 empty context dictionary sitting there, waiting to be filled up, so we just put
 the value right in. Done!</p>
-<p>There is a variation on this, which is also very simple and to some people may
-be completely obvious, which is that sometimes it helps to pull out the context
+<p>There is a variation on this, which is that sometimes it helps to pull out the context
 data into a variable first, especially if we are conditionally adding data to
 it:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
@@ -84,8 +83,8 @@ it:</p>
 </div>
 <p>Next up: <a class="reference internal" href="common_context_data.html"><span class="doc">Common context data</span></a></p>
 <div class="section" id="discussion-embarrassingly-simple">
-<h2>Discussion — embarrassingly simple?<a class="headerlink" href="#discussion-embarrassingly-simple" title="Permalink to this headline">¶</a></h2>
-<p>This code is so simple it doesn’t seem worth mentioning. Yet, with Class Based
+<h2>Discussion: embarrassingly simple?<a class="headerlink" href="#discussion-embarrassingly-simple" title="Permalink to this headline">¶</a></h2>
+<p>This code is so simple it might not seem worth mentioning. Yet, with Class Based
 Views, the equivalent is anything but simple. Suppose we start with a
 <code class="docutils literal notranslate"><span class="pre">TemplateView</span></code>, or a subclass:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HomeView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
@@ -102,7 +101,7 @@ I actually end up adding is:</p>
 </pre></div>
 </div>
 <p>So it’s extremely hard to see how this can be improved.</p>
-<p>With a CBV, however, what you have to write this:</p>
+<p>With a CBV, however, what you have to write is this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">context</span><span class="p">[</span><span class="s1">&#39;today&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
@@ -114,8 +113,8 @@ case I then have the boilerplate issue mentioned in <a class="reference internal
 might not have been. I have to know this API, and there is plenty that can go
 wrong — a wrong signature, or failing to call <code class="docutils literal notranslate"><span class="pre">super()</span></code> (which may not have
 immediate problems, but could cause problems down the road).</p>
-<p>Is this a real problem? Am I straining at a gnat here? Look at this <a class="reference external" href="https://rasulkireev.com/django-get-context-data">blog post
-about putting data on your home page</a>. The problem solved by that
+<p>Is this a real problem? Am I making a mountain out of a molehill? Look at this
+<a class="reference external" href="https://rasulkireev.com/django-get-context-data">blog post about putting data on your home page</a>. The problem solved by that
 post is exactly the same as what I showed above, with different data.</p>
 <p>The author’s <a class="reference external" href="https://twitter.com/rasulkireev/status/1230974745644060678">first attempt</a> involved using
 template tags to solve this problem — something he was very embarrassed about.
@@ -123,7 +122,7 @@ But he shouldn’t be embarrassed — for a newbie, you would have to be a prett
 capable developer to actually successfully pull off all the parts needed for a
 <a class="reference external" href="https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/">custom template tag</a>.</p>
 <p>Rather, he struggled for so long because of a bad context that was making a
-trivial thing hard, and those of us responsible for that bad context should be
+simple thing hard, and those of us responsible for that bad context should be
 the ones who are embarrassed.</p>
 </div>
 </div>
@@ -155,10 +154,14 @@ the ones who are embarrassed.</p>
 <li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Adding data to a template</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-embarrassingly-simple">Discussion — embarrassingly simple?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-embarrassingly-simple">Discussion: embarrassingly simple?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start - delegation</a></li>
 </ul>
 
 

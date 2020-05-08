@@ -51,115 +51,82 @@
 <li><p>Common context data</p>
 <p>Discussion: testable code vs mixins</p>
 </li>
-</ul>
-</div>
-<div class="section" id="todo">
-<h1>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
 <li><p>Accept a URL parameter
 - Discussion: perils of generic code
 - Discussion: checkable URLconf</p></li>
 <li><p>Display an object.
 - Show full pattern with raise Http404</p>
-<ul>
-<li><p>Discussion: DetailView vs get_object_or_404</p></li>
+<ul class="simple">
+<li><p>Discussion - DetailView vs get_object_or_404</p></li>
 </ul>
-</li>
-</ul>
-<p>Discussion - DetailView vs get_object_or_404</p>
-<p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview">https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview</a></p>
-<p>Original:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
-<span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="kn">import</span> <span class="n">DetailView</span>
-
-<span class="kn">from</span> <span class="nn">articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
-
-<span class="k">class</span> <span class="nc">ArticleDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
-
-    <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
-
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;now&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">context</span>
-</pre></div>
-</div>
-<p>Rewritten:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
-<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
-
-<span class="k">def</span> <span class="nf">article_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
-   <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;my_app/article_detail.html&quot;</span><span class="p">,</span> <span class="p">{</span>
-       <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">),</span>
-       <span class="s1">&#39;now&#39;</span><span class="p">:</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-   <span class="p">})</span>
-</pre></div>
-</div>
-<p>Comparisons:
-- Compare template <code class="docutils literal notranslate"><span class="pre">object</span></code>
-- Suppose we need to change CBV to be filtered QuerySet, not all objects.</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">model</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">queryset</span></code></p>
-</div></blockquote>
-<ul>
-<li><p>Suppose we need it to be filtered according to something in request
-<code class="docutils literal notranslate"><span class="pre">queryset</span></code> attribute -&gt; <code class="docutils literal notranslate"><span class="pre">get_queryset</span></code> method.</p>
-<p>Discussion - convention vs configuration (template name)</p>
-<p>Discussion - shortcuts vs mixins</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>RPR - Xls generation - layer violation - init - request parameter</p></li>
-<li><p>Brandon Rhodes</p></li>
-</ul>
-</div></blockquote>
 </li>
 <li><p>Display a list of objects</p></li>
 </ul>
-<p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function">https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function</a></p>
-<dl class="simple">
-<dt>def listing(request):</dt><dd><p>contact_list = Contact.objects.all()
-paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
-page_number = request.GET.get(‘page’)
-page_obj = paginator.get_page(page_number)
-return render(request, ‘list.html’, {‘page_obj’: page_obj})</p>
-</dd>
-</dl>
-<p># Rewritten:</p>
-<dl class="simple">
-<dt>def listing(request):</dt><dd><p>context = {}
-context.update(paged_object_list_context(request, Contact.objects.all(), paginate_by=25))
-return TemplateResponse(request, ‘list.html’, context)</p>
-</dd>
-</dl>
-<p>Writing <code class="docutils literal notranslate"><span class="pre">paged_object_list_context</span></code> is left as an exercise for you!</p>
-<p>Discussion - comparison to ListView</p>
-<p>Adding these kind of utilities to your code is what every developer should learn
-to do, and in a project you would expect to have a small library of this kind of
-thing that is specific to your project and encapsulates your own patterns and
-conventions. This is far superior to contorting your code with method overrides
-that are necessary only because of the structure handed to you by someone else.</p>
-<p>Yes, using <code class="docutils literal notranslate"><span class="pre">paged_object_list_context</span></code> is very slightly longer than just
-adding a <code class="docutils literal notranslate"><span class="pre">paginate_by</span></code> attribute to a <code class="docutils literal notranslate"><span class="pre">ListView</span></code>. But the benefits are huge
-— you stay in full control of your view function and it remains readable and
-extremely easy to debug or further customise. You also have a utility that is
-separately testable.</p>
-<ul class="simple">
-<li><p>Discussion: discovering reusable units (pagination)</p></li>
-</ul>
-<dl class="simple">
-<dt>def paged_object_list_context(request, queryset, paginate_by=25):</dt><dd><p>paginator = Paginator(queryset, paginate_by)
-page_number = request.GET.get(‘page’)
-page_obj = paginator.get_page(page_number)
-return {‘page_obj’: page_obj}</p>
-</dd>
-</dl>
+</div>
+<div class="section" id="todo">
+<h1>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h1>
+<p>—
+Custom logic at the start - delegation</p>
 <ul>
-<li><p>Redirect
-- HTTP level</p>
-<ul class="simple">
-<li><p>Discussion: codeless views?</p></li>
+<li><p>Example product list view,
+second is like the first but a “special offers” page, with extra
+info at the top.</p></li>
+<li><p>Discussion:</p>
+<dl class="simple">
+<dt>Doing multiple things:</dt><dd><ul class="simple">
+<li><p>this view is a DetailView and a ListView combined. Easy with FBV</p></li>
 </ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>[</p>
+<blockquote>
+<div><p>Generic function based code</p>
+<p>re-usable functionality</p>
+<p>Explicit parameters.</p>
+<p>Classes vs functions for re-usability?
+Parameters?</p>
+</div></blockquote>
+<p>]</p>
+<p>—</p>
+<p>Custom logic in the middle - Callbacks</p>
+<ul>
+<li><p>Example, our product listing page actually uses some different services
+for getting product lists, not QuerySet based. Could be some other ORM,
+or external HTTP service.</p>
+<p>We’ve been given this function:</p>
+<p>get_product_list(filter_dict, sort_spec)</p>
+<p>For special offers, we have to pass {‘special_offer’: ‘&lt;special-offer-name&gt;’} in filter_dict</p>
+<p>Main product_list function will build filter_dict, we need to somehow add to it.</p>
+<p>Also, for the special offer case, just after we call <code class="docutils literal notranslate"><span class="pre">get_product_list</span></code>, we
+also want to do some extra logging of the product list that got returned, for
+some reason, along with with some data from the request (like user etc.)</p>
+<p>and want
+Could pass the extra arguments through, but that is ugly.</p>
+</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>Discussion - Callbacks vs template method</p></li>
+</ul>
+</div></blockquote>
+<p>Discussion - closures vs instances</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Use CCIW example of PopupEmailAction</p></li>
+</ul>
+</div></blockquote>
+<p>—</p>
+<p>Customising the start - pre-conditions</p>
+<ul class="simple">
+<li><p>Decorators</p></li>
+</ul>
+<p>—</p>
+<ul>
+<li><p>Redirects
+- HTTP level
+- Discussion: codeless views? or “look ma, no code!”</p>
 <p>Discussion -</p>
 <ul class="simple">
 <li><p>RedirectView - rewrite example in docs - <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView">https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView</a></p></li>
@@ -226,46 +193,6 @@ History of CBVs.</p></li>
 </ul>
 </li>
 </ul>
-<p>—
-Customising the start - continuation</p>
-<ul>
-<li><p>Example product list view,
-second is like the first but a “special offers” page, with extra
-info at the top.</p></li>
-<li><p>Discussion: re-usable functionality</p>
-<p>Classes vs functions for re-usability?
-Parameters?</p>
-</li>
-</ul>
-<p>—</p>
-<p>Customising in the middle - Callbacks</p>
-<ul class="simple">
-<li><p>Example - for the special offer page, after filter paging the list,
-we do some extra logging of which products were displayed to the user.</p></li>
-</ul>
-<blockquote>
-<div><ul class="simple">
-<li><p>Discussion - Callbacks vs template method</p></li>
-</ul>
-</div></blockquote>
-<p>—
-Advanced callbacks - closures</p>
-<ul class="simple">
-<li><p>Example: our extra logging needs access to a parameter from
-the outer view function</p></li>
-</ul>
-<p>Discussion - closures vs instances</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Use CCIW example of PopupEmailAction</p></li>
-</ul>
-</div></blockquote>
-<p>—</p>
-<p>Customising the start - pre-conditions</p>
-<ul class="simple">
-<li><p>Decorators</p></li>
-</ul>
-<p>—</p>
 <p>Adva</p>
 <p>Customising the end</p>
 <p>Security</p>
@@ -291,7 +218,8 @@ the outer view function</p></li>
 </dl>
 <p>Length - not the most important measure</p>
 <p>Code got significantly more succinct:</p>
-<p>Before:
+<p>(as formatted by <code class="docutils literal notranslate"><span class="pre">black</span></code>:
+Before:
 631 tokens
 83 non-blank lines
 103 total lines</p>
@@ -311,15 +239,21 @@ my mistakes every step of the way - e.g. undefined and unused locals - until
 everything was in shape, at which point the code worked. (I’m using flake8 in
 emacs, but most IDEs will have just as capable linters that will catch the same
 errors).</p>
-<p>The opposite refactoring would not have worked like this.</p>
+<p>The opposite refactoring would not have worked like this. In Python, if you are
+sticking attributes onto <code class="docutils literal notranslate"><span class="pre">self</span></code> at various points, and reading them at others,
+it’s going to be extremely hard for any static analysis to work out of you are
+doing that correctly.</p>
 <p>Automated static analysis that linters can do is just a sign of a deeper
 reality - the FBV is simpler and easier to understand. The fact that it reaches
-a stage where an automated process can understand it and catch most errors,
-despite Python’s dynamism, is great, but what is even better is the benefit for
-humans trying to understand this kind of code.</p>
-<p>My code is more boring now, in the best sense. There are few tricks or clever
-techniques. These are still allowed, but reserved for when you really need them
-and get benefit from them.</p>
+a stage where, despite Python’s dynamism, an automated process can understand it
+and catch most errors is great, but what is even better is the benefit for
+humans trying to understand or modify this kind of code.</p>
+<p>In doing this refactoring, I had just one twinge of sadness — my code seems a
+little bit plain now. I have fewer OOP hierarchies and clever tricks to feel
+smug about. But this is misplaced sadness. If you are into smugness-driven
+development, you need to be aiming for the feeling you get when you come back to
+some code 3 months or 3 years later and find it’s so easy to work with that
+after doing <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">praise</span></code> you feel the need to give yourself a little hug.</p>
 <p>Security:</p>
 <p>e.g. this view that shows the return page when people come back from PayPal. It
 needs <code class="docutils literal notranslate"><span class="pre">csrf_exempt</span></code> because PayPal insists on making browsers do a POST
@@ -436,10 +370,24 @@ far more base classes and complexity.</p>
 tokens vs 102), despite the fact that it includes all the form flow control
 logic and all other logic, rather than delegating to base classes. However, it
 is many times easier to understand, and no crazy metaclass fixes are necessary.</p>
+<p>Ways in which it will fail you:</p>
+<ol class="arabic">
+<li><p>Multiple forms on same page (alternatives to each other)</p></li>
+<li><p>Special flow. For example, in some cases, you want extra confirmation.
+Like “This will create an Foo with the same name as an existing Foo, are you sure?”.
+In this case you need to re-display the form but differently, with a “confirm” button
+instead of just “save”, and then need to be able to detect the “confirm” button
+was pressed.</p>
+<p>Totally straightforward if you are in charge of the control flow yourself, horrible
+if you are trying to fit into FormView</p>
+</li>
+</ol>
 <hr class="docutils" />
 <p><a class="reference external" href="https://twitter.com/rasulkireev/status/1230974745644060678">https://twitter.com/rasulkireev/status/1230974745644060678</a></p>
 <p><a class="reference external" href="https://twitter.com/rasulkireev/status/1231267109717626880">https://twitter.com/rasulkireev/status/1231267109717626880</a></p>
 <p><a class="reference external" href="https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/">https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/</a></p>
+<p>Brandon Rhodes on Python mixins:</p>
+<p><a class="reference external" href="https://youtu.be/S0No2zSJmks?t=3095">https://youtu.be/S0No2zSJmks?t=3095</a></p>
 </div>
 
 
@@ -462,6 +410,10 @@ is many times easier to understand, and no crazy metaclass fixes are necessary.<
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
 <li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start - delegation</a></li>
 </ul>
 
 

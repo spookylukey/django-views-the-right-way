@@ -19,137 +19,99 @@ DONE
   Discussion: testable code vs mixins
 
 
-
-TODO
-====
-
 - Accept a URL parameter
   - Discussion: perils of generic code
   - Discussion: checkable URLconf
 
 
 
+
 - Display an object.
   - Show full pattern with raise Http404
-    
-  
-  - Discussion: DetailView vs get_object_or_404
 
-
-Discussion - DetailView vs get_object_or_404
-
-https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview
-
-
-Original::
-
-    from django.utils import timezone
-    from django.views.generic.detail import DetailView
-
-    from articles.models import Article
-
-    class ArticleDetailView(DetailView):
-
-        model = Article
-
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            context['now'] = timezone.now()
-            return context
-
-Rewritten::
-
-    from django.template.response import TemplateResponse
-    from django.shortcuts import get_object_or_404
-    from django.utils import timezone
-
-    def article_view(request, slug):
-       return TemplateResponse(request, "my_app/article_detail.html", {
-           'article': get_object_or_404(Article.objects.all(), slug=slug),
-           'now': timezone.now(),
-       })
-
-
-Comparisons:
-- Compare template ``object``
-- Suppose we need to change CBV to be filtered QuerySet, not all objects.
-
-  ``model`` -> ``queryset``
-
-- Suppose we need it to be filtered according to something in request
-  ``queryset`` attribute -> ``get_queryset`` method.
-
-
-  Discussion - convention vs configuration (template name)
-
-
-
-  Discussion - shortcuts vs mixins
-
-   - RPR - Xls generation - layer violation - init - request parameter
-
-   - Brandon Rhodes
-
-
+  - Discussion - DetailView vs get_object_or_404
 
 
 - Display a list of objects
 
-https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function
+TODO
+====
 
-def listing(request):
-    contact_list = Contact.objects.all()
-    paginator = Paginator(contact_list, 25) # Show 25 contacts per page.
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'list.html', {'page_obj': page_obj})
+---
+Custom logic at the start - delegation
 
-
-# Rewritten:
-
-def listing(request):
-    context = {}
-    context.update(paged_object_list_context(request, Contact.objects.all(), paginate_by=25))
-    return TemplateResponse(request, 'list.html', context)
+- Example product list view,
+  second is like the first but a "special offers" page, with extra
+  info at the top.
 
 
-Writing ``paged_object_list_context`` is left as an exercise for you!
+- Discussion:
+
+  Doing multiple things:
+   - this view is a DetailView and a ListView combined. Easy with FBV
+
+
+[ 
+  
+  Generic function based code
+
+  re-usable functionality
+
+  Explicit parameters.
+
+  Classes vs functions for re-usability?
+  Parameters?
+]
+
+---
+
+Custom logic in the middle - Callbacks
+
+- Example, our product listing page actually uses some different services
+  for getting product lists, not QuerySet based. Could be some other ORM,
+  or external HTTP service.
+
+ 
+  We've been given this function:
+
+  get_product_list(filter_dict, sort_spec)
+
+  For special offers, we have to pass {'special_offer': '<special-offer-name>'} in filter_dict
+
+  Main product_list function will build filter_dict, we need to somehow add to it.
+
+  Also, for the special offer case, just after we call ``get_product_list``, we
+  also want to do some extra logging of the product list that got returned, for
+  some reason, along with with some data from the request (like user etc.)
+  
+  and want 
+  Could pass the extra arguments through, but that is ugly.
 
 
 
-Discussion - comparison to ListView
+ - Discussion - Callbacks vs template method
 
 
 
-Adding these kind of utilities to your code is what every developer should learn
-to do, and in a project you would expect to have a small library of this kind of
-thing that is specific to your project and encapsulates your own patterns and
-conventions. This is far superior to contorting your code with method overrides
-that are necessary only because of the structure handed to you by someone else.
+Discussion - closures vs instances
+
+   - Use CCIW example of PopupEmailAction
 
 
-Yes, using ``paged_object_list_context`` is very slightly longer than just
-adding a ``paginate_by`` attribute to a ``ListView``. But the benefits are huge
-— you stay in full control of your view function and it remains readable and
-extremely easy to debug or further customise. You also have a utility that is
-separately testable.
+---
+
+Customising the start - pre-conditions
+
+- Decorators
 
 
-- Discussion: discovering reusable units (pagination)
-
-
-def paged_object_list_context(request, queryset, paginate_by=25):
-    paginator = Paginator(queryset, paginate_by)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return {'page_obj': page_obj}
+---
 
 
 
-- Redirect
+- Redirects
   - HTTP level
-
-  - Discussion: codeless views?
+  - Discussion: codeless views? or “look ma, no code!”
 
 
 
@@ -221,49 +183,6 @@ Function wrapper of CBV::
   - Discussion: codeless views?
     History of CBVs.
 
----
-Customising the start - continuation
-
-- Example product list view,
-  second is like the first but a "special offers" page, with extra
-  info at the top.
-
-- Discussion: re-usable functionality
-
-  Classes vs functions for re-usability?
-  Parameters?
-
-
----
-
-Customising in the middle - Callbacks
-
-- Example - for the special offer page, after filter paging the list,
-  we do some extra logging of which products were displayed to the user.
-
-
- - Discussion - Callbacks vs template method
-
----
-Advanced callbacks - closures
-
-- Example: our extra logging needs access to a parameter from
-  the outer view function
-
-
-Discussion - closures vs instances
-
-   - Use CCIW example of PopupEmailAction
-
-
----
-
-Customising the start - pre-conditions
-
-- Decorators
-
-
----
 
 Adva
 
@@ -301,6 +220,7 @@ Length - not the most important measure
 
 Code got significantly more succinct:
 
+(as formatted by ``black``:
 Before:
 631 tokens
 83 non-blank lines
@@ -327,19 +247,24 @@ everything was in shape, at which point the code worked. (I'm using flake8 in
 emacs, but most IDEs will have just as capable linters that will catch the same
 errors).
 
-The opposite refactoring would not have worked like this.
+The opposite refactoring would not have worked like this. In Python, if you are
+sticking attributes onto ``self`` at various points, and reading them at others,
+it's going to be extremely hard for any static analysis to work out of you are
+doing that correctly.
 
 
 Automated static analysis that linters can do is just a sign of a deeper
 reality - the FBV is simpler and easier to understand. The fact that it reaches
-a stage where an automated process can understand it and catch most errors,
-despite Python's dynamism, is great, but what is even better is the benefit for
-humans trying to understand this kind of code.
+a stage where, despite Python's dynamism, an automated process can understand it
+and catch most errors is great, but what is even better is the benefit for
+humans trying to understand or modify this kind of code.
 
-
-My code is more boring now, in the best sense. There are few tricks or clever
-techniques. These are still allowed, but reserved for when you really need them
-and get benefit from them.
+In doing this refactoring, I had just one twinge of sadness — my code seems a
+little bit plain now. I have fewer OOP hierarchies and clever tricks to feel
+smug about. But this is misplaced sadness. If you are into smugness-driven
+development, you need to be aiming for the feeling you get when you come back to
+some code 3 months or 3 years later and find it's so easy to work with that
+after doing ``git praise`` you feel the need to give yourself a little hug.
 
 
 Security:
@@ -501,6 +426,22 @@ logic and all other logic, rather than delegating to base classes. However, it
 is many times easier to understand, and no crazy metaclass fixes are necessary.
 
 
+------
+Forms
+
+Ways in which it will fail you:
+
+1) Multiple forms on same page (alternatives to each other)
+
+2) Special flow. For example, in some cases, you want extra confirmation.
+   Like "This will create an Foo with the same name as an existing Foo, are you sure?".
+   In this case you need to re-display the form but differently, with a "confirm" button
+   instead of just "save", and then need to be able to detect the "confirm" button
+   was pressed.
+
+   Totally straightforward if you are in charge of the control flow yourself, horrible
+   if you are trying to fit into FormView
+
 
 ------
 
@@ -509,3 +450,9 @@ https://twitter.com/rasulkireev/status/1230974745644060678
 https://twitter.com/rasulkireev/status/1231267109717626880
 
 https://iheanyi.com/journal/2020/04/04/dynamic-page-titles-in-django/
+
+
+
+Brandon Rhodes on Python mixins:
+
+https://youtu.be/S0No2zSJmks?t=3095
