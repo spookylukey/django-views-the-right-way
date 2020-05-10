@@ -8,7 +8,7 @@ of the view needs to be re-used. How can we do that with FBVs?
 
 Continuing our :doc:`example <list_view>` of a list of products, let's add a
 variation. As well as the main product list page, we've also got a “special
-offers” page — or rather, a set of them, because we can have a ``SpecialOffer``
+offers” page — or rather, a set of them, because we have a ``SpecialOffer``
 model that allows us to have many different ones. Each of these pages needs to
 display some details about the special offer, and then the list of products
 associated with that offer. Our feature requirements say this product list
@@ -224,11 +224,10 @@ These Django docs do come up with a solution for this case, but it is a house of
 cards that requires lots of extremely careful thinking and knowing the
 implementation as well as interface of all the mixins involved.
 
-But at the very least, after scratching your head and debugging for an hour, at
-least you have less typing with the CBV, right? Unfortunately, it's quite the
-opposite:
+But, after scratching your head and debugging for an hour, at least you have
+less typing with the CBV, right? Unfortunately, the opposite is true:
 
-With Django CBVs:
+With Django CBVs — straight out of the docs linked above:
 
 .. code-block:: python
 
@@ -253,7 +252,7 @@ With Django CBVs:
        def get_queryset(self):
            return self.object.book_set.all()
 
-The Right Way:
+The Right Way (including calling ``Paginator`` manually ourselves etc.):
 
 .. code-block:: python
 
@@ -277,13 +276,12 @@ that many mixins don't actually work together. But we need to add to those
 warnings:
 
 * It's virtually impossible to know ahead of time which combinations are likely
-  to turn out bad. It's pretty much the point of mixins that you can “mix and
-  match” behaviour. Except it turns out you can't.
-
+  to turn out bad. It's pretty much the point of mixins that you should be able
+  to “mix and match” behaviour. But you can't.
 
 * Simple things often turn into complicated things. If you have started with
-  CBVs, you will most likely want to continue, and you'll find yourself rather
-  snarled up. You will then have to retrace, and completely restructure your
-  code, working out how to implement for yourself the things the CBVs were doing
-  for you. As we mentioned before, the CBV is a :ref:`bad starting point
+  CBVs, you will most likely want to continue, and you'll quickly find yourself
+  rather snarled up. You will then have to retrace, and completely restructure
+  your code, working out how to implement for yourself the things the CBVs were
+  doing for you. As we mentioned before, the CBV is a :ref:`bad starting point
   <bad-starting-point>`.

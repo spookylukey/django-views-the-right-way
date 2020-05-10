@@ -169,11 +169,12 @@ the common logic.
 
 This powerful technique has lots of great advantages. For one,
 ``display_product_list`` never needs to be concerned with all of this. We don't
-have to modify its signature, nor the signature of its ``product_searcher``
+have to modify its signature, nor the signature of the ``product_searcher``
 parameter it expects. Also, this works really well with static analysis (like
 the linters that are built-in to many IDEs which can point out undefined names
 and so on).
 
+Next up: TODO preconditions
 
 
 Discussion: DI vs template method

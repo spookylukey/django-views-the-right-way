@@ -43,9 +43,6 @@ Custom logic at the start - delegation
   second is like the first but a "special offers" page, with extra
   info at the top.
 
-  
-TODO
-====
 
 ---
 
@@ -71,6 +68,10 @@ Custom logic in the middle - Callbacks
   and want 
   Could pass the extra arguments through, but that is ugly.
 
+
+
+TODO
+====
 
 
  - Discussion - Callbacks vs template method
