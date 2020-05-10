@@ -48,13 +48,14 @@ might be different.
 
 But now we want to change this view to re-use the logic in our normal
 ``product_list`` view, whether it is filtering/sorting/paging or anything else
-it has built up by now. How should we do that?
+it has built up by now (which I'll represent using the function
+``apply_product_filtering()`` below). How should we do that?
 
 The simplest way is to look at our old ``product_list`` view and apply
 `parameterisation
 <https://www.toptal.com/python/python-parameterized-design-patterns>`_. The
-parameters we need to pass are: the product list ``QuerySet``; the name of the
-template to use; and something to pass in some extra context. With those in
+extra parameters we need to pass are: the product list ``QuerySet``; the name of
+the template to use; and something to pass in some extra context. With those in
 place we can easily pull out a ``display_product_list`` function, and call it
 from our two functions. I'm calling this pattern **delegation** — our entry
 point view is delegating the rest of the work to another function.
@@ -81,27 +82,35 @@ point view is delegating the rest of the work to another function.
        })
 
 
-   def display_product_list(request, context=None, *, queryset, template_name):
+   def display_product_list(request, *, context=None, queryset, template_name):
        if context is None:
            context = {}
+       queryset = apply_product_filtering(request, queryset)
        context.update(paged_object_list_context(request, queryset, paginate_by=25))
        return TemplateResponse(request, template_name, context)
 
 
 .. note::
 
-   For those unfamiliar with the signature on ``display_product_list``, here
-   ``queryset`` and ``template_name`` are “keyword only” arguments (lacking
-   defaults, because we don't have any good defaults), because we want to ensure
-   that people will pass them by name for clarity. For ``context`` we do have a
-   sensible default, but also need to avoid the mutable arguments bug.
+   For those unfamiliar with the signature on ``display_product_list``:
+
+   * eveything after ``*`` is a “keyword only” argument. They cannot be passed
+     as positional arguments. This:
+
+     * helps ensures clarity in calling code
+     * means we can add to and re-order these arguments later and be sure
+       we won't be breaking anything.
+   * ``queryset`` and ``template_name`` lack defaults (because we don't have any
+     good defaults) which forces calling code to pass supply the arguments.
+   * for ``context`` we do have a sensible default, but also need to avoid the
+     mutable default arguments issue.
 
 At the template level, we'll probably do a similar refactoring, using `include
 <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include>`_ to
 factor out duplication.
 
 That's it! See below for some more discussion about how this delegation pattern
-might evolve. Otherwise, onto :doc:`callbacks`.
+might evolve. Otherwise, onto :doc:`dependency_injection`.
 
 .. _function-based-generic-views:
 
@@ -210,9 +219,58 @@ Discussion: Multiple mixins?
 When doing both a single object lookup and a list of objects, contrast the
 simplicity of the above FBV code with `trying to wrangle CBVs into doing this
 <https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview>`_.
+
 These Django docs do come up with a solution for this case, but it is a house of
 cards that requires lots of extremely careful thinking and knowing the
 implementation as well as interface of all the mixins involved.
+
+But at the very least, after scratching your head and debugging for an hour, at
+least you have less typing with the CBV, right? Unfortunately, it's quite the
+opposite:
+
+With Django CBVs:
+
+.. code-block:: python
+
+   from django.views.generic import ListView
+   from django.views.generic.detail import SingleObjectMixin
+   from books.models import Publisher
+
+
+   class PublisherDetail(SingleObjectMixin, ListView):
+       paginate_by = 2
+       template_name = "books/publisher_detail.html"
+
+       def get(self, request, *args, **kwargs):
+           self.object = self.get_object(queryset=Publisher.objects.all())
+           return super().get(request, *args, **kwargs)
+
+       def get_context_data(self, **kwargs):
+           context = super().get_context_data(**kwargs)
+           context['publisher'] = self.object
+           return context
+
+       def get_queryset(self):
+           return self.object.book_set.all()
+
+The Right Way:
+
+.. code-block:: python
+
+   from django.shortcuts import get_object_or_404
+   from django.template.response import TemplateResponse
+
+
+   def publisher_detail(request, slug):
+       publisher = get_object_or_404(Publisher.objects.all(), slug=slug)
+       paginator = Paginator(publisher.book_set.all(), 2)
+       page_number = request.GET.get('page')
+       page_obj = paginator.get_page(page_number)
+       return TemplateResponse(request, 'books/publisher_detail.html', {
+           'publisher': publisher,
+           'page_obj': page_obj,
+       })
+
 
 Thankfully the docs do add a “don't try this at home kids” warning and mention
 that many mixins don't actually work together. But we need to add to those
@@ -229,4 +287,3 @@ warnings:
   code, working out how to implement for yourself the things the CBVs were doing
   for you. As we mentioned before, the CBV is a :ref:`bad starting point
   <bad-starting-point>`.
-

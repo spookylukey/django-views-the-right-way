@@ -35,10 +35,10 @@ CBVs are often suggested as the solution. If you read all of it:
   simpler than if you used CBVs.
 * You'll be freed from learning a whole stack of terrifying APIs that were only
   making your life harder (and teaching you bad patterns).
-* Instead of learning a bunch of Django specific APIs, you will gain much more
-  re-usable knowledge:
+* Instead of learning a bunch of Django specific APIs, we'll cover much more
+  transferable knowledge:
 
-  * Some HTTP principles
+  * HTTP principles
   * General OOP/multi-paradigm programming principles
   * General Python techniques
 
@@ -71,7 +71,7 @@ So let's go!
    detail_view
    list_view
    delegation
-   callbacks
+   dependency_injection
 
 
 Caveats and disclaimers etc.
