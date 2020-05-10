@@ -1,9 +1,6 @@
 The Right Way
 =============
 
-.. contents:: Contents
-   :local:
-
 .. _the-pattern:
 
 The Pattern
