@@ -173,8 +173,8 @@ Proponents of Ruby-on-Rail-style “convention over configuration” will point 
 some super-verbose Java framework as an example of all the boilerplate you can
 save. But this is a false dichotomy. With dynamic languages, we can very often
 avoid as much configuration as we want to. We should make sure we restrain
-ourselves if we are going to make code harder maintain for the sake of saving a
-tiny bit of typing.
+ourselves if we are going to make code less maintainable for the sake of saving
+a tiny bit of typing.
 
 Discussion: Static vs dynamic
 -----------------------------
@@ -246,7 +246,7 @@ CBVs, but a bad thing when doing maintenance.
 The issue here is again the problem of generic code. For the view code, it's an
 unusually tricky problem — you are inheriting from generic code that doesn't
 know a better name than ``object``. However, **your** code is not generic, and
-could have chosen a much better name, but your code wasn't in charge.
+could have chosen a much better name, but your code isn't “in charge”.
 
 This is a problem that is specific to **class based** generic code. If you write
 :ref:`function based generic code <function-based-generic-views>`, the problem
