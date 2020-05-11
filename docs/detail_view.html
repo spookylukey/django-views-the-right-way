@@ -82,7 +82,7 @@ This combines the above logic for, so that you can just write:</p>
 </div>
 <p>If the only thing we are going to do with the product object is render it in a
 template, the final, concise version of our view will look like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span>
         <span class="s1">&#39;product&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">product_slug</span><span class="p">),</span>
     <span class="p">})</span>

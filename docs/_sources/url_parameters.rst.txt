@@ -31,7 +31,7 @@ We can do that as follow:
 
    # views.py
 
-   def product_details(request, product_slug):
+   def product_detail(request, product_slug):
        return TemplateResponse(request, 'products/product_detail.html', {})
 
 
@@ -71,11 +71,11 @@ You can additionally make use of this by adding type hints:
 
 .. code-block:: python
 
-   def product_details(request, name: str):
+   def product_detail(request, name: str):
        pass  # etc
 
    # OR
-   def product_details(request, pk: int):
+   def product_detail(request, pk: int):
        pass  # etc
 
 Now, you now longer have to check the URLconf to be sure of the type of the

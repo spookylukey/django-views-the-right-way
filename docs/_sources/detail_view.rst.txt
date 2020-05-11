@@ -50,7 +50,7 @@ template, the final, concise version of our view will look like this:
 
 .. code-block:: python
 
-   def product_details(request, product_slug):
+   def product_detail(request, product_slug):
        return TemplateResponse(request, 'products/product_detail.html', {
            'product': get_object_or_404(Product.objects.all(), slug=product_slug),
        })

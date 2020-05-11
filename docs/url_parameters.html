@@ -71,7 +71,7 @@ version of the name (e.g <code class="docutils literal notranslate"><span class=
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># views.py</span>
 
-<span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
 </pre></div>
 </div>
@@ -99,11 +99,11 @@ functionality added in 2.0 it got a whole lot better, because it will
 automatically convert things to the correct type for you, reducing the amount of
 type conversion you have to do in your function.</p>
 <p>You can additionally make use of this by adding type hints:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">pass</span>  <span class="c1"># etc</span>
 
 <span class="c1"># OR</span>
-<span class="k">def</span> <span class="nf">product_details</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
     <span class="k">pass</span>  <span class="c1"># etc</span>
 </pre></div>
 </div>
