@@ -283,5 +283,5 @@ warnings:
   CBVs, you will most likely want to continue, and you'll quickly find yourself
   rather snarled up. You will then have to retrace, and completely restructure
   your code, working out how to implement for yourself the things the CBVs were
-  doing for you. As we mentioned before, the CBV is a :ref:`bad starting point
-  <bad-starting-point>`.
+  doing for you. Again we find the CBV is a bad :ref:`starting point
+  <starting-point>`.

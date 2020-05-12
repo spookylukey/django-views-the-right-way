@@ -49,28 +49,53 @@ were displayed.
 The point of all this is to set up a common requirement — something that applies
 to many programming situations, not just view functions:
 
-    **What do we do when we have some custom logic that needs to be executed in
-    the middle of some common logic?**
+    **How can we execute some custom logic in the middle of some common logic?**
 
-In OO languages a solution to this is the “strategy pattern” which is
-fundamentally the same as “dependency injection”. When the “dependency” or
-“strategy” does a single thing, in Python this reduces to **first class
-functions** (aka callbacks). But dependency injection sounds much cooler than
-callbacks, and that is clearer what is important.
-
-Another way to look at this is to see it is just another example of
-`parameterisation
+We can think of this is as just another example of `parameterisation
 <https://www.toptal.com/python/python-parameterized-design-patterns>`_. We need
 a parameter that will capture “what we need to do in the middle”.
+
+To implement this in Python, we can use **first class functions**. These are
+functions that we pass around as values.
+
+.. note::
+
+   **Terminology**
+
+   In OO languages, the standard solution to this question is the “strategy
+   pattern”. That involves creating an object which can encapsulate the action
+   you need to take.
+
+   In Python, functions are “first class objects“ i.e. objects that you can pass
+   around just like every other type of value. So we can just use “functions”
+   where we need “the strategy pattern” (particular if our strategy has only one
+   part to it. If you have more than one entry point that you need to bundle
+   together, a class can be helpful).
+
+   A slightly more general concept is “dependency injection”. If you have some
+   code that needs to do something, i.e. it has a dependency on some other code,
+   instead of depending directly, the dependency gets injected from the outside.
+   If our dependency is a just a function, we can pass it as a parameter in.
+
+   Often you will hear the term “dependency injection” being used for something
+   that goes one step further, and injects dependencies **automatically** in
+   some way. I call these “dependency injection frameworks/containers”. Outside
+   of `pytest's fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I
+   have never found a need or desire for these in Python.
+
+   So, we can call this pattern “first class functions”, or “callbacks”,
+   “strategy pattern” or “dependency injection”. But dependency injection sounds
+   the coolest, so I used that in the title.
+
 
 Let's start with the easier case — just the ``product_list`` view, factored out
 :doc:`as before <delegation>` into the main ``product_list`` view and the
 ``display_product_list`` function it delegates to. The latter now needs changing:
 
-1. It no longer takes a ``queryset`` parameter, but a ``product_searcher`` parameter.
+1. It no longer takes a ``queryset`` parameter, but a ``searcher`` parameter.
 2. It must collect the filters to be passed to ``product_search``. I'll assume we can
    rewrite our (imagined) ``apply_product_filtering`` into ``collect_filtering_parameters``.
-3. It needs to actually use the ``product_searcher`` parameter.
+3. It needs to actually use the ``searcher`` parameter.
 
 Something like this:
 
@@ -81,12 +106,12 @@ Something like this:
    def product_list(request):
        return display_product_list(
            request,
-           product_searcher=product_search,
+           searcher=product_search,
            template_name='products/product_list.html',
        )
 
 
-   def display_product_list(request, *, context=None, product_searcher, template_name):
+   def display_product_list(request, *, context=None, searcher, template_name):
        if context is None:
            context = {}
        filters = collect_filtering_parameters(request)
@@ -94,20 +119,20 @@ Something like this:
            page = int(request.GET['page'])
        except (KeyError, ValueError):
            page = 1
-       context['products'] = product_searcher(filters, page=page)
+       context['products'] = searcher(filters, page=page)
        return TemplateResponse(request, template_name, context)
 
-To the unfamiliar: here we passed the ``product_search`` function into
-``display_product_list`` as the parameter ``product_searcher``. This is called
+To explain a little: here we passed the ``product_search`` function into
+``display_product_list`` as the parameter ``searcher``. This is called
 “first class functions” — just like you can pass around any other data as a
 parameter, you pass around functions too. That is the heart of the technique
 here.
 
 But what about the ``special_offer_detail`` view? If we pass
-``product_searcher=special_product_search``, inside ``display_product_list``
+``searcher=special_product_search``, inside ``display_product_list``
 we'll have a problem. Our passed in function gets called as::
 
-  product_searcher(filters, page=page)
+  searcher(filters, page=page)
 
 But that doesn't match the signature of ``special_product_search`` — it has an
 extra parameter. How can we get that parameter passed?
@@ -144,7 +169,7 @@ the extra logging:
            context={
                'special_offer': special_offer,
            },
-           product_searcher=special_product_search_wrapper,
+           searcher=special_product_search_wrapper,
            template_name='products/special_offer_detail.html',
        })
 
@@ -169,7 +194,7 @@ the common logic.
 
 This powerful technique has lots of great advantages. For one,
 ``display_product_list`` never needs to be concerned with all of this. We don't
-have to modify its signature, nor the signature of the ``product_searcher``
+have to modify its signature, nor the signature of the ``searcher``
 parameter it expects. Also, this works really well with static analysis (like
 the linters that are built-in to many IDEs which can point out undefined names
 and so on).
@@ -180,7 +205,23 @@ Next up: TODO preconditions
 Discussion: DI vs template method
 ---------------------------------
 
-TODO
+In contrast to the pattern I'm suggesting here (dependency injection / strategy
+/ first class functions), Django's CBVs opt for inheritance or “template method”
+as the basic method of customisation.
+
+.. note::
+
+   Terminology
+
+
+   Regarding template method, you would normally call it inheritance when the
+   base class provides a default that does something useful, and `“template
+   method” <https://en.wikipedia.org/wiki/Template_method_pattern>`_ when the
+   base class is abstract - it provides a skeleton, but you must inherit and
+   implement a method for it to work.
+
+   
+
 
 Discussion: Closures vs instances
 ---------------------------------

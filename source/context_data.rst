@@ -109,6 +109,6 @@ capable developer to actually successfully pull off all the parts needed for a
 `custom template tag
 <https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/>`_.
 
-Rather, he struggled for so long because of a bad context that was making a
-simple thing hard, and those of us responsible for that bad context are the ones
-who should be embarrassed.
+Rather, he struggled for so long because of a bad :ref:`starting point
+<starting-point>` that was making a simple thing hard. If we as the Django
+community have made this hard, we are the ones who should be embarrassed.

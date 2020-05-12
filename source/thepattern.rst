@@ -40,7 +40,7 @@ Which bits do you change?
   <https://docs.djangoproject.com/en/3.0/ref/templates/language/>`_.
 * ``{}``, the third argument to ``TemplateResponse``, is the context data you
   want available in your template.
-* ``arg`` is a placeholder for any number of optional URL arguments — parts of
+* ``arg`` is a placeholder for any number of optional URL parameters — parts of
   the URL path that you are matching with a `path converter
   <https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters>`_
   (here we used ``str``) and supplying to the view function as a parameter. You
@@ -78,7 +78,7 @@ for Hello World! In your views.py, you'd have this:
        return HttpResponse('Hello world!')
 
 
-This function expects to receive a ‘request’ object as its argument. This will
+This function expects to receive a ‘request’ object as its parameter. This will
 be an instance of `HttpRequest
 <https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest>`_,
 which contains all the information about the request that the user's browser
@@ -232,12 +232,13 @@ ratio. **Boilerplate reduction should be almost entirely about noise reduction,
 not typing reduction.**
 
 For example, if we wanted, we could reduce the “repetition” of having
-``request`` as an argument to each view function using threadlocals and an
+``request`` as an parameter to each view function using threadlocals and an
 import. We could go further, and remove the import using some magic like web2py
 does. But `we recognise this as a bad idea
 <https://youtu.be/S0No2zSJmks?t=1716>`_, because it reduces clarity. Those
-functions have ``request`` as an argument because it is an argument. Making it
-an implicit one, instead of an explicit one, would hurt you in lots of ways.
+functions have ``request`` as a parameter because it is an input to the
+function. Making it an implicit one, instead of an explicit one, would hurt you
+in lots of ways.
 
 With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
 above is as follows:
@@ -277,7 +278,7 @@ it's better when it comes to DetailView etc? :ref:`We'll see about that
 <DetailView comparison>`.
 
 But let's add a more realistic situation — we actually want some context data.
-Let's say it's just a single piece of information, like a title, using some
+Suppose it's just a single piece of information, like a title, using some
 generic 'page' template.
 
 FBV version:
@@ -332,32 +333,3 @@ In other words:
 
 * The boilerplate you need for a basic CBV is bigger than for an FBV
 * It's so big and tedious that people use snippets library to write it for them.
-
-.. _bad-starting-point:
-
-Discussion: Starting points
----------------------------
-
-Some people will say we can use the CBV for the really simple cases, and then
-switch to an FBV later as needed. But in reality that doesn't happen. Most
-developers are much more likely to stick with the existing structure of the
-code, because that is a safe option, and usually involves less work. Plus, once
-you have started down the CBV route, you quickly gain various mixins etc. that
-make using plain functions less attractive.
-
-So, starting points matter, and the CBV was a bad starting point. With the FBV,
-we just added the context data right into the context dictionary we had already
-created. There was an obvious place for the thing we wanted to add, because the
-logic of the view isn't hidden away somewhere in a base class.
-
-With the CBV, if you start with the minimal version, you have to do a lot more
-work to add a basic customisation.
-
-You find this again and again with CBVs. As soon as you need any logic, you have
-to start defining methods, which brings you pain:
-
-* You've got to know which methods to define, which involves knowing this
-  massive API.
-* You could easily get it wrong in a way which introduces serious bugs. (TODO
-  link)
-* You've got to add the method, which is extra boilerplate.
