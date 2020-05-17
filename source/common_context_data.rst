@@ -50,6 +50,7 @@ Next up: :doc:`url_parameters`
 (You may be interested in a fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn't necessary).
 
+.. _helpers-vs-mixins:
 
 Discussion: Helpers vs Mixins
 -----------------------------

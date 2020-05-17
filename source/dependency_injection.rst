@@ -14,11 +14,8 @@ complexity you will likely encounter in real projects.
 
 Instead of using Django's ``QuerySets`` as the basis for our list of products,
 we have to use a different API. Maybe it is a third party HTTP-based service, or
-maybe it is our own service, perhaps using Elasticsearch or something similar
-which will do our filtering for us. Or just some other bit of code that doesn't
-take ``QuerySet`` as an input.
-
-Let's say that this service has been wrapped in a function that looks like this:
+our own service, but our entry point is a function that doesn't take a
+``QuerySet`` as an input. Perhaps like this:
 
 .. code-block:: python
 
@@ -58,39 +55,10 @@ a parameter that will capture “what we need to do in the middle”.
 To implement this in Python, we can use **first class functions**. These are
 functions that we pass around as values.
 
-.. note::
-
-   **Terminology**
-
-   In OO languages, the standard solution to this question is the “strategy
-   pattern”. That involves creating an object which can encapsulate the action
-   you need to take.
-
-   In Python, functions are “first class objects“ i.e. objects that you can pass
-   around just like every other type of value. So we can just use “functions”
-   where we need “the strategy pattern” (particular if our strategy has only one
-   part to it. If you have more than one entry point that you need to bundle
-   together, a class can be helpful).
-
-   A slightly more general concept is “dependency injection”. If you have some
-   code that needs to do something, i.e. it has a dependency on some other code,
-   instead of depending directly, the dependency gets injected from the outside.
-   If our dependency is a just a function, we can pass it as a parameter in.
-
-   Often you will hear the term “dependency injection” being used for something
-   that goes one step further, and injects dependencies **automatically** in
-   some way. I call these “dependency injection frameworks/containers”. Outside
-   of `pytest's fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I
-   have never found a need or desire for these in Python.
-
-   So, we can call this pattern “first class functions”, or “callbacks”,
-   “strategy pattern” or “dependency injection”. But dependency injection sounds
-   the coolest, so I used that in the title.
-
-
 Let's start with the easier case — just the ``product_list`` view, factored out
-:doc:`as before <delegation>` into the main ``product_list`` view and the
-``display_product_list`` function it delegates to. The latter now needs changing:
+:doc:`as before <delegation>` into the main view and the
+``display_product_list`` function it delegates to. The latter now needs
+changing:
 
 1. It no longer takes a ``queryset`` parameter, but a ``searcher`` parameter.
 2. It must collect the filters to be passed to ``product_search``. I'll assume we can
@@ -121,6 +89,7 @@ Something like this:
            page = 1
        context['products'] = searcher(filters, page=page)
        return TemplateResponse(request, template_name, context)
+
 
 To explain a little: here we passed the ``product_search`` function into
 ``display_product_list`` as the parameter ``searcher``. This is called
@@ -202,28 +171,142 @@ and so on).
 Next up: TODO preconditions
 
 
-Discussion: DI vs template method
----------------------------------
+Note — terminology
+------------------
+
+In OO languages, the standard solution to this question is the “strategy
+pattern”. That involves creating an object which can encapsulate the action you
+need to take.
+
+In Python, functions are “first class objects“ i.e. objects that you can pass
+around just like every other type of value. So we can just use “functions” where
+we need “the strategy pattern” (particular if our strategy has only one part to
+it. If you have more than one entry point that you need to bundle together, a
+class can be helpful).
+
+A slightly more general concept is “dependency injection”. If you have some code
+that needs to do something, i.e. it has a dependency on some other code, instead
+of depending directly, the dependency gets injected from the outside. If our
+dependency is a just a function, we can pass it as a parameter in.
+
+Often you will hear the term “dependency injection” being used for something
+that goes one step further, and injects dependencies **automatically** in some
+way. I call these “dependency injection frameworks/containers”. Outside of
+`pytest's fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I have
+never found a need or desire for these in Python.
+
+So, we can call this pattern “first class functions”, or “callbacks”, “strategy
+pattern” or “dependency injection”. But dependency injection sounds the coolest,
+so I used that in the title.
+
+
+Discussion: DI vs inheritance
+-----------------------------
 
 In contrast to the pattern I'm suggesting here (dependency injection / strategy
-/ first class functions), Django's CBVs opt for inheritance or “template method”
-as the basic method of customisation.
+/ first class functions), Django's CBVs opt for inheritance as the basic method
+of customisation, resulting in the need for class attributes and method
+overrides.
 
-.. note::
+Inheritance brings with it the problems we've also discussed under
+:ref:helpers-vs-mixins.
 
-   Terminology
+To make it more concrete, suppose we had solved the above
+custom-logic-in-the-middle problem by using inheritance and the template method
+pattern, in which we have a base class that calls an abstract
+``do_product_search`` method, and two subclasses which each implement that
+method. The base class might look something like this:
+
+.. code-block:: python
+
+   # TODO check these code samples would work
+
+   class ProductSearchBase(TemplateView):
+       def get_context_data(self, **kwargs):
+           context = super().get_context_data(**kwargs)
+           filters = collect_filtering_parameters(request)
+           try:
+               page = int(request.GET['page'])
+           except (KeyError, ValueError):
+               page = 1
+           context['products'] = self.product_search(filters, page=page)
+           return context
+
+       def product_search(self, filters, page=1):
+           raise NotImplementedError()
 
 
-   Regarding template method, you would normally call it inheritance when the
-   base class provides a default that does something useful, and `“template
-   method” <https://en.wikipedia.org/wiki/Template_method_pattern>`_ when the
-   base class is abstract - it provides a skeleton, but you must inherit and
-   implement a method for it to work.
+Now, how do we implement ``product_search`` for our “special offer“ subclass? We
+need access to the ``special_offer`` object that we already looked up somewhere.
+We might do something like this:
 
-   
+.. code-block:: python
 
 
-Discussion: Closures vs instances
----------------------------------
+   class SpecialOfferProductList(ProductSearchBase):
+       def get(self, request, **kwargs):
+           special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=kwargs['slug'])
+           self.special_offer = special_offer
+           return super().get(request, **kwargs)
 
-TODO
+       def product_search(self, filters, page=1):
+           return special_product_search(filters, self.special_offer, page=page)
+
+       def get_context_data(self, **kwargs):
+           context = super().get_context_data(**kwargs)
+           context['special_offer'] = self.special_offer
+           return context
+
+Here we have separate methods that are forced to communicate with each other via
+setting data on ``self``. This is hacky and difficult to follow or reason about.
+It requires knowing what order your different methods are going to get called
+in. Your ``product_search`` method now has some hidden inputs that could easily
+be missing. When you are forced to use ``self`` like this, it's worth reflecting
+that what you really wanted was a closure.
+
+This kind of code is not uncommon with CBVs. For example, a lot of code that
+uses ``DetailView`` will need to make use of the fact that ``get_object`` method
+stores its result in ``self.object``.
+
+I recently refactored some CBV code that demonstrated exactly this issue into
+the FBV pattern I recommend above. The initial CBV code had a significant
+advantage over most CBV code you'll find — I was using `my own custom CBV base
+class <https://lukeplant.me.uk/blog/posts/my-approach-to-class-based-views/>`_,
+that I had specifically designed to avoid what I consider to be the worst
+features of Django's offering.
+
+Despite this, rewriting as FBV yielded immediate improvements. There was a
+noticeable reduction in length (542 tokens vs 631). But far more important and
+impressive was the fact that I completed the task without any errors — the new
+code had no bugs and passed all the tests first time.
+
+Was this because I'm some kind of super-programmer? No, it was simply that my
+linter was pointing out every single mistake I made while I was moving code
+around. Once I had fixed all the “undefined name” and “unused variable” errors,
+I was done. The reason for this is that **static analysis has a much easier time
+with code written with functions and closures**.
+
+The same static analysis is almost impossible with the CBV version. Half of the
+local variables become instance variables, and that means the analysis would
+have to trace all the methods, work out when they are run, and whether
+everything has been set up before it is used etc.
+
+However, the tool is simply automating what you can do as a human. The fact that
+it fails with the CBV and succeeds with the FBV is just pointing out to you the
+much greater complexity of the latter, which has implications for any human
+maintainer of the code, as well as for tools.
+
+I'm not using anything fancy in terms of linters, by the way — just ``flake8``
+integrated into my editor. If you want to go further and add type hints and use
+mypy, you will find it very easy to do with the approach I've outlined above,
+and make it possible to automatically verify even more things. On the other
+hand, if your CBV ``self`` object is a rag-bag of stuff as above it will be very
+hard for even the most advanced tools to help you.
+
+
+
+(TODO - run pylint over both sets of code. False positives?)
+
+
+
+(TODO - is it possible to implement using DetailView?)
