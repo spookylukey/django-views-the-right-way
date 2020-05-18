@@ -163,10 +163,9 @@ the common logic.
 
 This powerful technique has lots of great advantages. For one,
 ``display_product_list`` never needs to be concerned with all of this. We don't
-have to modify its signature, nor the signature of the ``searcher``
-parameter it expects. Also, this works really well with static analysis (like
-the linters that are built-in to many IDEs which can point out undefined names
-and so on).
+have to modify its signature, nor the signature of the ``searcher`` parameter it
+expects. Also, this works really well with static analysis, like the linters
+that are built-in to many IDEs which can point out undefined names and so on.
 
 Next up: TODO preconditions
 
@@ -259,10 +258,10 @@ We might do something like this:
 
 Here we have separate methods that are forced to communicate with each other via
 setting data on ``self``. This is hacky and difficult to follow or reason about.
-It requires knowing what order your different methods are going to get called
-in. Your ``product_search`` method now has some hidden inputs that could easily
-be missing. When you are forced to use ``self`` like this, it's worth reflecting
-that what you really wanted was a closure.
+Your ``product_search`` method now has some hidden inputs that could easily be
+missing. To be sure, you need to know what order your different methods are
+going to get called in. When you are forced to use ``self`` like this, it's
+worth reflecting that what you really wanted was a closure.
 
 This kind of code is not uncommon with CBVs. For example, a lot of code that
 uses ``DetailView`` will need to make use of the fact that ``get_object`` method

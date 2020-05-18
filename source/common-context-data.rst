@@ -45,7 +45,7 @@ understand and flexible. You can add parameters to the function if necessary
 into bigger helpers, as per your requirements. And you can write tests for these
 helpers if they have any significant logic in them.
 
-Next up: :doc:`url_parameters`
+Next up: :doc:`url-parameters`
 
 (You may be interested in a fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn't necessary).

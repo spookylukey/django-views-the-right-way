@@ -24,7 +24,7 @@ want you to remember is:
   more concise if you find yourself writing the same things over and over. Don't
   be afraid to make some mistakes along the way.
 
-Next up - :doc:`context_data`.
+Next up - :doc:`context-data`.
 
 
 .. _starting-point:

@@ -53,7 +53,7 @@ it:
            context['special_message'] = 'Happy Monday!'
        return TemplateResponse(request, "home.html", context)
 
-That's it! Next up: :doc:`common_context_data`.
+That's it! Next up: :doc:`common-context-data`.
 
 
 Discussion: Embarrassingly simple?

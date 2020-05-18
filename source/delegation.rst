@@ -6,7 +6,7 @@ view in another view. We've thought about how we can use utility functions and
 classes, but sometimes these don't cut it — sometimes the majority of the body
 of the view needs to be re-used. How can we do that with FBVs?
 
-Continuing our :doc:`example <list_view>` of a list of products, let's add a
+Continuing our :doc:`example <list-view>` of a list of products, let's add a
 variation. As well as the main product list page, we've also got a “special
 offers” page — or rather, a set of them, because we have a ``SpecialOffer``
 model that allows us to have many different ones. Each of these pages needs to
@@ -110,7 +110,7 @@ At the template level, we'll probably do a similar refactoring, using `include
 factor out duplication.
 
 That's it! See below for some more discussion about how this delegation pattern
-might evolve. Otherwise, onto :doc:`dependency_injection`.
+might evolve. Otherwise, onto :doc:`dependency-injection`.
 
 .. _function-based-generic-views:
 

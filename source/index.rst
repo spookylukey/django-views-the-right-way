@@ -66,15 +66,15 @@ So let's go!
    :maxdepth: 2
    :caption: Contents:
 
-   thepattern
+   the-pattern
    anything
-   context_data
-   common_context_data
-   url_parameters
-   detail_view
-   list_view
+   context-data
+   common-context-data
+   url-parameters
+   detail-view
+   list-view
    delegation
-   dependency_injection
+   dependency-injection
 
 
 Caveats and disclaimers etc.

@@ -1,7 +1,7 @@
 Displaying a single database object
 ===================================
 
-To continue :doc:`our example <url_parameters>`, we want to display individual
+To continue :doc:`our example <url-parameters>`, we want to display individual
 product pages, looking them up from a product slug that will be part of the URL.
 
 This requires knowing how to use ``QuerySet``, and in particular the
@@ -56,7 +56,7 @@ template, the final, concise version of our view will look like this:
        })
 
 
-That's it! Next up: :doc:`list_view`
+That's it! Next up: :doc:`list-view`
 
 .. _DetailView comparison:
 
