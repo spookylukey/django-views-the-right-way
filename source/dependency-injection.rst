@@ -208,7 +208,7 @@ of customisation, resulting in the need for class attributes and method
 overrides.
 
 Inheritance brings with it the problems we've also discussed under
-:ref:helpers-vs-mixins.
+:ref:`helpers-vs-mixins`.
 
 To make it more concrete, suppose we had solved the above
 custom-logic-in-the-middle problem by using inheritance and the template method
@@ -264,8 +264,8 @@ going to get called in. When you are forced to use ``self`` like this, it's
 worth reflecting that what you really wanted was a closure.
 
 This kind of code is not uncommon with CBVs. For example, a lot of code that
-uses ``DetailView`` will need to make use of the fact that ``get_object`` method
-stores its result in ``self.object``.
+uses ``DetailView`` will need to use the fact that ``get_object`` method stores
+its result in ``self.object``.
 
 I recently refactored some CBV code that demonstrated exactly this issue into
 the FBV pattern I recommend above. The initial CBV code had a significant
