@@ -51,14 +51,25 @@ But now we want to change this view to re-use the logic in our normal
 it has built up by now (which I'll represent using the function
 ``apply_product_filtering()`` below). How should we do that?
 
-The simplest way is to look at our old ``product_list`` view and apply
+One way would be to treat this the same as what we did in
+:doc:`common-context-data` — wrap the body of the existing ``product_list`` view
+into a function that takes some parameters and returns the data to be added to
+the context. However, in some cases that interface won't work. For instance, if
+the view decides that in some cases it will return a completely different kind
+of response — perhaps a redirection, for example — then it won't fit into that
+mould.
+
+Instead we'll use what I'm going to call **delegation** — our entry-point view
+will delegate the rest of the work to another function.
+
+To create this function, look at our old ``product_list`` view and apply
 `parameterisation
 <https://www.toptal.com/python/python-parameterized-design-patterns>`_. The
 extra parameters we need to pass are: the product list ``QuerySet``; the name of
 the template to use; and something to pass in some extra context. With those in
 place we can easily pull out a ``display_product_list`` function, and call it
-from our two functions. I'm calling this pattern **delegation** — our entry
-point view is delegating the rest of the work to another function.
+from our two entry-point view functions.
+
 
 .. code-block:: python
 
@@ -94,8 +105,8 @@ point view is delegating the rest of the work to another function.
 
    For those unfamiliar with the signature on ``display_product_list``:
 
-   * eveything after ``*`` is a “keyword only” argument. They cannot be passed
-     as positional arguments. This:
+   * the arguments after ``*`` are “keyword only” arguments. They cannot be
+     passed as positional arguments. This:
 
      * helps ensures clarity in calling code
      * means we can add to and re-order these arguments later and be sure
@@ -158,8 +169,12 @@ As FBVs they will probably be better for you than your own custom CBVs:
   points would be the same, but hidden from you in the form of lots of mixins
   each with their own attributes and methods. With the function, your problem is
   more visible, and can prompt you factor things out. For example, if you have
-  several parameters related to filtering a list, perhaps you actually need a
-  ``Filterer``?
+  several parameters related to filtering a list, perhaps you actually need to
+  invent a ``Filterer`` class?
+
+
+TODO - going further - higher level - DRF/Django admin
+
 
 Discussion: Copy-paste Programming Bad, Classes Good?
 -----------------------------------------------------
