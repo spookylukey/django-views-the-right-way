@@ -45,7 +45,8 @@ CBVs are often suggested as the solution. If you read all of it:
   * General OOP/multi-paradigm programming principles
   * General Python techniques
 
-Each page is composed of two parts:
+Each page is composed of **two parts**, which have two slightly different
+audiences.
 
 First, the business — the **what and how**: a short, definitive guide to The
 Right Way. As a less experienced developer, either in general or in terms of

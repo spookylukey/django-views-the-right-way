@@ -29,9 +29,9 @@ into a function:
        # This might be loaded from a database or something...
        return {
            'help_pages': [
-               'Help index',
-               'Getting started',
-               'Contact us',
+               ('/help/',                 'Help index'),
+               ('/help/getting-started/', 'Getting started'),
+               ('/help/contact-us',       'Contact us'),
                # etc.
            ],
        }
