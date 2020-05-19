@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block "title" %}Index{% endblock %}
+
+{% block "content" %}
+  <h1>Index of all views</h1>
+
+  <h2>The Pattern</h2>
+  <ul>
+    <li><a href="{% url 'example_name' arg="hello" %}">example</a></li>
+    <li><a href="{% url 'hello_world' %}">hello world</a></li>
+  </ul>
+{% endblock %}

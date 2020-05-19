@@ -147,7 +147,7 @@ So our revised view might look like this:
    from django.template import loader
 
 
-   def hello_world(request):
+   def hello_world(request, my_arg):
        template = loader.get_template('hello_world.html')
        context = {}
        return HttpResponse(template.render(context, request))
