@@ -14,8 +14,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Custom logic in the middle — dependency injection" href="dependency_injection.html" />
-    <link rel="prev" title="Displaying a list of objects" href="list_view.html" />
+    <link rel="next" title="Custom logic in the middle — dependency injection" href="dependency-injection.html" />
+    <link rel="prev" title="Displaying a list of objects" href="list-view.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,10 +34,10 @@
     <ul>
         <li>
           &larr;
-          <a href="list_view.html" title="Previous document">Displaying a list of objects</a>
+          <a href="list-view.html" title="Previous document">Displaying a list of objects</a>
         </li>
         <li>
-          <a href="dependency_injection.html" title="Next document">Custom logic in the middle — dependency injection</a>
+          <a href="dependency-injection.html" title="Next document">Custom logic in the middle — dependency injection</a>
           &rarr;
         </li>
     </ul>
@@ -53,7 +53,7 @@
 view in another view. We’ve thought about how we can use utility functions and
 classes, but sometimes these don’t cut it — sometimes the majority of the body
 of the view needs to be re-used. How can we do that with FBVs?</p>
-<p>Continuing our <a class="reference internal" href="list_view.html"><span class="doc">example</span></a> of a list of products, let’s add a
+<p>Continuing our <a class="reference internal" href="list-view.html"><span class="doc">example</span></a> of a list of products, let’s add a
 variation. As well as the main product list page, we’ve also got a “special
 offers” page — or rather, a set of them, because we have a <code class="docutils literal notranslate"><span class="pre">SpecialOffer</span></code>
 model that allows us to have many different ones. Each of these pages needs to
@@ -63,7 +63,7 @@ should have <strong>all</strong> the features of the normal product list (filter
 etc.), so we want to re-use the logic as much as possible.</p>
 <p>So our view will need to do two things: it will show a single object, and also
 shows a list. The answer of how to do two things with FBVs is: <strong>do two
-things</strong>: No special tricks needed for that. Let’s start with a simple version
+things</strong>. No special tricks needed for that. Let’s start with a simple version
 of our view:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
 
@@ -92,13 +92,20 @@ might be different.</p>
 <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view, whether it is filtering/sorting/paging or anything else
 it has built up by now (which I’ll represent using the function
 <code class="docutils literal notranslate"><span class="pre">apply_product_filtering()</span></code> below). How should we do that?</p>
-<p>The simplest way is to look at our old <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view and apply
+<p>One way would be to do what we did in <a class="reference internal" href="common-context-data.html"><span class="doc">Common context data</span></a> — wrap the body
+of the existing <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view into a function that takes some parameters
+and returns the data to be added to the context. However, in some cases that
+interface won’t work. For instance, if the view decides that in some cases it
+will return a completely different kind of response — perhaps a redirection, for
+example — then it won’t fit into that mould.</p>
+<p>Instead we’ll use what I’m going to call <strong>delegation</strong> — our entry-point view
+will delegate the rest of the work to another function.</p>
+<p>To create this function, look at our old <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view and apply
 <a class="reference external" href="https://www.toptal.com/python/python-parameterized-design-patterns">parameterisation</a>. The
 extra parameters we need to pass are: the product list <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>; the name of
 the template to use; and something to pass in some extra context. With those in
 place we can easily pull out a <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> function, and call it
-from our two functions. I’m calling this pattern <strong>delegation</strong> — our entry
-point view is delegating the rest of the work to another function.</p>
+from our two entry-point view functions.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">display_product_list</span><span class="p">(</span>
         <span class="n">request</span><span class="p">,</span>
@@ -131,8 +138,8 @@ point view is delegating the rest of the work to another function.</p>
 <p class="admonition-title">Note</p>
 <p>For those unfamiliar with the signature on <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code>:</p>
 <ul class="simple">
-<li><p>eveything after <code class="docutils literal notranslate"><span class="pre">*</span></code> is a “keyword only” argument. They cannot be passed
-as positional arguments. This:</p>
+<li><p>the arguments after <code class="docutils literal notranslate"><span class="pre">*</span></code> are “keyword only” arguments. They cannot be
+passed as positional arguments. This:</p>
 <ul>
 <li><p>helps ensures clarity in calling code</p></li>
 <li><p>means we can add to and re-order these arguments later and be sure
@@ -148,7 +155,7 @@ mutable default arguments issue.</p></li>
 <p>At the template level, we’ll probably do a similar refactoring, using <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include">include</a> to
 factor out duplication.</p>
 <p>That’s it! See below for some more discussion about how this delegation pattern
-might evolve. Otherwise, onto <a class="reference internal" href="dependency_injection.html"><span class="doc">Custom logic in the middle — dependency injection</span></a>.</p>
+might evolve. Otherwise, onto <a class="reference internal" href="dependency-injection.html"><span class="doc">Custom logic in the middle — dependency injection</span></a>.</p>
 <div class="section" id="discussion-function-based-generic-views">
 <span id="function-based-generic-views"></span><h2>Discussion: Function based generic views<a class="headerlink" href="#discussion-function-based-generic-views" title="Permalink to this headline">¶</a></h2>
 <p>What happens if you keep going with this parameterisation pattern? Let’s say you
@@ -160,9 +167,9 @@ function based generic views, <a class="reference external" href="https://django
 <p>Isn’t that a step backwards? I’d argue no. With the benefit of hindsight, I’d
 argue that the move from these function based generic views to class based
 generic views was actually the backwards step.</p>
-<p>But that is in the past. Looking forward, the generic <code class="docutils literal notranslate"><span class="pre">object_list</span></code> you might
-develop will be better than both Django’s old generic FBVs and the newer generic
-CBVs in several ways:</p>
+<p>But that is in the past. Looking forward, the generic views you might develop
+will be better than both Django’s old generic FBVs and the newer generic CBVs in
+several ways:</p>
 <ul class="simple">
 <li><p>They will have all the functionality you need built-in.</p></li>
 <li><p>Importantly, they will have none of the functionality you don’t need.</p></li>
@@ -184,13 +191,14 @@ to classes where you do inherit instance variable names).</p></li>
 this is a good thing. For your class-based equivalent, the number of extension
 points would be the same, but hidden from you in the form of lots of mixins
 each with their own attributes and methods. With the function, your problem is
-more visible, and can prompt you factor things out. For example, if you have
-several parameters related to filtering a list, perhaps you actually need a
-<code class="docutils literal notranslate"><span class="pre">Filterer</span></code>?</p></li>
+more visible, and can prompt you to factor things out. For example, if you
+have several parameters related to filtering a list, perhaps you actually need
+to invent a <code class="docutils literal notranslate"><span class="pre">Filterer</span></code> class?</p></li>
 </ul>
+<p>TODO - going further - higher level - DRF/Django admin</p>
 </div>
-<div class="section" id="discussion-copy-paste-programming-bad-classes-good">
-<h2>Discussion: Copy-paste Programming Bad, Classes Good?<a class="headerlink" href="#discussion-copy-paste-programming-bad-classes-good" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="discussion-copy-paste-bad-re-use-good">
+<h2>Discussion: Copy-Paste Bad, Re-use Good?<a class="headerlink" href="#discussion-copy-paste-bad-re-use-good" title="Permalink to this headline">¶</a></h2>
 <p>Where do Django’s generic CBVs come from? Why didn’t we stop with function based
 generic views? The problem was that there was an endless list of requests to
 extend generic views to do one more thing, and we wanted to provide something
@@ -289,7 +297,7 @@ to “mix and match” behaviour. But you can’t.</p></li>
 CBVs, you will most likely want to continue, and you’ll quickly find yourself
 rather snarled up. You will then have to retrace, and completely restructure
 your code, working out how to implement for yourself the things the CBVs were
-doing for you. As we mentioned before, the CBV is a <a class="reference internal" href="thepattern.html#bad-starting-point"><span class="std std-ref">bad starting point</span></a>.</p></li>
+doing for you. Again we find the CBV is a bad <a class="reference internal" href="anything.html#starting-point"><span class="std std-ref">starting point</span></a>.</p></li>
 </ul>
 </div>
 </div>
@@ -302,10 +310,10 @@ doing for you. As we mentioned before, the CBV is a <a class="reference internal
     <ul>
         <li>
           &larr;
-          <a href="list_view.html" title="Previous document">Displaying a list of objects</a>
+          <a href="list-view.html" title="Previous document">Displaying a list of objects</a>
         </li>
         <li>
-          <a href="dependency_injection.html" title="Next document">Custom logic in the middle — dependency injection</a>
+          <a href="dependency-injection.html" title="Next document">Custom logic in the middle — dependency injection</a>
           &rarr;
         </li>
     </ul>
@@ -318,20 +326,20 @@ doing for you. As we mentioned before, the CBV is a <a class="reference internal
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
-<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
-<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Custom logic at the start — delegation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-function-based-generic-views">Discussion: Function based generic views</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-copy-paste-programming-bad-classes-good">Discussion: Copy-paste Programming Bad, Classes Good?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-copy-paste-bad-re-use-good">Discussion: Copy-Paste Bad, Re-use Good?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-multiple-mixins">Discussion: Multiple mixins?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 </ul>
 
 
@@ -348,8 +356,8 @@ doing for you. As we mentioned before, the CBV is a <a class="reference internal
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="list_view.html" title="previous chapter">Displaying a list of objects</a></li>
-      <li>Next: <a href="dependency_injection.html" title="next chapter">Custom logic in the middle — dependency injection</a></li>
+      <li>Previous: <a href="list-view.html" title="previous chapter">Displaying a list of objects</a></li>
+      <li>Next: <a href="dependency-injection.html" title="next chapter">Custom logic in the middle — dependency injection</a></li>
   </ul></li>
 </ul>
 </div>

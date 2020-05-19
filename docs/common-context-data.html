@@ -14,8 +14,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="URL parameters in views" href="url_parameters.html" />
-    <link rel="prev" title="Adding data to a template" href="context_data.html" />
+    <link rel="next" title="URL parameters in views" href="url-parameters.html" />
+    <link rel="prev" title="Adding data to a template" href="context-data.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,10 +34,10 @@
     <ul>
         <li>
           &larr;
-          <a href="context_data.html" title="Previous document">Adding data to a template</a>
+          <a href="context-data.html" title="Previous document">Adding data to a template</a>
         </li>
         <li>
-          <a href="url_parameters.html" title="Next document">URL parameters in views</a>
+          <a href="url-parameters.html" title="Next document">URL parameters in views</a>
           &rarr;
         </li>
     </ul>
@@ -71,9 +71,9 @@ into a function:</p>
     <span class="c1"># This might be loaded from a database or something...</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s1">&#39;help_pages&#39;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s1">&#39;Help index&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Getting started&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Contact us&#39;</span><span class="p">,</span>
+            <span class="p">(</span><span class="s1">&#39;/help/&#39;</span><span class="p">,</span>                 <span class="s1">&#39;Help index&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;/help/getting-started/&#39;</span><span class="p">,</span> <span class="s1">&#39;Getting started&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;/help/contact-us&#39;</span><span class="p">,</span>       <span class="s1">&#39;Contact us&#39;</span><span class="p">),</span>
             <span class="c1"># etc.</span>
         <span class="p">],</span>
     <span class="p">}</span>
@@ -86,11 +86,11 @@ understand and flexible. You can add parameters to the function if necessary
 (e.g. <code class="docutils literal notranslate"><span class="pre">request</span></code> or some data from it), combine common sets of these helpers
 into bigger helpers, as per your requirements. And you can write tests for these
 helpers if they have any significant logic in them.</p>
-<p>Next up: <a class="reference internal" href="url_parameters.html"><span class="doc">URL parameters in views</span></a></p>
+<p>Next up: <a class="reference internal" href="url-parameters.html"><span class="doc">URL parameters in views</span></a></p>
 <p>(You may be interested in a fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn’t necessary).</p>
 <div class="section" id="discussion-helpers-vs-mixins">
-<h2>Discussion: Helpers vs Mixins<a class="headerlink" href="#discussion-helpers-vs-mixins" title="Permalink to this headline">¶</a></h2>
+<span id="helpers-vs-mixins"></span><h2>Discussion: Helpers vs Mixins<a class="headerlink" href="#discussion-helpers-vs-mixins" title="Permalink to this headline">¶</a></h2>
 <p>The solution above is simple and direct. But some might protest it is a bit
 ugly, and has involved a bit of boilerplate. A CBV solution using a mixin is
 surely more elegant:</p>
@@ -132,7 +132,7 @@ not in another, due to different expectations about what is attached to
 <p>In contrast, all the parameters to functions are usually well defined, and you
 can usually have a very high level of confidence that they will work in all
 contexts. There is no <code class="docutils literal notranslate"><span class="pre">self</span></code> parameter which you can you use to sneak things
-in. (See <a class="reference internal" href="detail_view.html#shortcuts-vs-mixins"><span class="std std-ref">shortcuts vs mixins</span></a> for a more in-depth
+in. (See <a class="reference internal" href="detail-view.html#shortcuts-vs-mixins"><span class="std std-ref">shortcuts vs mixins</span></a> for a more in-depth
 treatment of this)</p>
 </li>
 <li><p>Mixins often tie you into inheritance trees for organising things. In reality,
@@ -165,10 +165,10 @@ which also mentions mixins.</p>
     <ul>
         <li>
           &larr;
-          <a href="context_data.html" title="Previous document">Adding data to a template</a>
+          <a href="context-data.html" title="Previous document">Adding data to a template</a>
         </li>
         <li>
-          <a href="url_parameters.html" title="Next document">URL parameters in views</a>
+          <a href="url-parameters.html" title="Next document">URL parameters in views</a>
           &rarr;
         </li>
     </ul>
@@ -181,18 +181,18 @@ which also mentions mixins.</p>
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
-<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Common context data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-helpers-vs-mixins">Discussion: Helpers vs Mixins</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 </ul>
 
 
@@ -209,8 +209,8 @@ which also mentions mixins.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="context_data.html" title="previous chapter">Adding data to a template</a></li>
-      <li>Next: <a href="url_parameters.html" title="next chapter">URL parameters in views</a></li>
+      <li>Previous: <a href="context-data.html" title="previous chapter">Adding data to a template</a></li>
+      <li>Next: <a href="url-parameters.html" title="next chapter">URL parameters in views</a></li>
   </ul></li>
 </ul>
 </div>
@@ -226,7 +226,7 @@ which also mentions mixins.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/common_context_data.rst.txt"
+      <a href="_sources/common-context-data.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

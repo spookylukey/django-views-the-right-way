@@ -52,7 +52,7 @@ Be sure to check the Django docs about `path converters
 the different kind of things you might add into your URLs. If you are into type
 hints, also see below for tips on how you can enhance this pattern.
 
-Otherwise, onto :doc:`detail_view`.
+Otherwise, onto :doc:`detail-view`.
 
 Discussion: Generic code and function signatures
 ------------------------------------------------

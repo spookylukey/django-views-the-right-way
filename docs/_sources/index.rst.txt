@@ -36,7 +36,7 @@ CBVs are often suggested as the solution. If you read all of it:
 
 * You'll learn how to make your views usually shorter and definitely much
   simpler than if you used CBVs.
-* You'll be freed from learning a whole stack of terrifying APIs that were only
+* You'll be freed from learning a whole stack of additional APIs that were only
   making your life harder (and teaching you bad patterns).
 * Instead of learning a bunch of Django specific APIs, we'll cover much more
   transferable knowledge:
@@ -45,7 +45,8 @@ CBVs are often suggested as the solution. If you read all of it:
   * General OOP/multi-paradigm programming principles
   * General Python techniques
 
-Each page is composed of two parts:
+Each page is composed of **two parts**, which have two slightly different
+audiences.
 
 First, the business — the **what and how**: a short, definitive guide to The
 Right Way. As a less experienced developer, either in general or in terms of
@@ -66,15 +67,15 @@ So let's go!
    :maxdepth: 2
    :caption: Contents:
 
-   thepattern
+   the-pattern
    anything
-   context_data
-   common_context_data
-   url_parameters
-   detail_view
-   list_view
+   context-data
+   common-context-data
+   url-parameters
+   detail-view
+   list-view
    delegation
-   dependency_injection
+   dependency-injection
 
 
 Caveats and disclaimers etc.

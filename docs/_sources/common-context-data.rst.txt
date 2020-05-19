@@ -29,9 +29,9 @@ into a function:
        # This might be loaded from a database or something...
        return {
            'help_pages': [
-               'Help index',
-               'Getting started',
-               'Contact us',
+               ('/help/',                 'Help index'),
+               ('/help/getting-started/', 'Getting started'),
+               ('/help/contact-us',       'Contact us'),
                # etc.
            ],
        }
@@ -45,11 +45,12 @@ understand and flexible. You can add parameters to the function if necessary
 into bigger helpers, as per your requirements. And you can write tests for these
 helpers if they have any significant logic in them.
 
-Next up: :doc:`url_parameters`
+Next up: :doc:`url-parameters`
 
 (You may be interested in a fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn't necessary).
 
+.. _helpers-vs-mixins:
 
 Discussion: Helpers vs Mixins
 -----------------------------

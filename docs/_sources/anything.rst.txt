@@ -24,25 +24,38 @@ want you to remember is:
   more concise if you find yourself writing the same things over and over. Don't
   be afraid to make some mistakes along the way.
 
-Next up - :doc:`context_data`.
+Next up - :doc:`context-data`.
 
 
-Discussion: Simplicity
-----------------------
+.. _starting-point:
 
-The point of this page is to highlight that fact that class based views often
-make things far harder than needed. There is ``ListView`` for displaying a list
-of items, or ``DetailView`` for displaying a single item, there are dozens of
-methods to override, and docs to look up, all for doing the simplest things.
+Discussion: Starting points
+---------------------------
 
-These things are unnecessary, and make things much harder than they need to be.
-We'll see more examples later.
+One of the reasons for the pattern I'm recommending is that it makes a great
+starting point for doing anything. The body of the view — the function that
+takes a request and returns a response — is right there in front of you, just
+ready for you to write some logic. If a developer understands **what a view
+is**, and they have some idea of what they want this view to do, then they will
+likely have a good idea of what code they need to write. The code structure in
+front of them will not be an obstacle.
 
-Developers should understand **what** they are doing when they write a view, and
-then the vast majority of things they need to do will be obvious, and won't
-require docs or StackExchange answers. They already know how to program, the
-things they are doing are often not hard, they just need a context that doesn't
-actively prevent them from doing stuff.
+The same is not true of using CBVs are a starting point. As soon as you need any
+logic, you have to start adding configuration or defining methods, which brings
+you pain:
 
-Many of the problems with CBVs also stem, ultimately, from people trying to
-avoid writing any code at all. TODO see "codeless views".
+* You've got to know which methods to define, which involves knowing this
+  massive API.
+* You could easily get it wrong in a way which introduces serious bugs. (TODO
+  link)
+* You've got to add the method, which is extra boilerplate.
+* You may need to switch the base class, and understand what that will do.
+
+We'll see more examples of this as we go through.
+
+Some people will say we should use a CBV for the really simple cases, and then
+switch to an FBV later as needed. But in reality that doesn't happen. Most
+developers are much more likely to stick with the existing structure of the
+code, because that is a safe option, and usually involves less work. Plus, once
+you have started down the CBV route, you quickly gain various mixins etc. that
+make using plain functions less attractive.

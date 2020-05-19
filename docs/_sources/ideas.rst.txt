@@ -176,6 +176,9 @@ Customising the end
 Security
 
 
+Thin views, fat models
+
+
 
 
 ---
@@ -243,11 +246,11 @@ and catch most errors is great, but what is even better is the benefit for
 humans trying to understand or modify this kind of code.
 
 In doing this refactoring, I had just one twinge of sadness — my code seems a
-little bit plain now. I have fewer OOP hierarchies and clever tricks to feel
+little bit plainer now. I have fewer OOP hierarchies and clever tricks to feel
 smug about. But this is misplaced sadness. If you are into smugness-driven
-development, you need to be aiming for the feeling you get when you come back to
-some code 3 months or 3 years later and find it's so easy to work with that
-after doing ``git praise`` you feel the need to give yourself a little hug.
+development, nothing can beat the feeling you get when you come back to some
+code 3 months or 3 years later and find it's so easy to work with that after
+doing ``git praise`` you feel the need to give yourself a little hug.
 
 
 Security:

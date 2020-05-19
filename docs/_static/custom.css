@@ -1,1 +1,6 @@
-/* This file intentionally left blank. */
+div.document {
+    width: 1040px;
+}
+pre {
+    padding: 7px 12px;
+}

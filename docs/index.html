@@ -14,7 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The Right Way" href="thepattern.html" />
+    <link rel="next" title="The Right Way" href="the-pattern.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -32,7 +32,7 @@
   <nav id="rellinks">
     <ul>
         <li>
-          <a href="thepattern.html" title="Next document">The Right Way</a>
+          <a href="the-pattern.html" title="Next document">The Right Way</a>
           &rarr;
         </li>
     </ul>
@@ -68,7 +68,7 @@ CBVs are often suggested as the solution. If you read all of it:</p>
 <ul class="simple">
 <li><p>You’ll learn how to make your views usually shorter and definitely much
 simpler than if you used CBVs.</p></li>
-<li><p>You’ll be freed from learning a whole stack of terrifying APIs that were only
+<li><p>You’ll be freed from learning a whole stack of additional APIs that were only
 making your life harder (and teaching you bad patterns).</p></li>
 <li><p>Instead of learning a bunch of Django specific APIs, we’ll cover much more
 transferable knowledge:</p>
@@ -79,7 +79,8 @@ transferable knowledge:</p>
 </ul>
 </li>
 </ul>
-<p>Each page is composed of two parts:</p>
+<p>Each page is composed of <strong>two parts</strong>, which have two slightly different
+audiences.</p>
 <p>First, the business — the <strong>what and how</strong>: a short, definitive guide to The
 Right Way. As a less experienced developer, either in general or in terms of
 knowledge of Django, this part is all you need. Since this guide is not intended
@@ -95,50 +96,49 @@ CBVs and FBVs, and more general programming principles.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="thepattern.html#the-pattern">The Pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="thepattern.html#the-explanation">The explanation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="thepattern.html#discussion-boilerplate">Discussion: Boilerplate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="thepattern.html#discussion-starting-points">Discussion: Starting points</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#the-pattern">The Pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#the-explanation">The explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#discussion-boilerplate">Discussion: Boilerplate</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="anything.html#discussion-simplicity">Discussion: Simplicity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anything.html#discussion-starting-points">Discussion: Starting points</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="context_data.html#discussion-embarrassingly-simple">Discussion: Embarrassingly simple?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="context-data.html#discussion-embarrassingly-simple">Discussion: Embarrassingly simple?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="common_context_data.html#discussion-helpers-vs-mixins">Discussion: Helpers vs Mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="common-context-data.html#discussion-helpers-vs-mixins">Discussion: Helpers vs Mixins</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="url_parameters.html#discussion-generic-code-and-function-signatures">Discussion: Generic code and function signatures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="url-parameters.html#discussion-generic-code-and-function-signatures">Discussion: Generic code and function signatures</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="detail_view.html#discussion-comparison-to-detailview">Discussion: Comparison to DetailView</a></li>
-<li class="toctree-l2"><a class="reference internal" href="detail_view.html#discussion-convention-vs-configuration">Discussion: Convention vs configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="detail_view.html#discussion-static-vs-dynamic">Discussion: Static vs dynamic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="detail_view.html#discussion-generic-code-and-variable-names">Discussion: Generic code and variable names</a></li>
-<li class="toctree-l2"><a class="reference internal" href="detail_view.html#discussion-layering-violations-shortcuts-vs-mixins">Discussion: Layering violations — shortcuts vs mixins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="detail-view.html#discussion-layering-violations-shortcuts-vs-mixins">Discussion: Layering violations — shortcuts vs mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detail-view.html#discussion-comparison-to-detailview">Discussion: Comparison to DetailView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detail-view.html#discussion-convention-vs-configuration">Discussion: Convention vs configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detail-view.html#discussion-static-vs-dynamic">Discussion: Static vs dynamic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="detail-view.html#discussion-generic-code-and-variable-names">Discussion: Generic code and variable names</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="list_view.html#discussion-discovering-re-usable-units-of-code">Discussion: Discovering re-usable units of code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="list-view.html#discussion-discovering-re-usable-units-of-code">Discussion: Discovering re-usable units of code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="delegation.html#discussion-function-based-generic-views">Discussion: Function based generic views</a></li>
-<li class="toctree-l2"><a class="reference internal" href="delegation.html#discussion-copy-paste-programming-bad-classes-good">Discussion: Copy-paste Programming Bad, Classes Good?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delegation.html#discussion-copy-paste-bad-re-use-good">Discussion: Copy-Paste Bad, Re-use Good?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="delegation.html#discussion-multiple-mixins">Discussion: Multiple mixins?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dependency_injection.html#discussion-di-vs-template-method">Discussion: DI vs template method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dependency_injection.html#discussion-closures-vs-instances">Discussion: Closures vs instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dependency-injection.html#note-terminology">Note — terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependency-injection.html#discussion-di-vs-inheritance">Discussion: DI vs inheritance</a></li>
 </ul>
 </li>
 </ul>
@@ -178,7 +178,7 @@ things I’m expressing now.</p></li>
   <nav id="rellinks">
     <ul>
         <li>
-          <a href="thepattern.html" title="Next document">The Right Way</a>
+          <a href="the-pattern.html" title="Next document">The Right Way</a>
           &rarr;
         </li>
     </ul>
@@ -191,15 +191,15 @@ things I’m expressing now.</p></li>
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
-<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
-<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 </ul>
 
 
@@ -216,7 +216,7 @@ things I’m expressing now.</p></li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="thepattern.html" title="next chapter">The Right Way</a></li>
+      <li>Next: <a href="the-pattern.html" title="next chapter">The Right Way</a></li>
   </ul></li>
 </ul>
 </div>

@@ -78,7 +78,7 @@ going to cover how to write templates anywhere in this guide. Please see the
 template language topic</a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">{}</span></code>, the third argument to <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code>, is the context data you
 want available in your template.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">arg</span></code> is a placeholder for any number of optional URL arguments — parts of
+<li><p><code class="docutils literal notranslate"><span class="pre">arg</span></code> is a placeholder for any number of optional URL parameters — parts of
 the URL path that you are matching with a <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters">path converter</a>
 (here we used <code class="docutils literal notranslate"><span class="pre">str</span></code>) and supplying to the view function as a parameter. You
 can remove it, or add more, but have to change the URLconf to match.</p></li>
@@ -109,7 +109,7 @@ for Hello World! In your views.py, you’d have this:</p>
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s1">&#39;Hello world!&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function expects to receive a ‘request’ object as its argument. This will
+<p>This function expects to receive a ‘request’ object as its parameter. This will
 be an instance of <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest">HttpRequest</a>,
 which contains all the information about the request that the user’s browser
 sent. It then returns an <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponse">HttpResponse</a>
@@ -158,7 +158,7 @@ information that needs to appear in the page.</p>
 <span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
 
 
-<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">my_arg</span><span class="p">):</span>
     <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;hello_world.html&#39;</span><span class="p">)</span>
     <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span>
@@ -224,11 +224,12 @@ but that verbose code hinders comprehension due to the low signal-to-noise
 ratio. <strong>Boilerplate reduction should be almost entirely about noise reduction,
 not typing reduction.</strong></p>
 <p>For example, if we wanted, we could reduce the “repetition” of having
-<code class="docutils literal notranslate"><span class="pre">request</span></code> as an argument to each view function using threadlocals and an
+<code class="docutils literal notranslate"><span class="pre">request</span></code> as an parameter to each view function using threadlocals and an
 import. We could go further, and remove the import using some magic like web2py
 does. But <a class="reference external" href="https://youtu.be/S0No2zSJmks?t=1716">we recognise this as a bad idea</a>, because it reduces clarity. Those
-functions have <code class="docutils literal notranslate"><span class="pre">request</span></code> as an argument because it is an argument. Making it
-an implicit one, instead of an explicit one, would hurt you in lots of ways.</p>
+functions have <code class="docutils literal notranslate"><span class="pre">request</span></code> as a parameter because it is an input to the
+function. Making it an implicit one, instead of an explicit one, would hurt you
+in lots of ways.</p>
 <p>With that in mind, let’s do a comparison. The CBV equivalent to the view I wrote
 above is as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
@@ -254,9 +255,9 @@ squeeze it to one long one using
 <code class="docutils literal notranslate"><span class="pre">TemplateView.as_view(template_name=&quot;example.html&quot;)</span></code> but that’s not how you
 normally write it.</p>
 <p>Given the downsides, I expected the upside to be a lot more convincing. Maybe
-it’s better when it comes to DetailView etc? <a class="reference internal" href="detail_view.html#detailview-comparison"><span class="std std-ref">We’ll see about that</span></a>.</p>
+it’s better when it comes to DetailView etc? <a class="reference internal" href="detail-view.html#detailview-comparison"><span class="std std-ref">We’ll see about that</span></a>.</p>
 <p>But let’s add a more realistic situation — we actually want some context data.
-Let’s say it’s just a single piece of information, like a title, using some
+Suppose it’s just a single piece of information, like a title, using some
 generic ‘page’ template.</p>
 <p>FBV version:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
@@ -300,30 +301,6 @@ and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/bl
 <li><p>It’s so big and tedious that people use snippets library to write it for them.</p></li>
 </ul>
 </div>
-<div class="section" id="discussion-starting-points">
-<span id="bad-starting-point"></span><h2>Discussion: Starting points<a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
-<p>Some people will say we can use the CBV for the really simple cases, and then
-switch to an FBV later as needed. But in reality that doesn’t happen. Most
-developers are much more likely to stick with the existing structure of the
-code, because that is a safe option, and usually involves less work. Plus, once
-you have started down the CBV route, you quickly gain various mixins etc. that
-make using plain functions less attractive.</p>
-<p>So, starting points matter, and the CBV was a bad starting point. With the FBV,
-we just added the context data right into the context dictionary we had already
-created. There was an obvious place for the thing we wanted to add, because the
-logic of the view isn’t hidden away somewhere in a base class.</p>
-<p>With the CBV, if you start with the minimal version, you have to do a lot more
-work to add a basic customisation.</p>
-<p>You find this again and again with CBVs. As soon as you need any logic, you have
-to start defining methods, which brings you pain:</p>
-<ul class="simple">
-<li><p>You’ve got to know which methods to define, which involves knowing this
-massive API.</p></li>
-<li><p>You could easily get it wrong in a way which introduces serious bugs. (TODO
-link)</p></li>
-<li><p>You’ve got to add the method, which is extra boilerplate.</p></li>
-</ul>
-</div>
 </div>
 
 
@@ -354,17 +331,16 @@ link)</p></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-pattern">The Pattern</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-explanation">The explanation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-boilerplate">Discussion: Boilerplate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-starting-points">Discussion: Starting points</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
-<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
-<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 </ul>
 
 
@@ -398,7 +374,7 @@ link)</p></li>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/thepattern.rst.txt"
+      <a href="_sources/the-pattern.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

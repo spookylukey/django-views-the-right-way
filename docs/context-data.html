@@ -14,7 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Common context data" href="common_context_data.html" />
+    <link rel="next" title="Common context data" href="common-context-data.html" />
     <link rel="prev" title="How to do anything in a view" href="anything.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -37,7 +37,7 @@
           <a href="anything.html" title="Previous document">How to do anything in a view</a>
         </li>
         <li>
-          <a href="common_context_data.html" title="Next document">Common context data</a>
+          <a href="common-context-data.html" title="Next document">Common context data</a>
           &rarr;
         </li>
     </ul>
@@ -51,7 +51,7 @@
 <h1>Adding data to a template<a class="headerlink" href="#adding-data-to-a-template" title="Permalink to this headline">¶</a></h1>
 <p>Suppose we have some data that we want to use in a template. We therefore need
 to pass that data into the template’s “context”. It could be anything — a simple
-value or a list of objects retrieved using the ORM. Using <a class="reference internal" href="thepattern.html#the-pattern"><span class="std std-ref">The Pattern</span></a> I
+value or a list of objects retrieved using the ORM. Using <a class="reference internal" href="the-pattern.html#the-pattern"><span class="std std-ref">The Pattern</span></a> I
 described earlier, how do we do that?</p>
 <p>For the sake of argument, we are going to put today’s date into the context,
 with the name <code class="docutils literal notranslate"><span class="pre">today</span></code>, and I’m going to assume you are writing the home page
@@ -92,7 +92,7 @@ it:</p>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;home.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>That’s it! Next up: <a class="reference internal" href="common_context_data.html"><span class="doc">Common context data</span></a>.</p>
+<p>That’s it! Next up: <a class="reference internal" href="common-context-data.html"><span class="doc">Common context data</span></a>.</p>
 <div class="section" id="discussion-embarrassingly-simple">
 <h2>Discussion: Embarrassingly simple?<a class="headerlink" href="#discussion-embarrassingly-simple" title="Permalink to this headline">¶</a></h2>
 <p>This code is so simple it might not seem worth mentioning. Yet, with Class Based
@@ -120,7 +120,7 @@ I actually end up adding is:</p>
 </pre></div>
 </div>
 <p>If I’m lucky then most of this method has already been written for me (in which
-case I then have the boilerplate issue mentioned in <a class="reference internal" href="thepattern.html#boilerplate"><span class="std std-ref">Discussion: Boilerplate</span></a>), but it
+case I then have the boilerplate issue mentioned in <a class="reference internal" href="the-pattern.html#boilerplate"><span class="std std-ref">Discussion: Boilerplate</span></a>), but it
 might not have been. I have to know this API, and there is plenty that can go
 wrong — a wrong signature, or failing to call <code class="docutils literal notranslate"><span class="pre">super()</span></code> (which may not have
 immediate problems, but could cause problems down the road).</p>
@@ -132,9 +132,8 @@ template tags to solve this problem — something he was very embarrassed about.
 But he shouldn’t be embarrassed — for a newbie, you would have to be a pretty
 capable developer to actually successfully pull off all the parts needed for a
 <a class="reference external" href="https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/">custom template tag</a>.</p>
-<p>Rather, he struggled for so long because of a bad context that was making a
-simple thing hard, and those of us responsible for that bad context are the ones
-who should be embarrassed.</p>
+<p>Rather, he struggled for so long because of a bad <a class="reference internal" href="anything.html#starting-point"><span class="std std-ref">starting point</span></a> that was making a simple thing hard. If we as the Django
+community have made this hard, we are the ones who should be embarrassed.</p>
 </div>
 </div>
 
@@ -149,7 +148,7 @@ who should be embarrassed.</p>
           <a href="anything.html" title="Previous document">How to do anything in a view</a>
         </li>
         <li>
-          <a href="common_context_data.html" title="Next document">Common context data</a>
+          <a href="common-context-data.html" title="Next document">Common context data</a>
           &rarr;
         </li>
     </ul>
@@ -162,18 +161,18 @@ who should be embarrassed.</p>
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Adding data to a template</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-embarrassingly-simple">Discussion: Embarrassingly simple?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 </ul>
 
 
@@ -191,7 +190,7 @@ who should be embarrassed.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="anything.html" title="previous chapter">How to do anything in a view</a></li>
-      <li>Next: <a href="common_context_data.html" title="next chapter">Common context data</a></li>
+      <li>Next: <a href="common-context-data.html" title="next chapter">Common context data</a></li>
   </ul></li>
 </ul>
 </div>
@@ -207,7 +206,7 @@ who should be embarrassed.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/context_data.rst.txt"
+      <a href="_sources/context-data.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

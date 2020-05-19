@@ -14,8 +14,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Adding data to a template" href="context_data.html" />
-    <link rel="prev" title="The Right Way" href="thepattern.html" />
+    <link rel="next" title="Adding data to a template" href="context-data.html" />
+    <link rel="prev" title="The Right Way" href="the-pattern.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,10 +34,10 @@
     <ul>
         <li>
           &larr;
-          <a href="thepattern.html" title="Previous document">The Right Way</a>
+          <a href="the-pattern.html" title="Previous document">The Right Way</a>
         </li>
         <li>
-          <a href="context_data.html" title="Next document">Adding data to a template</a>
+          <a href="context-data.html" title="Next document">Adding data to a template</a>
           &rarr;
         </li>
     </ul>
@@ -68,22 +68,34 @@ software developer, you write code. Take responsibility and just do it.</p></li>
 more concise if you find yourself writing the same things over and over. Don’t
 be afraid to make some mistakes along the way.</p></li>
 </ul>
-<p>Next up - <a class="reference internal" href="context_data.html"><span class="doc">Adding data to a template</span></a>.</p>
-<div class="section" id="discussion-simplicity">
-<h2>Discussion: Simplicity<a class="headerlink" href="#discussion-simplicity" title="Permalink to this headline">¶</a></h2>
-<p>The point of this page is to highlight that fact that class based views often
-make things far harder than needed. There is <code class="docutils literal notranslate"><span class="pre">ListView</span></code> for displaying a list
-of items, or <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> for displaying a single item, there are dozens of
-methods to override, and docs to look up, all for doing the simplest things.</p>
-<p>These things are unnecessary, and make things much harder than they need to be.
-We’ll see more examples later.</p>
-<p>Developers should understand <strong>what</strong> they are doing when they write a view, and
-then the vast majority of things they need to do will be obvious, and won’t
-require docs or StackExchange answers. They already know how to program, the
-things they are doing are often not hard, they just need a context that doesn’t
-actively prevent them from doing stuff.</p>
-<p>Many of the problems with CBVs also stem, ultimately, from people trying to
-avoid writing any code at all. TODO see “codeless views”.</p>
+<p>Next up - <a class="reference internal" href="context-data.html"><span class="doc">Adding data to a template</span></a>.</p>
+<div class="section" id="discussion-starting-points">
+<span id="starting-point"></span><h2>Discussion: Starting points<a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
+<p>One of the reasons for the pattern I’m recommending is that it makes a great
+starting point for doing anything. The body of the view — the function that
+takes a request and returns a response — is right there in front of you, just
+ready for you to write some logic. If a developer understands <strong>what a view
+is</strong>, and they have some idea of what they want this view to do, then they will
+likely have a good idea of what code they need to write. The code structure in
+front of them will not be an obstacle.</p>
+<p>The same is not true of using CBVs are a starting point. As soon as you need any
+logic, you have to start adding configuration or defining methods, which brings
+you pain:</p>
+<ul class="simple">
+<li><p>You’ve got to know which methods to define, which involves knowing this
+massive API.</p></li>
+<li><p>You could easily get it wrong in a way which introduces serious bugs. (TODO
+link)</p></li>
+<li><p>You’ve got to add the method, which is extra boilerplate.</p></li>
+<li><p>You may need to switch the base class, and understand what that will do.</p></li>
+</ul>
+<p>We’ll see more examples of this as we go through.</p>
+<p>Some people will say we should use a CBV for the really simple cases, and then
+switch to an FBV later as needed. But in reality that doesn’t happen. Most
+developers are much more likely to stick with the existing structure of the
+code, because that is a safe option, and usually involves less work. Plus, once
+you have started down the CBV route, you quickly gain various mixins etc. that
+make using plain functions less attractive.</p>
 </div>
 </div>
 
@@ -95,10 +107,10 @@ avoid writing any code at all. TODO see “codeless views”.</p>
     <ul>
         <li>
           &larr;
-          <a href="thepattern.html" title="Previous document">The Right Way</a>
+          <a href="the-pattern.html" title="Previous document">The Right Way</a>
         </li>
         <li>
-          <a href="context_data.html" title="Next document">Adding data to a template</a>
+          <a href="context-data.html" title="Next document">Adding data to a template</a>
           &rarr;
         </li>
     </ul>
@@ -111,18 +123,18 @@ avoid writing any code at all. TODO see “codeless views”.</p>
         <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="thepattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">How to do anything in a view</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-simplicity">Discussion: Simplicity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-starting-points">Discussion: Starting points</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="context_data.html">Adding data to a template</a></li>
-<li class="toctree-l1"><a class="reference internal" href="common_context_data.html">Common context data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="url_parameters.html">URL parameters in views</a></li>
-<li class="toctree-l1"><a class="reference internal" href="detail_view.html">Displaying a single database object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="list_view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 </ul>
 
 
@@ -139,8 +151,8 @@ avoid writing any code at all. TODO see “codeless views”.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="thepattern.html" title="previous chapter">The Right Way</a></li>
-      <li>Next: <a href="context_data.html" title="next chapter">Adding data to a template</a></li>
+      <li>Previous: <a href="the-pattern.html" title="previous chapter">The Right Way</a></li>
+      <li>Next: <a href="context-data.html" title="next chapter">Adding data to a template</a></li>
   </ul></li>
 </ul>
 </div>
