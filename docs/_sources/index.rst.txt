@@ -52,7 +52,8 @@ First, the business — the **what and how**: a short, definitive guide to The
 Right Way. As a less experienced developer, either in general or in terms of
 knowledge of Django, this part is all you need. Since this guide is not intended
 to be reference documentation, I'll include various links to the official Django
-reference docs.
+reference docs. All example code can be found in full in the `GitHub repo
+<https://github.com/spookylukey/django-views-the-right-way/tree/master/code>`_.
 
 Second, discussion — the **why**: a longer, in-depth explanation of why everyone
 else who tells you differently is wrong :-). It's targeted at slightly more
@@ -76,7 +77,6 @@ So let's go!
    list-view
    delegation
    dependency-injection
-
 
 Caveats and disclaimers etc.
 ============================
