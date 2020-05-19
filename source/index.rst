@@ -36,7 +36,7 @@ CBVs are often suggested as the solution. If you read all of it:
 
 * You'll learn how to make your views usually shorter and definitely much
   simpler than if you used CBVs.
-* You'll be freed from learning a whole stack of terrifying APIs that were only
+* You'll be freed from learning a whole stack of additional APIs that were only
   making your life harder (and teaching you bad patterns).
 * Instead of learning a bunch of Django specific APIs, we'll cover much more
   transferable knowledge:

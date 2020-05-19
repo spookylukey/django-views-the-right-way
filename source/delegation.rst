@@ -17,7 +17,7 @@ etc.), so we want to re-use the logic as much as possible.
 
 So our view will need to do two things: it will show a single object, and also
 shows a list. The answer of how to do two things with FBVs is: **do two
-things**: No special tricks needed for that. Let's start with a simple version
+things**. No special tricks needed for that. Let's start with a simple version
 of our view:
 
 .. code-block:: python
@@ -51,13 +51,12 @@ But now we want to change this view to re-use the logic in our normal
 it has built up by now (which I'll represent using the function
 ``apply_product_filtering()`` below). How should we do that?
 
-One way would be to treat this the same as what we did in
-:doc:`common-context-data` — wrap the body of the existing ``product_list`` view
-into a function that takes some parameters and returns the data to be added to
-the context. However, in some cases that interface won't work. For instance, if
-the view decides that in some cases it will return a completely different kind
-of response — perhaps a redirection, for example — then it won't fit into that
-mould.
+One way would be to do what we did in :doc:`common-context-data` — wrap the body
+of the existing ``product_list`` view into a function that takes some parameters
+and returns the data to be added to the context. However, in some cases that
+interface won't work. For instance, if the view decides that in some cases it
+will return a completely different kind of response — perhaps a redirection, for
+example — then it won't fit into that mould.
 
 Instead we'll use what I'm going to call **delegation** — our entry-point view
 will delegate the rest of the work to another function.
@@ -141,9 +140,9 @@ Isn't that a step backwards? I'd argue no. With the benefit of hindsight, I'd
 argue that the move from these function based generic views to class based
 generic views was actually the backwards step.
 
-But that is in the past. Looking forward, the generic ``object_list`` you might
-develop will be better than both Django's old generic FBVs and the newer generic
-CBVs in several ways:
+But that is in the past. Looking forward, the generic views you might develop
+will be better than both Django's old generic FBVs and the newer generic CBVs in
+several ways:
 
 * They will have all the functionality you need built-in.
 * Importantly, they will have none of the functionality you don't need.
@@ -168,16 +167,16 @@ As FBVs they will probably be better for you than your own custom CBVs:
   this is a good thing. For your class-based equivalent, the number of extension
   points would be the same, but hidden from you in the form of lots of mixins
   each with their own attributes and methods. With the function, your problem is
-  more visible, and can prompt you factor things out. For example, if you have
-  several parameters related to filtering a list, perhaps you actually need to
-  invent a ``Filterer`` class?
+  more visible, and can prompt you to factor things out. For example, if you
+  have several parameters related to filtering a list, perhaps you actually need
+  to invent a ``Filterer`` class?
 
 
 TODO - going further - higher level - DRF/Django admin
 
 
-Discussion: Copy-paste Programming Bad, Classes Good?
------------------------------------------------------
+Discussion: Copy-Paste Bad, Re-use Good?
+----------------------------------------
 
 Where do Django's generic CBVs come from? Why didn't we stop with function based
 generic views? The problem was that there was an endless list of requests to
