@@ -3,17 +3,24 @@
 {% block "title" %}Index{% endblock %}
 
 {% block "content" %}
-  <h1>Index of all views</h1>
+  <h1>Index of main views</h1>
 
   <h2>The Pattern</h2>
   <ul>
     <li><a href="{% url 'the_pattern:example_name' arg="hello" %}">example</a></li>
-    <li><a href="{% url 'the_pattern_other:hello_world' %}">hello world</a></li>
+    <li><a href="{% url 'the_pattern_explanation:hello_world' %}">hello world</a></li>
   </ul>
+
 
   <h2>Context data</h2>
   <ul>
     <li><a href="{% url 'context_data:home' %}">home</a></li>
     <li><a href="{% url 'context_data:home_2' %}">home 2</a></li>
   </ul>
+
+  <h3>Discussion</h2>
+  <ul>
+    <li><a href="{% url 'context_data_discussion:home' %}">home - CBV</a></li>
+  </ul>
+
 {% endblock %}

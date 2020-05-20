@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import other_views as views
+from . import explanation_views as views
 
 urlpatterns = [
     path('hello/', views.hello_world, name='hello_world'),
@@ -10,4 +10,4 @@ urlpatterns = [
     path('hello5/<str:my_arg>/', views.hello_world_5),
 ]
 
-app_name = 'the_pattern_other'
+app_name = 'the_pattern_explanation'

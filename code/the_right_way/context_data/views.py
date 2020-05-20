@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 
 def home(request):
     return TemplateResponse(request, "home.html", {
-        'today': date.today(),   # This is the line you add
+        'today': date.today(),
     })
 
 

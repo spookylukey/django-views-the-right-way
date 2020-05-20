@@ -213,35 +213,23 @@ much there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and
 
 Next up - :doc:`anything`.
 
+.. _visibility:
 
-.. _boilerplate:
+Discussion — keep the view visible!
+-----------------------------------
 
-Discussion: Boilerplate
------------------------
+The most important thing about the pattern I'm recommending is that the view
+itself is visible. The fundamental nature of a view is that it is a function (or
+callable) that takes a request and returns a response. This is pretty obvious in
+the pattern above — we have:
 
-The first thing to note about boilerplate (by which I mean repeated code that
-just Needs To Be There For Some Reason) is that a small amount of it is not a
-big problem in software development. **We don't spend most of our time typing,
-we spend most of our time reading code. This means that clarity is much more
-important than shaving a few keystrokes**. Arguments about small amounts of
-boilerplate should not be the major factor.
+* a function (check)
+* that takes an argument called ``request`` (check)
+* and returns some kind of response — a ``TemplateResponse`` (check)
 
-The real issue with boilerplate, in fact, is not how much typing it involves,
-but that verbose code hinders comprehension due to the low signal-to-noise
-ratio. **Boilerplate reduction should be almost entirely about noise reduction,
-not typing reduction.**
 
-For example, if we wanted, we could reduce the “repetition” of having
-``request`` as an parameter to each view function using threadlocals and an
-import. We could go further, and remove the import using some magic like web2py
-does. But `we recognise this as a bad idea
-<https://youtu.be/S0No2zSJmks?t=1716>`_, because it reduces clarity. Those
-functions have ``request`` as a parameter because it is an input to the
-function. Making it an implicit one, instead of an explicit one, would hurt you
-in lots of ways.
+Using CBVs we could rewrite the code as:
 
-With that in mind, let's do a comparison. The CBV equivalent to the view I wrote
-above is as follows:
 
 .. code-block:: python
 
@@ -251,85 +239,18 @@ above is as follows:
         template_name = "example.html"
 
 
-.. code-block:: python
+But now **all 3 essential elements of the view have disappeared**. To have any
+idea that this matches the description of what a view is you have to know what
+the base classes do, and the fundamental simplicity of what you are doing has
+been obscured.
 
-   urlpatterns = [
-       path('example/<str:arg>/', views.ExampleView.as_view(), name='example_name'),
-   ]
+There may be reasons for doing this, of course, but let's be aware of this
+problem and weigh up the advantages and disadvantages.
+
+You might think “this is shorter than the FBV” is one of the advantages. It is,
+slightly, but as soon as the add the need for :doc:`context data <context-data>`
+this advantage disappears, and we'll find we have :ref:`more boilerplate
+<boilerplate>`, not less, with CBVs.
 
 
-How does this compare?
 
-On the plus side, it has a certain kind of clarity — it is clear from reading it
-that ``ExampleView`` will render a template, and it tells us exactly which one.
-
-On the negative side, however, we should note that **it's barely any shorter**
-than the FBV.
-
-CBVs have some very big downsides, which I'll get onto. The major selling point
-of CBVs is that they are supposed to remove duplication and boilerplate. But, we
-only had 2 lines to begin with, and we still have 2 lines. We could just about
-squeeze it to one long one using
-``TemplateView.as_view(template_name="example.html")`` but that's not how you
-normally write it.
-
-Given the downsides, I expected the upside to be a lot more convincing. Maybe
-it's better when it comes to DetailView etc? :ref:`We'll see about that
-<DetailView comparison>`.
-
-But let's add a more realistic situation — we actually want some context data.
-Suppose it's just a single piece of information, like a title, using some
-generic 'page' template.
-
-FBV version:
-
-.. code-block:: python
-
-   def my_view(request):
-       return TemplateResponse(request, "page.html", {
-           'title': 'My Title',
-       })
-
-CBV version:
-
-.. code-block:: python
-
-   class MyView(TemplateView):
-       template_name = "page.html"
-
-       def get_context_data(self, **kwargs):
-           context = super().get_context_data(**kwargs)
-           context['title'] = 'My Title'
-           return context
-
-For this trivial task, we've had to define a new, bulky method, and now we find
-**it's a lot longer** than the FBV, in addition to being much more complex and
-indirect.
-
-In fact, you'll find many people don't actually start with the bare
-``TemplateView`` subclass. If you `search GitHub
-<https://github.com/search?q=get_context_data&type=Code>`_ for
-``get_context_data``, you'll find hundreds and hundreds of examples that look
-like this:
-
-.. code-block:: python
-
-   class HomeView(TemplateView):
-       # ...
-
-       def get_context_data(self):
-           context = super(HomeView, self).get_context_data()
-           return context
-
-This doesn't make much sense, until you realise that people are using
-boilerplate generators/snippets to create new CBVs — such as `this for emacs
-<https://github.com/pashinin/emacsd/blob/c8e50e6bb573641f3ffd454236215ea59e4eca13/snippets/python-mode/class>`_
-and `this for vim
-<https://github.com/ppiet/dotfiles/blob/e92c4b31d253e48027b72335f071281352b05f01/vim/UltiSnips/python.snippets>`_,
-and `this for Sublime Text
-<https://github.com/mvdwaeter/dotfiles/blob/60673ae395bf493fd5fa6addeceac662218e1703/osx/Sublime%20Text/get_context_data.sublime-snippet>`_.
-
-In other words:
-
-* The boilerplate you need for a basic CBV is bigger than for an FBV
-* It's so big and tedious that people use snippets library to write it for them.

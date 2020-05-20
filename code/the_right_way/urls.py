@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.index),
     path('admin/', admin.site.urls),
     path('the-pattern/', include('the_right_way.the_pattern.urls')),
-    path('the-pattern-other/', include('the_right_way.the_pattern.other_urls')),
+    path('the-pattern-explanation/', include('the_right_way.the_pattern.explanation_urls')),
     path('context-data/', include('the_right_way.context_data.urls')),
+    path('context-data-discussion/', include('the_right_way.context_data.discussion_urls')),
 ]
