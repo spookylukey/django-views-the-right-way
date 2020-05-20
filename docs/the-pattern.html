@@ -211,95 +211,33 @@ much there is</a> — fill the warehouse with dynamite and
 <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t look back</a>.</p>
 <p>Next up - <a class="reference internal" href="anything.html"><span class="doc">How to do anything in a view</span></a>.</p>
 </div>
-<div class="section" id="discussion-boilerplate">
-<span id="boilerplate"></span><h2>Discussion: Boilerplate<a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
-<p>The first thing to note about boilerplate (by which I mean repeated code that
-just Needs To Be There For Some Reason) is that a small amount of it is not a
-big problem in software development. <strong>We don’t spend most of our time typing,
-we spend most of our time reading code. This means that clarity is much more
-important than shaving a few keystrokes</strong>. Arguments about small amounts of
-boilerplate should not be the major factor.</p>
-<p>The real issue with boilerplate, in fact, is not how much typing it involves,
-but that verbose code hinders comprehension due to the low signal-to-noise
-ratio. <strong>Boilerplate reduction should be almost entirely about noise reduction,
-not typing reduction.</strong></p>
-<p>For example, if we wanted, we could reduce the “repetition” of having
-<code class="docutils literal notranslate"><span class="pre">request</span></code> as an parameter to each view function using threadlocals and an
-import. We could go further, and remove the import using some magic like web2py
-does. But <a class="reference external" href="https://youtu.be/S0No2zSJmks?t=1716">we recognise this as a bad idea</a>, because it reduces clarity. Those
-functions have <code class="docutils literal notranslate"><span class="pre">request</span></code> as a parameter because it is an input to the
-function. Making it an implicit one, instead of an explicit one, would hurt you
-in lots of ways.</p>
-<p>With that in mind, let’s do a comparison. The CBV equivalent to the view I wrote
-above is as follows:</p>
+<div class="section" id="discussion-keep-the-view-visible">
+<span id="visibility"></span><h2>Discussion — keep the view visible!<a class="headerlink" href="#discussion-keep-the-view-visible" title="Permalink to this headline">¶</a></h2>
+<p>The most important thing about the pattern I’m recommending is that the view
+itself is visible. The fundamental nature of a view is that it is a function (or
+callable) that takes a request and returns a response. This is pretty obvious in
+the pattern above — we have:</p>
+<ul class="simple">
+<li><p>a function (check)</p></li>
+<li><p>that takes an argument called <code class="docutils literal notranslate"><span class="pre">request</span></code> (check)</p></li>
+<li><p>and returns some kind of response — a <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code> (check)</p></li>
+</ul>
+<p>Using CBVs we could rewrite the code as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
 
  <span class="k">class</span> <span class="nc">ExampleView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
      <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;example.html&quot;</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;example/&lt;str:arg&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ExampleView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;example_name&#39;</span><span class="p">),</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-<p>How does this compare?</p>
-<p>On the plus side, it has a certain kind of clarity — it is clear from reading it
-that <code class="docutils literal notranslate"><span class="pre">ExampleView</span></code> will render a template, and it tells us exactly which one.</p>
-<p>On the negative side, however, we should note that <strong>it’s barely any shorter</strong>
-than the FBV.</p>
-<p>CBVs have some very big downsides, which I’ll get onto. The major selling point
-of CBVs is that they are supposed to remove duplication and boilerplate. But, we
-only had 2 lines to begin with, and we still have 2 lines. We could just about
-squeeze it to one long one using
-<code class="docutils literal notranslate"><span class="pre">TemplateView.as_view(template_name=&quot;example.html&quot;)</span></code> but that’s not how you
-normally write it.</p>
-<p>Given the downsides, I expected the upside to be a lot more convincing. Maybe
-it’s better when it comes to DetailView etc? <a class="reference internal" href="detail-view.html#detailview-comparison"><span class="std std-ref">We’ll see about that</span></a>.</p>
-<p>But let’s add a more realistic situation — we actually want some context data.
-Suppose it’s just a single piece of information, like a title, using some
-generic ‘page’ template.</p>
-<p>FBV version:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;page.html&quot;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;My Title&#39;</span><span class="p">,</span>
-    <span class="p">})</span>
-</pre></div>
-</div>
-<p>CBV version:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;page.html&quot;</span>
-
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;My Title&#39;</span>
-        <span class="k">return</span> <span class="n">context</span>
-</pre></div>
-</div>
-<p>For this trivial task, we’ve had to define a new, bulky method, and now we find
-<strong>it’s a lot longer</strong> than the FBV, in addition to being much more complex and
-indirect.</p>
-<p>In fact, you’ll find many people don’t actually start with the bare
-<code class="docutils literal notranslate"><span class="pre">TemplateView</span></code> subclass. If you <a class="reference external" href="https://github.com/search?q=get_context_data&amp;type=Code">search GitHub</a> for
-<code class="docutils literal notranslate"><span class="pre">get_context_data</span></code>, you’ll find hundreds and hundreds of examples that look
-like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HomeView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
-    <span class="c1"># ...</span>
-
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">HomeView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">context</span>
-</pre></div>
-</div>
-<p>This doesn’t make much sense, until you realise that people are using
-boilerplate generators/snippets to create new CBVs — such as <a class="reference external" href="https://github.com/pashinin/emacsd/blob/c8e50e6bb573641f3ffd454236215ea59e4eca13/snippets/python-mode/class">this for emacs</a>
-and <a class="reference external" href="https://github.com/ppiet/dotfiles/blob/e92c4b31d253e48027b72335f071281352b05f01/vim/UltiSnips/python.snippets">this for vim</a>,
-and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/blob/60673ae395bf493fd5fa6addeceac662218e1703/osx/Sublime%20Text/get_context_data.sublime-snippet">this for Sublime Text</a>.</p>
-<p>In other words:</p>
-<ul class="simple">
-<li><p>The boilerplate you need for a basic CBV is bigger than for an FBV</p></li>
-<li><p>It’s so big and tedious that people use snippets library to write it for them.</p></li>
-</ul>
+<p>But now <strong>all 3 essential elements of the view have disappeared</strong>. To have any
+idea that this matches the description of what a view is you have to know what
+the base classes do, and the fundamental simplicity of what you are doing has
+been obscured.</p>
+<p>There may be reasons for doing this, of course, but let’s be aware of this
+problem and weigh up the advantages and disadvantages.</p>
+<p>You might think “this is shorter than the FBV” is one of the advantages. It is,
+slightly, but as soon as the add the need for <a class="reference internal" href="context-data.html"><span class="doc">context data</span></a>
+this advantage disappears, and we’ll find we have <a class="reference internal" href="context-data.html#boilerplate"><span class="std std-ref">more boilerplate</span></a>, not less, with CBVs.</p>
 </div>
 </div>
 
@@ -330,7 +268,7 @@ and <a class="reference external" href="https://github.com/mvdwaeter/dotfiles/bl
 <li class="toctree-l1 current"><a class="current reference internal" href="#">The Right Way</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-pattern">The Pattern</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-explanation">The explanation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-boilerplate">Discussion: Boilerplate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-keep-the-view-visible">Discussion — keep the view visible!</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
