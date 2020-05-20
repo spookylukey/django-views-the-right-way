@@ -10,7 +10,7 @@ Structure
 
 Each page of the guide has a module defined inside ``the_right_way`` e.g.
 ``the_right_way.the_pattern``, which has ``views.py`` and ``urls.py`` defined in
-it. There are some common models defined in ``products``.
+it. There are some common models defined in ``shop``.
 
 
 Running the app
@@ -19,6 +19,8 @@ Running the app
 ::
 
    ./manage.py runserver
+
+Browse at http://localhost:8000/ and http://localhost:8000/admin/
 
 
 Other info

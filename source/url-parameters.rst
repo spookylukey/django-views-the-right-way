@@ -8,10 +8,10 @@ handling docs
 if you want to capture part of a URL to be used in a view function, you can do
 it by configuring your URLs.
 
-Let's say you have some kind of e-commerce site where you want to display
-products on individual pages. We want ``/product/`` to be the prefix for all
-these pages, and the next part to be the “slug” for the product — a URL-friendly
-version of the name (e.g ``white-t-shirt`` instead of "White T-Shirt").
+Let's say we have an e-commerce site where we want to display products on
+individual pages. We want ``/product/`` to be the prefix for all these pages,
+and the next part to be the “slug” for the product — a URL-friendly version of
+the name (e.g ``white-t-shirt`` instead of "White T-Shirt").
 
 We can do that as follow:
 
@@ -86,10 +86,13 @@ URL configuration matched the view function, both in terms of names and types of
 arguments?
 
 `OK, you've persuaded me, go on then!
-<https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d>`_ (This
-code is pretty functional as it is already, but needs a fair amount of work to
-be a proper package. If anyone would like to take that on as a project, please
-go ahead, and I'll link it here!).
+<https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/url_checker.py>`_
+(This code is pretty functional as it is already, but needs a fair amount of
+work to be a proper package. If anyone would like to take that on as a project,
+please go ahead, and I'll link it here! You can play around with it by checking
+out the `example code
+<https://github.com/spookylukey/django-views-the-right-way/tree/master/code>`_
+that accompanies this guide).
 
 Unfortunately, you lose a number of these advantages if you are using CBVs:
 
@@ -116,9 +119,9 @@ Unfortunately, you lose a number of these advantages if you are using CBVs:
 
 The fundamental issue here is **generic code**. Generic code is useful precisely
 because of its breadth — it can be used in a wide range of situations. However,
-the downside of generic code is that it has to cater for every situation,
-instead of just yours. So it has to have a dictionary ``kwargs``, which isn't
-really what you wanted. Generic code by definition lacks the personal touch.
+the downside of generic code is that it must cater for every situation, instead
+of just yours. So it has to have a dictionary ``kwargs``, which isn't really
+what you wanted. Generic code by definition lacks the personal touch.
 
 Of course, there can be times when the advantages outweigh the disadvantages.
 But make sure you know what you are missing!

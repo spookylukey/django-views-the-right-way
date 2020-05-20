@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'products',
+    'accounts',
+    'shop',
 ]
 
 MIDDLEWARE = [
@@ -105,3 +106,5 @@ SILENCED_SYSTEM_CHECKS = [
     'urlchecker.W001',
     'urlchecker.W003',
 ]
+
+AUTH_USER_MODEL = 'accounts.User'

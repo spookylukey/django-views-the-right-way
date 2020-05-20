@@ -1,0 +1,18 @@
+{% extends "shop/checkout/base.html" %}
+
+{% block "main" %}
+  <h2>Step 1 - choose an address</h2>
+
+  {% if user_addresses %}
+    <p>Choose from one of these addresses:</p>
+
+    <ul>
+    {% for address in user_addresses %}
+      <li>{{ address.short_name }} - {{ address.first_line }}</li>
+    {% endfor %}
+    </ul>
+
+  {% endif %}
+
+  {# etc. #}
+{% endblock %}
