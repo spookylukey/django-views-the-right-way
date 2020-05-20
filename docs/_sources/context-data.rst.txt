@@ -120,7 +120,7 @@ community have made this hard, we are the ones who should be embarrassed.
 Discussion: Boilerplate
 -----------------------
 
-Do we have more boilerplate with CBVs or FBVs?
+With the above in mind, do we have more boilerplate with CBVs or FBVs?
 
 Before we answer that, the first thing to note about boilerplate (by which I
 mean repeated code that just Needs To Be There For Some Reason) is that a small
@@ -137,15 +137,14 @@ comprehension, not typing reduction.**
 For example, if we wanted, we could reduce the “repetition” of having
 ``request`` as an parameter to each view function using threadlocals and an
 import. We could go further, and remove the import using some magic like web2py
-does. But `we recognise this as a bad idea
-<https://youtu.be/S0No2zSJmks?t=1716>`_, because it reduces clarity. Those
+does. But `we recognise both of these as bad ideas
+<https://youtu.be/S0No2zSJmks?t=1716>`_, because they reduces clarity. Those
 functions have ``request`` as a parameter because it is an input to the
 function. Making it an implicit one, instead of an explicit one, would hurt you
 in lots of ways.
 
-With that in mind, let's do a comparison. Once you have added the need for
-context data, as above, the CBV equivalent to the view I wrote above is as
-follows:
+With that said, let's do a comparison. Once you have added the need for context
+data, as above, the CBV equivalent to the view I wrote above is as follows:
 
 .. code-block:: python
 
@@ -182,7 +181,7 @@ and `this for Sublime Text
 The result of this is that if you `search GitHub
 <https://github.com/search?q=get_context_data&type=Code>`_ for
 ``get_context_data``, you'll find hundreds and hundreds of examples that look
-like this:
+like this, which otherwise wouldn't make much sense.
 
 .. code-block:: python
 
@@ -193,9 +192,7 @@ like this:
            context = super(HomeView, self).get_context_data()
            return context
 
-This doesn't make much sense, until you realise that people are using these
-boilerplate snippets to start views or write parts of them. That's something
-I've never felt the need for with FBVs. In other words:
+In other words:
 
 * The boilerplate you need for a basic CBV is bigger than for an FBV.
 * It's so big and tedious that people feel the need of snippets libraries.
@@ -207,7 +204,8 @@ OK, we have more boilerplate, but have we improved code comprehension? Well, the
 CBV is very explicit about use of templates, but so is the FBV. Now that we've
 added ``get_context_data``, the CBV is clear about context data, but so was the
 FBV. However, CBV has made the key elements of the view :ref:`invisible
-<visibility>`, as we noted before, and obscured all the control flow.
+<visibility>`, as we noted before, and obscured all the control flow, so I think
+it is difficult to argue this is a win for comprehension.
 
 
 

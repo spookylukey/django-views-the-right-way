@@ -50,67 +50,68 @@
   <div class="section" id="common-context-data">
 <h1>Common context data<a class="headerlink" href="#common-context-data" title="Permalink to this headline">¶</a></h1>
 <p>Suppose we have a bunch of views that end up all needing the same bits of
-context data. A common example is some data that will be used by the navigation
-parts of your templates.</p>
+context data.</p>
 <p>If the data is going to be needed by pretty much every page in your site, the
 answer is <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext">context processors</a>.
 If you have context processors that are expensive to evaluate, and are used in
 lots of places but not everywhere, one technique is to use <a class="reference external" href="https://stackoverflow.com/a/28146359/182604">lazy evaluation in
 your context processor</a>.</p>
-<p>But let’s say you have some data that is just used for a sub-set of a pages —
-perhaps it’s navigation data for the help sub-section of your site. We can use
-the simple technique below of pulling out the code that returns the common data
-into a function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">help_index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<p>If the data is needed for common navigation elements, I might well decide that
+this is best handled at the template level. A base template might require a
+navigation element, so that template should be responsible for the data it
+needs. This can be done most easily by using a <a class="reference external" href="https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/#inclusion-tags/">custom inclusion template tag</a>
+which can load its own data.</p>
+<p>But suppose none of these apply — we just have some common data that is used for
+a group of a pages. Perhaps we have an e-commerce site, and all the checkout
+pages have a common set of data that they need, without necessarily displaying
+it in the same way.</p>
+<p>For this, we can use the simple technique below of pulling out the code that
+returns the common data into a function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">checkout_start</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">help_section_context_data</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;help/index.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">checkout_pages_context_data</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;shop/checkout/start.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">help_section_context_data</span><span class="p">():</span>
-    <span class="c1"># This might be loaded from a database or something...</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s1">&#39;help_pages&#39;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;/help/&#39;</span><span class="p">,</span>                 <span class="s1">&#39;Help index&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;/help/getting-started/&#39;</span><span class="p">,</span> <span class="s1">&#39;Getting started&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;/help/contact-us&#39;</span><span class="p">,</span>       <span class="s1">&#39;Contact us&#39;</span><span class="p">),</span>
-            <span class="c1"># etc.</span>
-        <span class="p">],</span>
-    <span class="p">}</span>
+<span class="k">def</span> <span class="nf">checkout_pages_context_data</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">is_anonymous</span><span class="p">:</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;user_addresses&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">addresses</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="s2">&quot;first_line&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">context</span>
 </pre></div>
 </div>
-<p>Just add <code class="docutils literal notranslate"><span class="pre">context.update(help_section_context_data())</span></code> into every view that
-needs it.</p>
+<p>Just add <code class="docutils literal notranslate"><span class="pre">context.update(checkout_pages_context_data(request.user))</span></code> into
+every view that needs it.</p>
 <p>This is a perfectly adequate technique that is very easy to use, easy to
-understand and flexible. You can add parameters to the function if necessary
-(e.g. <code class="docutils literal notranslate"><span class="pre">request</span></code> or some data from it), combine common sets of these helpers
+understand and flexible. You can add parameters to the function if necessary,
+such as the <code class="docutils literal notranslate"><span class="pre">user</span></code> object as above, and combine common sets of these helpers
 into bigger helpers, as per your requirements. And you can write tests for these
 helpers if they have any significant logic in them.</p>
 <p>Next up: <a class="reference internal" href="url-parameters.html"><span class="doc">URL parameters in views</span></a></p>
-<p>(You may be interested in a fancy technique, based on TemplateResponse and
+<p>(You may be interested in a more fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn’t necessary).</p>
 <div class="section" id="discussion-helpers-vs-mixins">
 <span id="helpers-vs-mixins"></span><h2>Discussion: Helpers vs Mixins<a class="headerlink" href="#discussion-helpers-vs-mixins" title="Permalink to this headline">¶</a></h2>
 <p>The solution above is simple and direct. But some might protest it is a bit
 ugly, and has involved a bit of boilerplate. A CBV solution using a mixin is
 surely more elegant:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">HelpPageMixin</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CheckoutPageMixin</span><span class="p">:</span>
 
     <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;help_pages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="c1"># etc.</span>
-        <span class="p">]</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">is_anonymous</span><span class="p">:</span>
+            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;user_addresses&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">addresses</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span> <span class="s2">&quot;first_line&quot;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">context</span>
 </pre></div>
 </div>
-<p>You simply have to include <code class="docutils literal notranslate"><span class="pre">HelpPageMixin</span></code> in your base classes, which is less
-typing than <code class="docutils literal notranslate"><span class="pre">context.update(help_section_context_data())</span></code>. This kind of base
-class or mixin might also provide some other functionality, like doing some
-permission checks for this sub-set of pages etc.</p>
+<p>You simply have to include <code class="docutils literal notranslate"><span class="pre">CheckoutPageMixin</span></code> in your base classes, which is
+less typing than <code class="docutils literal notranslate"><span class="pre">context.update(checkout_pages_context_data(request.user))</span></code>.
+This kind of base class or mixin might also provide some other functionality,
+like doing some pre-condition checks and redirects as necessary.</p>
 <p>My response would be, first, a reminder that a small reduction in typing is a
-poor trade-off if it obfuscates your code even a small amount, due to the amount
-of time we spend reading versus writing code.</p>
+poor trade-off if it obfuscates your code even a small amount, due to time we
+spend reading versus writing code.</p>
 <p>Second, the mixin has several significant disadvantages:</p>
 <ul>
 <li><p>It hides the source of the context data. Any of your base classes could
@@ -138,10 +139,10 @@ treatment of this)</p>
 <li><p>Mixins often tie you into inheritance trees for organising things. In reality,
 instead of trees you often want a mix-and-match approach to including data or
 functionality. Mixins do support that, at least in this case, but if you
-imagine that you’ll have a neat hierarchy involving a <code class="docutils literal notranslate"><span class="pre">HelpPageMixin</span></code> that
-provides both context data and some other functionality, you’ll quickly be
-disappointed when things don’t turn out that simple, and you find yourself in
-a tangle.</p></li>
+imagine that you’ll have a neat hierarchy involving a <code class="docutils literal notranslate"><span class="pre">CheckoutPageMixin</span></code>
+that provides both context data and some other functionality, you’ll quickly
+be disappointed when things don’t turn out that simple, and you find yourself
+in a tangle.</p></li>
 </ul>
 <p>The simple solution is the best!</p>
 <p>This example is part of a larger principle for the best way to write views, and

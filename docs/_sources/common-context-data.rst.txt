@@ -2,8 +2,7 @@ Common context data
 ===================
 
 Suppose we have a bunch of views that end up all needing the same bits of
-context data. A common example is some data that will be used by the navigation
-parts of your templates.
+context data.
 
 If the data is going to be needed by pretty much every page in your site, the
 answer is `context processors
@@ -12,42 +11,47 @@ If you have context processors that are expensive to evaluate, and are used in
 lots of places but not everywhere, one technique is to use `lazy evaluation in
 your context processor <https://stackoverflow.com/a/28146359/182604>`_.
 
-But let's say you have some data that is just used for a sub-set of a pages —
-perhaps it's navigation data for the help sub-section of your site. We can use
-the simple technique below of pulling out the code that returns the common data
-into a function:
+If the data is needed for common navigation elements, I might well decide that
+this is best handled at the template level. A base template might require a
+navigation element, so that template should be responsible for the data it
+needs. This can be done most easily by using a `custom inclusion template tag
+<https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/#inclusion-tags/>`_
+which can load its own data.
+
+But suppose none of these apply — we just have some common data that is used for
+a group of a pages. Perhaps we have an e-commerce site, and all the checkout
+pages have a common set of data that they need, without necessarily displaying
+it in the same way.
+
+For this, we can use the simple technique below of pulling out the code that
+returns the common data into a function:
 
 .. code-block:: python
 
-   def help_index(request):
+   def checkout_start(request):
        context = {}
-       context.update(help_section_context_data())
-       return TemplateResponse(request, "help/index.html", context)
+       context.update(checkout_pages_context_data(request.user))
+       return TemplateResponse(request, "shop/checkout/start.html", context)
 
 
-   def help_section_context_data():
-       # This might be loaded from a database or something...
-       return {
-           'help_pages': [
-               ('/help/',                 'Help index'),
-               ('/help/getting-started/', 'Getting started'),
-               ('/help/contact-us',       'Contact us'),
-               # etc.
-           ],
-       }
+   def checkout_pages_context_data(user):
+       context = {}
+       if not user.is_anonymous:
+           context["user_addresses"] = list(user.addresses.order_by("primary", "first_line"))
+       return context
 
-Just add ``context.update(help_section_context_data())`` into every view that
-needs it.
+Just add ``context.update(checkout_pages_context_data(request.user))`` into
+every view that needs it.
 
 This is a perfectly adequate technique that is very easy to use, easy to
-understand and flexible. You can add parameters to the function if necessary
-(e.g. ``request`` or some data from it), combine common sets of these helpers
+understand and flexible. You can add parameters to the function if necessary,
+such as the ``user`` object as above, and combine common sets of these helpers
 into bigger helpers, as per your requirements. And you can write tests for these
 helpers if they have any significant logic in them.
 
 Next up: :doc:`url-parameters`
 
-(You may be interested in a fancy technique, based on TemplateResponse and
+(You may be interested in a more fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn't necessary).
 
 .. _helpers-vs-mixins:
@@ -61,23 +65,23 @@ surely more elegant:
 
 .. code-block:: python
 
-   class HelpPageMixin:
+   class CheckoutPageMixin:
 
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
-           context['help_pages'] = [
-               # etc.
-           ]
+           user = self.request.user
+           if not user.is_anonymous:
+               context["user_addresses"] = list(user.addresses.order_by("primary", "first_line"))
            return context
 
-You simply have to include ``HelpPageMixin`` in your base classes, which is less
-typing than ``context.update(help_section_context_data())``. This kind of base
-class or mixin might also provide some other functionality, like doing some
-permission checks for this sub-set of pages etc.
+You simply have to include ``CheckoutPageMixin`` in your base classes, which is
+less typing than ``context.update(checkout_pages_context_data(request.user))``.
+This kind of base class or mixin might also provide some other functionality,
+like doing some pre-condition checks and redirects as necessary.
 
 My response would be, first, a reminder that a small reduction in typing is a
-poor trade-off if it obfuscates your code even a small amount, due to the amount
-of time we spend reading versus writing code.
+poor trade-off if it obfuscates your code even a small amount, due to time we
+spend reading versus writing code.
 
 Second, the mixin has several significant disadvantages:
 
@@ -110,10 +114,10 @@ Second, the mixin has several significant disadvantages:
 * Mixins often tie you into inheritance trees for organising things. In reality,
   instead of trees you often want a mix-and-match approach to including data or
   functionality. Mixins do support that, at least in this case, but if you
-  imagine that you'll have a neat hierarchy involving a ``HelpPageMixin`` that
-  provides both context data and some other functionality, you'll quickly be
-  disappointed when things don't turn out that simple, and you find yourself in
-  a tangle.
+  imagine that you'll have a neat hierarchy involving a ``CheckoutPageMixin``
+  that provides both context data and some other functionality, you'll quickly
+  be disappointed when things don't turn out that simple, and you find yourself
+  in a tangle.
 
 The simple solution is the best!
 
