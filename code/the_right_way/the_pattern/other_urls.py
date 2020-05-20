@@ -9,3 +9,5 @@ urlpatterns = [
     path('hello4/<str:my_arg>/', views.hello_world_4),
     path('hello5/<str:my_arg>/', views.hello_world_5),
 ]
+
+app_name = 'the_pattern_other'

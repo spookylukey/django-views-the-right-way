@@ -10,4 +10,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('the-pattern/', include('the_right_way.the_pattern.urls')),
     path('the-pattern-other/', include('the_right_way.the_pattern.other_urls')),
+    path('context-data/', include('the_right_way.context_data.urls')),
 ]

@@ -34,10 +34,9 @@ As we said, the answer to how do anything in a view is “Just do it”:
 
    **Imports:** For brevity I'll omit any imports I've mentioned already.
 
-We're going to let the template decide how to format the date (most likely using
-the `date filter
-<https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_), so we
-just use the ``date`` object rather than a string. Our pattern already had an
+The template will decide how to format the date (most likely using the `date
+filter <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_),
+so we used a ``date`` object rather than a string. Our pattern already had an
 empty context dictionary sitting there, waiting to be filled up, so we just put
 the value right in. Done!
 
@@ -48,8 +47,11 @@ it:
 .. code-block:: python
 
    def home(request):
-       context = {}
-       if date.today().weekday() == 0:
+       today = date.today()
+       context = {
+           'today': today,
+       }
+       if today.weekday() == 0:
            context['special_message'] = 'Happy Monday!'
        return TemplateResponse(request, "home.html", context)
 

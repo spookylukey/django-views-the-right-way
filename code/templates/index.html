@@ -7,7 +7,13 @@
 
   <h2>The Pattern</h2>
   <ul>
-    <li><a href="{% url 'example_name' arg="hello" %}">example</a></li>
-    <li><a href="{% url 'hello_world' %}">hello world</a></li>
+    <li><a href="{% url 'the_pattern:example_name' arg="hello" %}">example</a></li>
+    <li><a href="{% url 'the_pattern_other:hello_world' %}">hello world</a></li>
+  </ul>
+
+  <h2>Context data</h2>
+  <ul>
+    <li><a href="{% url 'context_data:home' %}">home</a></li>
+    <li><a href="{% url 'context_data:home_2' %}">home 2</a></li>
   </ul>
 {% endblock %}

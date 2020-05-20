@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block "content" %}
+  This is a home page. The date is {{ today|date:"d M Y" }}.
+  {% if special_message %}
+    {{ special_message }}
+  {% endif %}
+{% endblock %}
