@@ -7,30 +7,39 @@
 
   <h2>The Pattern</h2>
   <ul>
-    <li><a href="{% url 'the_pattern:example_name' arg="hello" %}">example</a></li>
-    <li><a href="{% url 'the_pattern_explanation:hello_world' %}">hello world</a></li>
+    <li><a href="{% url "the_pattern:example_name" arg="hello" %}">example</a></li>
+    <li><a href="{% url "the_pattern_explanation:hello_world" %}">hello world</a></li>
   </ul>
 
+  <p><a href="{% url "view_source" namespace="the_pattern" %}">[source]</a></p>
 
   <h2>Context data</h2>
   <ul>
-    <li><a href="{% url 'context_data:home' %}">home</a></li>
-    <li><a href="{% url 'context_data:home_2' %}">home 2</a></li>
+    <li><a href="{% url "context_data:home" %}">home</a></li>
+    <li><a href="{% url "context_data:home_2" %}">home 2</a></li>
   </ul>
+
+  <p><a href="{% url "view_source" namespace="context_data" %}">[source]</a></p>
 
   <h3>Discussion</h2>
   <ul>
-    <li><a href="{% url 'context_data_discussion:home' %}">home - CBV</a></li>
+    <li><a href="{% url "context_data_discussion:home" %}">home - CBV</a></li>
   </ul>
 
+  <p><a href="{% url "view_source" namespace="context_data_discussion" %}">[source]</a></p>
 
   <h2>Common context data</h2>
   <ul>
-    <li><a href="{% url 'common_context_data:checkout_start' %}">checkout start</a></li>
+    <li><a href="{% url "common_context_data:checkout_start" %}">checkout start</a></li>
   </ul>
+
+  <p><a href="{% url "view_source" namespace="common_context_data" %}">[source]</a></p>
 
   <h3>Discussion</h2>
   <ul>
-    <li><a href="{% url 'common_context_data_discussion:checkout_start' %}">checkout start - CBV</a></li>
+    <li><a href="{% url "common_context_data_discussion:checkout_start" %}">checkout start - CBV</a></li>
   </ul>
+
+  <p><a href="{% url "view_source" namespace="common_context_data_discussion" %}">[source]</a></p>
+
 {% endblock %}

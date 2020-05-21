@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
+    path('view-source/<str:namespace>/', views.view_source, name='view_source'),
     path('admin/', admin.site.urls),
     path('the-pattern/', include('the_right_way.the_pattern.urls')),
     path('the-pattern-explanation/', include('the_right_way.the_pattern.explanation_urls')),
