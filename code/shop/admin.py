@@ -4,6 +4,7 @@ from .models import Product
 
 
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
     fieldsets = [
         ('General',
          {'fields': ['name', 'slug', 'description']}

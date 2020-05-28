@@ -15,4 +15,8 @@ urlpatterns = [
     path('context-data-discussion/', include('the_right_way.context_data.discussion_urls')),
     path('common-context-data/', include('the_right_way.common_context_data.urls')),
     path('common-context-data-discussion/', include('the_right_way.common_context_data.discussion_urls')),
+    path('url-parameters/', include('the_right_way.url_parameters.urls')),
+    path('url-parameters-discussion/', include('the_right_way.url_parameters.discussion_urls')),
+    path('detail-view/', include('the_right_way.detail_view.urls')),
+    path('detail-view-discussion/', include('the_right_way.detail_view.discussion_urls')),
 ]

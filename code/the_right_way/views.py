@@ -1,10 +1,11 @@
+from datetime import date
 from django.http import HttpResponse, Http404
 from django.template.response import TemplateResponse
 from django.urls import get_resolver, get_urlconf
 
 
 def index(request):
-    return TemplateResponse(request, 'index.html', {})
+    return TemplateResponse(request, 'index.html', {'today': date.today()})
 
 
 def view_source(request, namespace):
