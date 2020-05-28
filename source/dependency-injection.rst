@@ -75,7 +75,7 @@ Something like this:
        return display_product_list(
            request,
            searcher=product_search,
-           template_name='products/product_list.html',
+           template_name='shop/product_list.html',
        )
 
 

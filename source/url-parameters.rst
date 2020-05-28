@@ -32,7 +32,7 @@ We can do that as follow:
    # views.py
 
    def product_detail(request, product_slug):
-       return TemplateResponse(request, 'products/product_detail.html', {})
+       return TemplateResponse(request, 'shop/product_detail.html', {})
 
 
 Note how the ``product_slug`` parameter has to be added to view function

@@ -28,7 +28,8 @@ The combined code would look like this:
    try:
        product = Product.objects.get(slug=product_slug)
    except Product.DoesNotExist:
-       raise Http404('Product not found, please check the link')
+       raise Http404
+
 
 This is perfectly adequate code that you should not feel in any way embarrassed
 about. However, this pattern comes up so often in Django apps that there is a
@@ -51,7 +52,7 @@ template, the final, concise version of our view will look like this:
 .. code-block:: python
 
    def product_detail(request, product_slug):
-       return TemplateResponse(request, 'products/product_detail.html', {
+       return TemplateResponse(request, 'shop/product_detail.html', {
            'product': get_object_or_404(Product.objects.all(), slug=product_slug),
        })
 
@@ -237,7 +238,7 @@ what would the code look like? This is what I would write:
 .. code-block:: python
 
    class ProductDetailView(DetailView):
-       template_name = 'products/product_detail.html'
+       template_name = 'shop/product_detail.html'
        queryset = Product.objects.all()
        context_object_name = 'product'
 
@@ -275,7 +276,7 @@ Discussion: Convention vs configuration
 The first way we could shorten the CBV version is by omitting ``template_name``.
 The generic CBVs have some logic built in to derive a template name from the
 model name and the type of view, which in this case would result in
-``products/product_detail.html``, on the assumption that the 'app' the model
+``shop/product_detail.html``, on the assumption that the 'app' the model
 lived in was called ``products``.
 
 This kind of behaviour is called “convention over configuration”. It's popular
@@ -296,7 +297,7 @@ developer, or they may be a more senior one who just has less experience in this
 particular framework. (If you are not expecting your project is going to be
 taken on by people like this, you really should).
 
-They discover they need to change ``products/product_detail.html``, and set
+They discover they need to change ``shop/product_detail.html``, and set
 about looking for the corresponding view code. Where can they find it?
 
 If we have used “convention over configuration”, they have to:
@@ -308,7 +309,7 @@ If we have used “convention over configuration”, they have to:
    ``DetailView`` etc.
 
 3. In addition, they will have to do a grep for code that references
-   ``products/product_detail.html``, because as well as ``DetailView`` there
+   ``shop/product_detail.html``, because as well as ``DetailView`` there
    could of course be other code just using the template directly.
 
 Step 1 is especially problematic. Attempting to document all the conventions in

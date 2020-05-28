@@ -7,7 +7,7 @@ listing page. Our first version of the code is just this:
 .. code-block:: python
 
    def product_list(request):
-       return TemplateResponse(request, 'products/product_list.html', {
+       return TemplateResponse(request, 'shop/product_list.html', {
            'products': Product.objects.all(),
        })
 
@@ -24,7 +24,7 @@ something like:
        paginator = Paginator(products, 25)  # Show 25 products per page.
        page_number = request.GET.get('page')
        page_obj = paginator.get_page(page_number)
-       return TemplateResponse(request, 'products/product_list.html', {
+       return TemplateResponse(request, 'shop/product_list.html', {
            'page_obj': page_obj,
        })
 
@@ -44,7 +44,7 @@ a bit shorter:
        products = Product.objects.all()
        context = {}
        context.update(paged_object_list_context(request, products, paginate_by=25))
-       return TemplateResponse(request, 'products/product_list.html', context)
+       return TemplateResponse(request, 'shop/product_list.html', context)
 
 
 Next up: :doc:`delegation`
