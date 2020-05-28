@@ -61,7 +61,9 @@ listing page. Our first version of the code is just this:</p>
 at least pagination. Django comes with a helpful <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function">Paginator</a>
 class, with helpful docs showing you how to use it. With that added, you have
 something like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+
+<span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">products</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>  <span class="c1"># Show 25 products per page.</span>
     <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
