@@ -256,15 +256,15 @@ this:
 This CBV is shorter, at least in terms of token count, than my version, although
 not by much. It suffers from the common disadvantages that CBVs have, such as by
 default not having an easy way to add extra data into the context, which makes a
-big difference — put ``get_context_data`` in and it's longer again.
+big difference — put ``get_context_data()`` in and it's longer again.
 
 The essential logic that ``DetailView`` adds is equivalent to a single line in
 my FBV::
 
   'product': get_object_or_404(Product.objects.all(), slug=product_slug),
 
-For a mixin plus two lines of configuration, you are not getting much value for
-money.
+For a mixin plus two lines of configuration, I don't think you are getting much
+value for money.
 
 You could make it more concise, but not in good ways. Each alternative way to
 write this brings up some issues that I'll discuss in turn.
@@ -277,18 +277,18 @@ The first way we could shorten the CBV version is by omitting ``template_name``.
 The generic CBVs have some logic built in to derive a template name from the
 model name and the type of view, which in this case would result in
 ``shop/product_detail.html``, on the assumption that the 'app' the model
-lived in was called ``products``.
+lived in was called ``shop``.
 
 This kind of behaviour is called “convention over configuration”. It's popular
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
-it is pretty much directly against the “Zen of Python” maxim “Explicit is better
+it's pretty much directly against the “Zen of Python” maxim “Explicit is better
 than implicit”.
 
 But it does appear in some parts of Django, and the `docs for DetailView
 <https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview>`_
 encourage this particular shortcut. This is unfortunate, in my opinion, because
 in this case convention over configuration seems great when you are writing the
-code, and is often a nightmare when it comes to maintenance.
+code, and can be a nightmare when it comes to maintenance.
 
 Consider the maintenance programmer who comes along and needs to make
 modifications to a template. We do not assume a maintenance programmer is an
@@ -323,10 +323,11 @@ Step 2 is a bit annoying, and harder to do than a simple grep.
 Finally, you still need to step 3 — which is the only step needed if you didn't
 have “convention over configuration” to deal with.
 
-So these typing-savers hurt maintenance, and therefore hurt your project because
-most software development is maintenance. If you do use CBVs, do yourself a
-favour and always add ``template_name``, even if you are sticking to the naming
-convention as I have done here.
+So for both experts and people with less knowledge these typing-savers hurt
+maintenance, and therefore hurt your project because most software development
+is maintenance. If you do use CBVs, and even if you are convinced only experts
+will be maintaining, and you are sticking to the naming convention, you will
+still do yourself a favour if you always add ``template_name``.
 
 The same “convention over configuration” logic is also present in the way
 ``DetailView`` looks up its object: it looks for a named URL parameter called
@@ -365,7 +366,8 @@ the sake of saving a tiny bit of typing.
 Discussion: Static vs dynamic
 -----------------------------
 
-For the case of statically defining what query to start with, we have two options:
+For the case of statically defining what query to start with as class attributes
+on the CBV, we have two options:
 
 * ``model = Product``
 * ``queryset = Product.objects.all()``
@@ -376,10 +378,10 @@ because it will hurt the maintenance programmer — if the requirements change
 ``queryset`` will make it easy — it can just be changed to
 ``Product.objects.visible()`` or something similar.
 
-(For the same reason, in my FBV above I wrote
+For the same reason, in my FBV above I wrote
 ``get_object_or_404(Product.objects.all(), …)`` instead of
 ``get_object_or_404(Product, …)`` which is also supported by the shortcut
-function).
+function.
 
 If, however, the queryset needed depends on the ``request`` object, the
 programmer will have to instead define ``get_queryset()`` to get access to the
@@ -396,10 +398,10 @@ to gaining some additional time based logic e.g.:
        return self.filter(visible=True).exclude(visible_until__lt=date.today())
 
 If you have ``queryset = Products.objects.visible()``, due to the fact that this
-is a class attribute which gets executed at module import time, the
-``date.today()`` call happens when your app starts up, not when your view is
-called. So it seems to work, but you a get a surprise on the second day in
-production!
+is a class attribute which gets executed at module import time, not when your
+view is run, the ``date.today()`` call happens when your app starts up, not when
+your view is called. So it seems to work, but you a get a surprise on the second
+day in production!
 
 None of these are massive issues — they are small bits of friction, but these
 things do add up, and it happens that all of them are avoided by the way in
@@ -439,3 +441,10 @@ could have chosen a much better name, but your code isn't “in charge”.
 This is a problem that is specific to **class based** generic code. If you write
 :ref:`function based generic code <function-based-generic-views>`, the problem
 doesn't exist, because you don't inherit local variable names.
+
+We can think of this in terms of the “framework vs library” debate. Frameworks
+impose a structure on your code, a mould that you have to fit into, where your
+function gets called by the framework. In contrast, libraries leave you in
+control, you choose to call the library functions in the structure you see fit.
+Both have their place, but if we accept the constraints of a framework we should
+be sure that it is worth it.
