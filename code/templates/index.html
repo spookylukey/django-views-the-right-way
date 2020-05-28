@@ -45,7 +45,7 @@
 
   <h2>URL parameters</h2>
   <ul>
-    <li><a href="{% url "url_parameters:product_detail" product_slug="test" %}">product detail</a></li>
+    <li><a href="{% url "url_parameters:product_detail" slug="test" %}">product detail</a></li>
   </ul>
 
   <p><a href="{% url "view_source" namespace="url_parameters" %}">[source]</a></p>
@@ -62,7 +62,7 @@
 
   <h2>Detail view</h2>
   <ul>
-    <li><a href="{% url "detail_view:product_detail" product_slug="hanky" %}">product detail</a></li>
+    <li><a href="{% url "detail_view:product_detail" slug="hanky" %}">product detail</a></li>
   </ul>
 
   <p><a href="{% url "view_source" namespace="detail_view" %}">[source]</a></p>

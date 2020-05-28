@@ -24,21 +24,23 @@ We can do that as follow:
    from . import views
 
    urlpatterns = [
-       path('products/<slug:product_slug>/', views.product_detail, name='product_detail'),
+       path('products/<slug:slug>/', views.product_detail, name='product_detail'),
    ]
 
 .. code-block:: python
 
    # views.py
 
-   def product_detail(request, product_slug):
+   def product_detail(request, slug):
        return TemplateResponse(request, 'shop/product_detail.html', {})
 
 
-Note how the ``product_slug`` parameter has to be added to view function
-signature, as well as in the URL conf. (We didn't actually use this
-``product_slug`` parameter yet, that will be covered in the next section). If
-you don't modify the view like this, it simply won't work — you'll get an
+Note how the ``slug`` parameter has to be added to view function signature, as
+well as in the URL conf. In the URL pattern, the first ``slug`` is the path
+converter type. The second ``slug`` is the name of the parameter in the
+``product_detail`` view, and we could have chosen something different.
+
+If you don't modify the view like this, it simply won't work — you'll get an
 exception, because Django will attempt to call your function with parameters
 that your function doesn't accept, which is an error in Python.
 
@@ -52,7 +54,9 @@ Be sure to check the Django docs about `path converters
 the different kind of things you might add into your URLs. If you are into type
 hints, also see below for tips on how you can enhance this pattern.
 
-Otherwise, onto :doc:`detail-view`.
+Otherwise, onto :doc:`detail-view`, where we will actually use the ``slug``
+parameter.
+
 
 Discussion: Generic code and function signatures
 ------------------------------------------------

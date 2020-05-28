@@ -13,7 +13,7 @@ method. Assuming we have a ``Product`` model with a `SlugField
 
 .. code-block:: python
 
-   product = Product.objects.get(slug=product_slug)
+   product = Product.objects.get(slug='some-product-slug')
 
 However, this could throw a ``Product.DoesNotExist`` exception, which we need to
 catch. Instead of crashing, we should instead show a 404 page to the user. We
@@ -26,7 +26,7 @@ The combined code would look like this:
 .. code-block:: python
 
    try:
-       product = Product.objects.get(slug=product_slug)
+       product = Product.objects.get(slug=slug)
    except Product.DoesNotExist:
        raise Http404
 
@@ -44,16 +44,16 @@ This combines the above logic for, so that you can just write:
    from django.shortcuts import get_object_or_404
 
    # in the view somewhere
-   product = get_object_or_404(Product.objects.all(), slug=product_slug)
+   product = get_object_or_404(Product.objects.all(), slug=slug)
 
 If the only thing we are going to do with the product object is render it in a
 template, the final, concise version of our view will look like this:
 
 .. code-block:: python
 
-   def product_detail(request, product_slug):
+   def product_detail(request, slug):
        return TemplateResponse(request, 'shop/product_detail.html', {
-           'product': get_object_or_404(Product.objects.all(), slug=product_slug),
+           'product': get_object_or_404(Product.objects.all(), slug=slug),
        })
 
 
@@ -190,8 +190,8 @@ class attributes (including all the base classes):
 These views generate Excel spreadsheets. For the methods you don't recognise,
 most of them relate to XLS generation, or to retrieving data the from the
 database. As you can guess, the implementation was significantly complicated by
-the hybrid nature of this class (with method like ``pre_init`` trying to cope
-with lack of a sensible ``__init__`` that the developer was in control of).
+the hybrid nature of this class. Methods like ``pre_init`` are trying to cope
+with the lack of a sensible ``__init__`` that the developer was in control of.
 
 It furthered suffered from the fact that all the methods had access to ``self``,
 and via ``self.request`` they had access to the HTTP request object. This meant
@@ -223,8 +223,6 @@ anti-patterns <https://youtu.be/S0No2zSJmks?t=3095>`_. He also specifically
 calls out Django CBV mixins (though manages to avoid saying ‘Django’), and in my
 opinion his analysis is spot on.
 
-As a positive example... TODO
-
 
 .. _DetailView comparison:
 
@@ -242,16 +240,8 @@ what would the code look like? This is what I would write:
        queryset = Product.objects.all()
        context_object_name = 'product'
 
-We'd also either have to change the name of the named group in our URLconf like
-this:
-
-.. code-block:: python
-
-   urlpatterns = [
-       path('products/<slug:slug>/', views.product_detail, name='product_detail'),
-   ]
-
-...or, add ``slug_url_kwarg = 'product_slug'`` to our class.
+We should also note that if our slug field on the model is not named ``slug``
+then we will have to do extra configuration by adding ``slug_url_kwarg``.
 
 This CBV is shorter, at least in terms of token count, than my version, although
 not by much. It suffers from the common disadvantages that CBVs have, such as by
@@ -261,7 +251,7 @@ big difference — put ``get_context_data()`` in and it's longer again.
 The essential logic that ``DetailView`` adds is equivalent to a single line in
 my FBV::
 
-  'product': get_object_or_404(Product.objects.all(), slug=product_slug),
+  'product': get_object_or_404(Product.objects.all(), slug=slug),
 
 For a mixin plus two lines of configuration, I don't think you are getting much
 value for money.

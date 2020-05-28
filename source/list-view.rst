@@ -29,11 +29,11 @@ something like:
        })
 
 That's basically it! Your real view might have additional needs, like filtering
-and ordering. These can be handled by responding to queryset parameters and
+and ordering. These can be handled by responding to query string parameters and
 modifying your ``products`` QuerySet above.
 
 There is a bit of boilerplate here for doing pagination. If you have a
-standardised convention of using ``page`` as your querystring parameter for
+standardised convention of using ``page`` as your query string parameter for
 paging, you could pull some of this boilerplate out into a utility like
 ``paged_object_list_context`` (left as an exercise for you) to produce something
 a bit shorter:
