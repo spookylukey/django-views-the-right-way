@@ -55,7 +55,7 @@ product pages, looking them up from a product slug that will be part of the URL.
 <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.get">QuerySet.get</a>
 method. Assuming we have a <code class="docutils literal notranslate"><span class="pre">Product</span></code> model with a <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/models/fields/#slugfield">SlugField</a> named
 <code class="docutils literal notranslate"><span class="pre">slug</span></code>, the code looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">product_slug</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="s1">&#39;some-product-slug&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>However, this could throw a <code class="docutils literal notranslate"><span class="pre">Product.DoesNotExist</span></code> exception, which we need to
@@ -64,9 +64,9 @@ can do this easily using Django’s <a class="reference external" href="https://
 exception.</p>
 <p>The combined code would look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">product_slug</span><span class="p">)</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">Product</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">Http404</span><span class="p">(</span><span class="s1">&#39;Product not found, please check the link&#39;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">Http404</span>
 </pre></div>
 </div>
 <p>This is perfectly adequate code that you should not feel in any way embarrassed
@@ -77,14 +77,14 @@ This combines the above logic for, so that you can just write:</p>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 
 <span class="c1"># in the view somewhere</span>
-<span class="n">product</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">product_slug</span><span class="p">)</span>
+<span class="n">product</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If the only thing we are going to do with the product object is render it in a
 template, the final, concise version of our view will look like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s1">&#39;product&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">product_slug</span><span class="p">),</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;product&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">),</span>
     <span class="p">})</span>
 </pre></div>
 </div>
@@ -205,8 +205,8 @@ class attributes (including all the base classes):</p>
 <p>These views generate Excel spreadsheets. For the methods you don’t recognise,
 most of them relate to XLS generation, or to retrieving data the from the
 database. As you can guess, the implementation was significantly complicated by
-the hybrid nature of this class (with method like <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> trying to cope
-with lack of a sensible <code class="docutils literal notranslate"><span class="pre">__init__</span></code> that the developer was in control of).</p>
+the hybrid nature of this class. Methods like <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> are trying to cope
+with the lack of a sensible <code class="docutils literal notranslate"><span class="pre">__init__</span></code> that the developer was in control of.</p>
 <p>It furthered suffered from the fact that all the methods had access to <code class="docutils literal notranslate"><span class="pre">self</span></code>,
 and via <code class="docutils literal notranslate"><span class="pre">self.request</span></code> they had access to the HTTP request object. This meant
 there was no clear separation of request processing from anything else — the
@@ -231,37 +231,30 @@ code, while mixins set up a pattern for your code which determines its structure
 anti-patterns</a>. He also specifically
 calls out Django CBV mixins (though manages to avoid saying ‘Django’), and in my
 opinion his analysis is spot on.</p>
-<p>As a positive example… TODO</p>
 </div>
 <div class="section" id="discussion-comparison-to-detailview">
 <span id="detailview-comparison"></span><h2>Discussion: Comparison to DetailView<a class="headerlink" href="#discussion-comparison-to-detailview" title="Permalink to this headline">¶</a></h2>
 <p>If instead of my FBV above we had used <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview">DetailView</a>,
 what would the code look like? This is what I would write:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProductDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;products/product_detail.html&#39;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;shop/product_detail.html&#39;</span>
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="n">context_object_name</span> <span class="o">=</span> <span class="s1">&#39;product&#39;</span>
 </pre></div>
 </div>
-<p>We’d also either have to change the name of the named group in our URLconf like
-this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;products/&lt;slug:slug&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">product_detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;product_detail&#39;</span><span class="p">),</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-<p>…or, add <code class="docutils literal notranslate"><span class="pre">slug_url_kwarg</span> <span class="pre">=</span> <span class="pre">'product_slug'</span></code> to our class.</p>
+<p>We should also note that if our slug field on the model is not named <code class="docutils literal notranslate"><span class="pre">slug</span></code>
+then we will have to do extra configuration by adding <code class="docutils literal notranslate"><span class="pre">slug_url_kwarg</span></code>.</p>
 <p>This CBV is shorter, at least in terms of token count, than my version, although
 not by much. It suffers from the common disadvantages that CBVs have, such as by
 default not having an easy way to add extra data into the context, which makes a
-big difference — put <code class="docutils literal notranslate"><span class="pre">get_context_data</span></code> in and it’s longer again.</p>
+big difference — put <code class="docutils literal notranslate"><span class="pre">get_context_data()</span></code> in and it’s longer again.</p>
 <p>The essential logic that <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> adds is equivalent to a single line in
 my FBV:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;product&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">product_slug</span><span class="p">),</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;product&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">),</span>
 </pre></div>
 </div>
-<p>For a mixin plus two lines of configuration, you are not getting much value for
-money.</p>
+<p>For a mixin plus two lines of configuration, I don’t think you are getting much
+value for money.</p>
 <p>You could make it more concise, but not in good ways. Each alternative way to
 write this brings up some issues that I’ll discuss in turn.</p>
 </div>
@@ -270,23 +263,23 @@ write this brings up some issues that I’ll discuss in turn.</p>
 <p>The first way we could shorten the CBV version is by omitting <code class="docutils literal notranslate"><span class="pre">template_name</span></code>.
 The generic CBVs have some logic built in to derive a template name from the
 model name and the type of view, which in this case would result in
-<code class="docutils literal notranslate"><span class="pre">products/product_detail.html</span></code>, on the assumption that the ‘app’ the model
-lived in was called <code class="docutils literal notranslate"><span class="pre">products</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">shop/product_detail.html</span></code>, on the assumption that the ‘app’ the model
+lived in was called <code class="docutils literal notranslate"><span class="pre">shop</span></code>.</p>
 <p>This kind of behaviour is called “convention over configuration”. It’s popular
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
-it is pretty much directly against the “Zen of Python” maxim “Explicit is better
+it’s pretty much directly against the “Zen of Python” maxim “Explicit is better
 than implicit”.</p>
 <p>But it does appear in some parts of Django, and the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview">docs for DetailView</a>
 encourage this particular shortcut. This is unfortunate, in my opinion, because
 in this case convention over configuration seems great when you are writing the
-code, and is often a nightmare when it comes to maintenance.</p>
+code, and can be a nightmare when it comes to maintenance.</p>
 <p>Consider the maintenance programmer who comes along and needs to make
 modifications to a template. We do not assume a maintenance programmer is an
 expert in your framework, or in this particular codebase. They may be a junior
 developer, or they may be a more senior one who just has less experience in this
 particular framework. (If you are not expecting your project is going to be
 taken on by people like this, you really should).</p>
-<p>They discover they need to change <code class="docutils literal notranslate"><span class="pre">products/product_detail.html</span></code>, and set
+<p>They discover they need to change <code class="docutils literal notranslate"><span class="pre">shop/product_detail.html</span></code>, and set
 about looking for the corresponding view code. Where can they find it?</p>
 <p>If we have used “convention over configuration”, they have to:</p>
 <ol class="arabic simple">
@@ -295,7 +288,7 @@ about looking for the corresponding view code. Where can they find it?</p>
 it matches <code class="docutils literal notranslate"><span class="pre">product.Product</span></code>. And also any further subclasses of
 <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> etc.</p></li>
 <li><p>In addition, they will have to do a grep for code that references
-<code class="docutils literal notranslate"><span class="pre">products/product_detail.html</span></code>, because as well as <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> there
+<code class="docutils literal notranslate"><span class="pre">shop/product_detail.html</span></code>, because as well as <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> there
 could of course be other code just using the template directly.</p></li>
 </ol>
 <p>Step 1 is especially problematic. Attempting to document all the conventions in
@@ -306,10 +299,11 @@ things that you don’t know that you don’t know until you trip up over them.<
 <p>Step 2 is a bit annoying, and harder to do than a simple grep.</p>
 <p>Finally, you still need to step 3 — which is the only step needed if you didn’t
 have “convention over configuration” to deal with.</p>
-<p>So these typing-savers hurt maintenance, and therefore hurt your project because
-most software development is maintenance. If you do use CBVs, do yourself a
-favour and always add <code class="docutils literal notranslate"><span class="pre">template_name</span></code>, even if you are sticking to the naming
-convention as I have done here.</p>
+<p>So for both experts and people with less knowledge these typing-savers hurt
+maintenance, and therefore hurt your project because most software development
+is maintenance. If you do use CBVs, and even if you are convinced only experts
+will be maintaining, and you are sticking to the naming convention, you will
+still do yourself a favour if you always add <code class="docutils literal notranslate"><span class="pre">template_name</span></code>.</p>
 <p>The same “convention over configuration” logic is also present in the way
 <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> looks up its object: it looks for a named URL parameter called
 <code class="docutils literal notranslate"><span class="pre">pk</span></code>, and then one called <code class="docutils literal notranslate"><span class="pre">slug</span></code> if <code class="docutils literal notranslate"><span class="pre">pk</span></code> doesn’t exist, and finds your
@@ -343,7 +337,8 @@ the sake of saving a tiny bit of typing.</p>
 </div>
 <div class="section" id="discussion-static-vs-dynamic">
 <h2>Discussion: Static vs dynamic<a class="headerlink" href="#discussion-static-vs-dynamic" title="Permalink to this headline">¶</a></h2>
-<p>For the case of statically defining what query to start with, we have two options:</p>
+<p>For the case of statically defining what query to start with as class attributes
+on the CBV, we have two options:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">Product</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">queryset</span> <span class="pre">=</span> <span class="pre">Product.objects.all()</span></code></p></li>
@@ -353,10 +348,10 @@ because it will hurt the maintenance programmer — if the requirements change
 (for example to limit listed products to ‘visible’ products), starting with
 <code class="docutils literal notranslate"><span class="pre">queryset</span></code> will make it easy — it can just be changed to
 <code class="docutils literal notranslate"><span class="pre">Product.objects.visible()</span></code> or something similar.</p>
-<p>(For the same reason, in my FBV above I wrote
+<p>For the same reason, in my FBV above I wrote
 <code class="docutils literal notranslate"><span class="pre">get_object_or_404(Product.objects.all(),</span> <span class="pre">…)</span></code> instead of
 <code class="docutils literal notranslate"><span class="pre">get_object_or_404(Product,</span> <span class="pre">…)</span></code> which is also supported by the shortcut
-function).</p>
+function.</p>
 <p>If, however, the queryset needed depends on the <code class="docutils literal notranslate"><span class="pre">request</span></code> object, the
 programmer will have to instead define <code class="docutils literal notranslate"><span class="pre">get_queryset()</span></code> to get access to the
 request data and dynamically respond to it, rather than have a static definition
@@ -369,10 +364,10 @@ to gaining some additional time based logic e.g.:</p>
 </pre></div>
 </div>
 <p>If you have <code class="docutils literal notranslate"><span class="pre">queryset</span> <span class="pre">=</span> <span class="pre">Products.objects.visible()</span></code>, due to the fact that this
-is a class attribute which gets executed at module import time, the
-<code class="docutils literal notranslate"><span class="pre">date.today()</span></code> call happens when your app starts up, not when your view is
-called. So it seems to work, but you a get a surprise on the second day in
-production!</p>
+is a class attribute which gets executed at module import time, not when your
+view is run, the <code class="docutils literal notranslate"><span class="pre">date.today()</span></code> call happens when your app starts up, not when
+your view is called. So it seems to work, but you a get a surprise on the second
+day in production!</p>
 <p>None of these are massive issues — they are small bits of friction, but these
 things do add up, and it happens that all of them are avoided by the way in
 which FBVs are constructed.</p>
@@ -403,6 +398,12 @@ could have chosen a much better name, but your code isn’t “in charge”.</p>
 <p>This is a problem that is specific to <strong>class based</strong> generic code. If you write
 <a class="reference internal" href="delegation.html#function-based-generic-views"><span class="std std-ref">function based generic code</span></a>, the problem
 doesn’t exist, because you don’t inherit local variable names.</p>
+<p>We can think of this in terms of the “framework vs library” debate. Frameworks
+impose a structure on your code, a mould that you have to fit into, where your
+function gets called by the framework. In contrast, libraries leave you in
+control, you choose to call the library functions in the structure you see fit.
+Both have their place, but if we accept the constraints of a framework we should
+be sure that it is worth it.</p>
 </div>
 </div>
 

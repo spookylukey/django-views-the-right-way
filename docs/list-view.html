@@ -52,7 +52,7 @@
 <p>To continue the example of an e-commerce site, let’s implement our product
 listing page. Our first version of the code is just this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_list.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span> <span class="p">{</span>
         <span class="s1">&#39;products&#39;</span><span class="p">:</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
     <span class="p">})</span>
 </pre></div>
@@ -66,16 +66,16 @@ something like:</p>
     <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">products</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>  <span class="c1"># Show 25 products per page.</span>
     <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
     <span class="n">page_obj</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_list.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span> <span class="p">{</span>
         <span class="s1">&#39;page_obj&#39;</span><span class="p">:</span> <span class="n">page_obj</span><span class="p">,</span>
     <span class="p">})</span>
 </pre></div>
 </div>
 <p>That’s basically it! Your real view might have additional needs, like filtering
-and ordering. These can be handled by responding to queryset parameters and
+and ordering. These can be handled by responding to query string parameters and
 modifying your <code class="docutils literal notranslate"><span class="pre">products</span></code> QuerySet above.</p>
 <p>There is a bit of boilerplate here for doing pagination. If you have a
-standardised convention of using <code class="docutils literal notranslate"><span class="pre">page</span></code> as your querystring parameter for
+standardised convention of using <code class="docutils literal notranslate"><span class="pre">page</span></code> as your query string parameter for
 paging, you could pull some of this boilerplate out into a utility like
 <code class="docutils literal notranslate"><span class="pre">paged_object_list_context</span></code> (left as an exercise for you) to produce something
 a bit shorter:</p>
@@ -83,7 +83,7 @@ a bit shorter:</p>
     <span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">products</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">25</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_list.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Next up: <a class="reference internal" href="delegation.html"><span class="doc">Custom logic at the start — delegation</span></a></p>

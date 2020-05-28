@@ -76,7 +76,7 @@ from our two entry-point view functions.
        return display_product_list(
            request,
            queryset=Product.objects.all(),
-           template_name='products/product_list.html',
+           template_name='shop/product_list.html',
        )
 
 
@@ -105,15 +105,15 @@ from our two entry-point view functions.
    For those unfamiliar with the signature on ``display_product_list``:
 
    * the arguments after ``*`` are “keyword only” arguments. They cannot be
-     passed as positional arguments. This:
-
-     * helps ensures clarity in calling code
-     * means we can add to and re-order these arguments later and be sure
-       we won't be breaking anything.
+     passed as positional arguments. This helps ensures clarity in calling code,
+     because we have to use the name. It also means we can add to and re-order
+     these arguments later and be sure we won't be breaking anything.
    * ``queryset`` and ``template_name`` lack defaults (because we don't have any
-     good defaults) which forces calling code to pass supply the arguments.
+     good defaults) which forces calling code to supply the arguments.
    * for ``context`` we do have a sensible default, but also need to avoid the
-     mutable default arguments issue.
+     `mutable default arguments gotcha
+     <https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments>_,
+     so we use ``None`` in the signature and change to ``{}`` later.
 
 At the template level, we'll probably do a similar refactoring, using `include
 <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include>`_ to

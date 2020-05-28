@@ -110,7 +110,7 @@ from our two entry-point view functions.</p>
     <span class="k">return</span> <span class="n">display_product_list</span><span class="p">(</span>
         <span class="n">request</span><span class="p">,</span>
         <span class="n">queryset</span><span class="o">=</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
-        <span class="n">template_name</span><span class="o">=</span><span class="s1">&#39;products/product_list.html&#39;</span><span class="p">,</span>
+        <span class="n">template_name</span><span class="o">=</span><span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span>
     <span class="p">)</span>
 
 
@@ -139,17 +139,15 @@ from our two entry-point view functions.</p>
 <p>For those unfamiliar with the signature on <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code>:</p>
 <ul class="simple">
 <li><p>the arguments after <code class="docutils literal notranslate"><span class="pre">*</span></code> are “keyword only” arguments. They cannot be
-passed as positional arguments. This:</p>
-<ul>
-<li><p>helps ensures clarity in calling code</p></li>
-<li><p>means we can add to and re-order these arguments later and be sure
-we won’t be breaking anything.</p></li>
-</ul>
-</li>
+passed as positional arguments. This helps ensures clarity in calling code,
+because we have to use the name. It also means we can add to and re-order
+these arguments later and be sure we won’t be breaking anything.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">queryset</span></code> and <code class="docutils literal notranslate"><span class="pre">template_name</span></code> lack defaults (because we don’t have any
-good defaults) which forces calling code to pass supply the arguments.</p></li>
+good defaults) which forces calling code to supply the arguments.</p></li>
 <li><p>for <code class="docutils literal notranslate"><span class="pre">context</span></code> we do have a sensible default, but also need to avoid the
-mutable default arguments issue.</p></li>
+<cite>mutable default arguments gotcha
+&lt;https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments&gt;_,
+so we use ``None`</cite> in the signature and change to <code class="docutils literal notranslate"><span class="pre">{}</span></code> later.</p></li>
 </ul>
 </div>
 <p>At the template level, we’ll probably do a similar refactoring, using <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include">include</a> to

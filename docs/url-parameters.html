@@ -65,20 +65,21 @@ the name (e.g <code class="docutils literal notranslate"><span class="pre">white
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;products/&lt;slug:product_slug&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">product_detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;product_detail&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;products/&lt;slug:slug&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">product_detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;product_detail&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># views.py</span>
 
-<span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">product_slug</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;products/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
+<span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{})</span>
 </pre></div>
 </div>
-<p>Note how the <code class="docutils literal notranslate"><span class="pre">product_slug</span></code> parameter has to be added to view function
-signature, as well as in the URL conf. (We didn’t actually use this
-<code class="docutils literal notranslate"><span class="pre">product_slug</span></code> parameter yet, that will be covered in the next section). If
-you don’t modify the view like this, it simply won’t work — you’ll get an
+<p>Note how the <code class="docutils literal notranslate"><span class="pre">slug</span></code> parameter has to be added to view function signature, as
+well as in the URL conf. In the URL pattern, the first <code class="docutils literal notranslate"><span class="pre">slug</span></code> is the path
+converter type. The second <code class="docutils literal notranslate"><span class="pre">slug</span></code> is the name of the parameter in the
+<code class="docutils literal notranslate"><span class="pre">product_detail</span></code> view, and we could have chosen something different.</p>
+<p>If you don’t modify the view like this, it simply won’t work — you’ll get an
 exception, because Django will attempt to call your function with parameters
 that your function doesn’t accept, which is an error in Python.</p>
 <p>If you are used to CBVs, this is one of the more obvious differences. With a
@@ -88,7 +89,8 @@ parameter.</p>
 <p>Be sure to check the Django docs about <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters">path converters</a> for
 the different kind of things you might add into your URLs. If you are into type
 hints, also see below for tips on how you can enhance this pattern.</p>
-<p>Otherwise, onto <a class="reference internal" href="detail-view.html"><span class="doc">Displaying a single database object</span></a>.</p>
+<p>Otherwise, onto <a class="reference internal" href="detail-view.html"><span class="doc">Displaying a single database object</span></a>, where we will actually use the <code class="docutils literal notranslate"><span class="pre">slug</span></code>
+parameter.</p>
 <div class="section" id="discussion-generic-code-and-function-signatures">
 <h2>Discussion: Generic code and function signatures<a class="headerlink" href="#discussion-generic-code-and-function-signatures" title="Permalink to this headline">¶</a></h2>
 <p>Django’s URL-to-function dispatching mechanism is very elegant and powerful,
