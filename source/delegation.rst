@@ -36,7 +36,7 @@ of our view:
 
    def special_offer_detail(request, slug):
        special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
-       return TemplateResponse(request, 'products/special_offer_detail.html', {
+       return TemplateResponse(request, 'shop/special_offer_detail.html', {
            'special_offer': special_offer,
            'products': special_offer.get_products(),
        })
@@ -104,15 +104,13 @@ from our two entry-point view functions.
 
    For those unfamiliar with the signature on ``display_product_list``:
 
-   * the arguments after ``*`` are “keyword only” arguments. They cannot be
-     passed as positional arguments. This helps ensures clarity in calling code,
-     because we have to use the name. It also means we can add to and re-order
-     these arguments later and be sure we won't be breaking anything.
+   * the arguments after ``*`` are “`keyword only arguments
+     <https://lukeplant.me.uk/blog/posts/keyword-only-arguments-in-python/>`_”.
    * ``queryset`` and ``template_name`` lack defaults (because we don't have any
      good defaults) which forces calling code to supply the arguments.
    * for ``context`` we do have a sensible default, but also need to avoid the
      `mutable default arguments gotcha
-     <https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments>_,
+     <https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments>`_,
      so we use ``None`` in the signature and change to ``{}`` later.
 
 At the template level, we'll probably do a similar refactoring, using `include

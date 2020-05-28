@@ -1,7 +1,11 @@
 {% extends "shop/base.html" %}
 
 {% block "content" %}
-  <h1>ACME online store: Products</h1>
+  <h1>Special offer: {{ special_offer.name }}</h1>
+
+  <p>{{ special_offer.description }}</p>
+
+  <h2>Products in this offer</h2>
 
   {% for product in page_obj %}
     <p><a href="{% url "detail_view:product_detail" slug=product.slug %}">{{ product.name }}</a></p>

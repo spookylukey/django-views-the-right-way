@@ -21,4 +21,6 @@ urlpatterns = [
     path('detail-view-discussion/', include('the_right_way.detail_view.discussion_urls')),
     path('list-view/', include('the_right_way.list_view.urls')),
     path('list-view-discussion/', include('the_right_way.list_view.discussion_urls')),
+    path('delegation/', include('the_right_way.delegation.urls')),
+    path('delegation-discussion/', include('the_right_way.delegation.discussion_urls')),
 ]

@@ -30,9 +30,7 @@ As we said, the answer to how do anything in a view is “Just do it”:
    There is no need to following the formatting, and you (or your tools) might
    have other ideas!
 
-.. note::
-
-   **Imports:** For brevity I'll omit any imports I've mentioned already.
+   **Imports:** For brevity I'll omit any imports I've already mentioned.
 
 The template will decide how to format the date (most likely using the `date
 filter <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_),

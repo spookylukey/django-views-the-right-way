@@ -8,3 +8,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SpecialOffer(models.Model):
+    name = models.CharField(max_length=255, blank=False)
+    slug = models.SlugField(unique=True)
+    description = models.TextField()
+    products = models.ManyToManyField(Product, related_name='special_offers')
+
+    def get_products(self):
+        return self.products.all()
+
+    def __str__(self):
+        return self.name
