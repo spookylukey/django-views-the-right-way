@@ -19,6 +19,8 @@ something like:
 
 .. code-block:: python
 
+   from django.core.paginator import Paginator
+
    def product_list(request):
        products = Product.objects.all()
        paginator = Paginator(products, 25)  # Show 25 products per page.

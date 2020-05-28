@@ -74,4 +74,20 @@
 
   <p><a href="{% url "view_source" namespace="detail_view_discussion" %}">[source]</a></p>
 
+
+  <h2>Detail view</h2>
+  <ul>
+    <li><a href="{% url "list_view:product_list_unpaged" %}">product list unpaged</a></li>
+    <li><a href="{% url "list_view:product_list" %}">product list paged</a></li>
+    <li><a href="{% url "list_view:product_list_refactored" %}">product list refactored</a></li>
+  </ul>
+
+  <p><a href="{% url "view_source" namespace="list_view" %}">[source]</a></p>
+
+  <h3>Discussion</h2>
+  <ul>
+  </ul>
+
+  <p><a href="{% url "view_source" namespace="list_view_discussion" %}">[source]</a></p>
+
 {% endblock %}

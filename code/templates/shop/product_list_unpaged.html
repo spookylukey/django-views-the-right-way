@@ -1,0 +1,9 @@
+{% extends "shop/base.html" %}
+
+{% block "content" %}
+  <h1>ACME online store: Products</h1>
+
+  {% for product in products %}
+    <p><a href="{% url "detail_view:product_detail" slug=product.slug %}">{{ product.name }}</a></p>
+  {% endfor %}
+{% endblock %}

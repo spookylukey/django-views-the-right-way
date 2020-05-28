@@ -19,4 +19,6 @@ urlpatterns = [
     path('url-parameters-discussion/', include('the_right_way.url_parameters.discussion_urls')),
     path('detail-view/', include('the_right_way.detail_view.urls')),
     path('detail-view-discussion/', include('the_right_way.detail_view.discussion_urls')),
+    path('list-view/', include('the_right_way.list_view.urls')),
+    path('list-view-discussion/', include('the_right_way.list_view.discussion_urls')),
 ]
