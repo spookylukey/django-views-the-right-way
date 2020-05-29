@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product
+from .models import Product, SpecialOffer
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -12,4 +12,9 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 
+class SpecialOfferAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
+
+
 admin.site.register(Product, ProductAdmin)
+admin.site.register(SpecialOffer, SpecialOfferAdmin)

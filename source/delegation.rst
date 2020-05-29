@@ -88,8 +88,8 @@ from our two entry-point view functions.
                'special_offer': special_offer,
            },
            queryset=special_offer.get_products(),
-           template_name='products/special_offer_detail.html',
-       })
+           template_name='shop/special_offer_detail.html',
+       )
 
 
    def display_product_list(request, *, context=None, queryset, template_name):
@@ -224,6 +224,7 @@ may be very different from what you thought, and when you have enough
 information to make that decision you might decide that it's not worth it. So
 avoiding all duplication at any cost is not the aim we should have.
 
+.. _multiple-mixins:
 
 Discussion: Multiple mixins?
 ----------------------------

@@ -17,7 +17,7 @@ class SpecialOffer(models.Model):
     products = models.ManyToManyField(Product, related_name='special_offers')
 
     def get_products(self):
-        return self.products.all()
+        return self.products.all().order_by('name')
 
     def __str__(self):
         return self.name
