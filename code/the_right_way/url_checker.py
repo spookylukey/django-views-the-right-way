@@ -19,12 +19,12 @@ import uuid
 from inspect import Parameter, signature
 
 from django.conf import settings
-from django.core.checks import Error, Tags, Warning, register
+from django.core import checks
 from django.urls import URLPattern, URLResolver, converters, get_resolver
 from django.urls.resolvers import RoutePattern
 
 
-@register(Tags.urls)
+@checks.register(checks.Tags.urls)
 def check_url_signatures(app_configs, **kwargs):
     if not getattr(settings, 'ROOT_URLCONF', None):
         return []
@@ -55,7 +55,7 @@ def check_url_args_match(url_pattern: URLPattern):
     has_star_args = False
     if any(p.kind in [Parameter.VAR_KEYWORD, Parameter.VAR_POSITIONAL]
            for p in parameters.values()):
-        errors.append(Warning(
+        errors.append(checks.Warning(
             f'View {callback_repr} signature contains *args or **kwarg syntax, can\'t properly check args',
             obj=url_pattern,
             id='urlchecker.W001',
@@ -79,7 +79,7 @@ def check_url_args_match(url_pattern: URLPattern):
                 )
             else:
                 message = f'View {callback_repr} signature does not have `request` parameter.'
-            errors.append(Error(
+            errors.append(checks.Error(
                 message,
                 obj=url_pattern,
                 id='urlchecker.E001',
@@ -97,26 +97,26 @@ def check_url_args_match(url_pattern: URLPattern):
             found_type = sig.parameters[name].annotation
             if expected_type == Parameter.empty:
                 # TODO - only output this warning once per converter
-                errors.append(Warning(
+                errors.append(checks.Warning(
                     f'Don\'t know output type for convert {converter}, can\'t verify URL signatures.',
                     obj=converter,
                     id=f'urlchecker.W002.{converter.__module__}.{converter.__class__.__name__}',
                 ))
             elif found_type == Parameter.empty:
-                errors.append(Warning(
+                errors.append(checks.Warning(
                     f'Missing type annotation for parameter `{name}`, can\'t check type.',
                     obj=url_pattern,
                     id='urlchecker.W003'
                 ))
             elif expected_type != found_type:
-                errors.append(Error(
+                errors.append(checks.Error(
                     f'For parameter `{name}`, annotated type {found_type.__name__} does not match'
                     f' expected `{expected_type.__name__}` from urlconf',
                     obj=url_pattern,
                     id='urlchecker.E002',
                 ))
         else:
-            errors.append(Error(
+            errors.append(checks.Error(
                 f'View {callback_repr} signature does not contain `{name}` parameter',
                 obj=url_pattern,
                 id='urlchecker.E003',
@@ -129,7 +129,7 @@ def check_url_args_match(url_pattern: URLPattern):
         if param.kind in (Parameter.VAR_POSITIONAL, Parameter.VAR_KEYWORD):
             continue
         if param.default == Parameter.empty:
-            errors.append(Error(
+            errors.append(checks.Error(
                 f'View {callback_repr} signature contains `{name}` parameter without default or ULRconf parameter',
                 obj=url_pattern,
                 id='urlchecker.E004',
