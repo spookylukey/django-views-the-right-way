@@ -88,15 +88,15 @@ from our two entry-point view functions.
                'special_offer': special_offer,
            },
            queryset=special_offer.get_products(),
-           template_name='products/special_offer_detail.html',
-       })
+           template_name='shop/special_offer_detail.html',
+       )
 
 
    def display_product_list(request, *, context=None, queryset, template_name):
        if context is None:
            context = {}
        queryset = apply_product_filtering(request, queryset)
-       context.update(paged_object_list_context(request, queryset, paginate_by=25))
+       context.update(paged_object_list_context(request, queryset, paginate_by=5))
        return TemplateResponse(request, template_name, context)
 
 
@@ -201,7 +201,7 @@ I recently wrote several implementations of Mozilla's `Fluent
 <https://projectfluent.org/>`_ localisation language, all of them in Python. One
 of them was a Fluent-to-Python compiler, another was a Fluent-to-Elm compiler.
 These two projects are clearly very similar in nature. So when I started the
-second, I did so with `one big copy-paste job
+second, I did so with `one big copy-paste job of 2500 lines of code
 <https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee>`_.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
@@ -224,6 +224,7 @@ may be very different from what you thought, and when you have enough
 information to make that decision you might decide that it's not worth it. So
 avoiding all duplication at any cost is not the aim we should have.
 
+.. _multiple-mixins:
 
 Discussion: Multiple mixins?
 ----------------------------
@@ -239,53 +240,61 @@ implementation as well as interface of all the mixins involved.
 But, after scratching your head and debugging for an hour, at least you have
 less typing with the CBV, right? Unfortunately, the opposite is true:
 
-With Django CBVs — straight out of the docs linked above:
+Here is our view implemented with Django CBVs — as it happens, it is exactly the
+same as the example in the docs linked above with model names and template names
+changed:
 
 .. code-block:: python
 
    from django.views.generic import ListView
    from django.views.generic.detail import SingleObjectMixin
-   from books.models import Publisher
+
+   from shop.models import SpecialOffer
 
 
-   class PublisherDetail(SingleObjectMixin, ListView):
+   class SpecialOfferDetail(SingleObjectMixin, ListView):
        paginate_by = 2
-       template_name = "books/publisher_detail.html"
+       template_name = "shop/special_offer_detail.html"
 
        def get(self, request, *args, **kwargs):
-           self.object = self.get_object(queryset=Publisher.objects.all())
+           self.object = self.get_object(queryset=SpecialOffer.objects.all())
            return super().get(request, *args, **kwargs)
 
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
-           context['publisher'] = self.object
+           context['special_offer'] = self.object
            return context
 
        def get_queryset(self):
-           return self.object.book_set.all()
+           return self.object.products.all()
 
-The Right Way (including calling ``Paginator`` manually ourselves etc.):
+And here is The Right Way (including calling ``Paginator`` manually ourselves
+without any helpers):
 
 .. code-block:: python
 
+   from django.core.paginator import Paginator
    from django.shortcuts import get_object_or_404
    from django.template.response import TemplateResponse
 
+   from shop.models import SpecialOffer
 
-   def publisher_detail(request, slug):
-       publisher = get_object_or_404(Publisher.objects.all(), slug=slug)
-       paginator = Paginator(publisher.book_set.all(), 2)
+
+   def special_offer_detail(request, slug):
+       special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
+       paginator = Paginator(special_offer.products.all(), 2)
        page_number = request.GET.get('page')
        page_obj = paginator.get_page(page_number)
-       return TemplateResponse(request, 'books/publisher_detail.html', {
-           'publisher': publisher,
+       return TemplateResponse(request, 'shop/special_offer_detail.html', {
+           'special_offer': special_offer,
            'page_obj': page_obj,
        })
 
+This is a clear win for FBVs by any code size metric.
 
-Thankfully the docs do add a “don't try this at home kids” warning and mention
-that many mixins don't actually work together. But we need to add to those
-warnings:
+Thankfully the Django docs do add a “don't try this at home kids” warning and
+mention that many mixins don't actually work together. But we need to add to
+those warnings:
 
 * It's virtually impossible to know ahead of time which combinations are likely
   to turn out bad. It's pretty much the point of mixins that you should be able

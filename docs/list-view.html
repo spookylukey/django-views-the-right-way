@@ -65,7 +65,7 @@ something like:</p>
 
 <span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">products</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>  <span class="c1"># Show 25 products per page.</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">products</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># Show 5 products per page.</span>
     <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
     <span class="n">page_obj</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span> <span class="p">{</span>
@@ -84,7 +84,7 @@ a bit shorter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">products</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">25</span><span class="p">))</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">products</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>

@@ -56,7 +56,7 @@ decorators - TODO - but it really isn't necessary).
 
 .. _helpers-vs-mixins:
 
-Discussion: Helpers vs Mixins
+Discussion: Helpers vs mixins
 -----------------------------
 
 The solution above is simple and direct. But some might protest it is a bit
@@ -80,8 +80,8 @@ This kind of base class or mixin might also provide some other functionality,
 like doing some pre-condition checks and redirects as necessary.
 
 My response would be, first, a reminder that a small reduction in typing is a
-poor trade-off if it obfuscates your code even a small amount, due to time we
-spend reading versus writing code.
+poor trade-off if it obfuscates your code even a small amount, due to the time
+we spend reading versus writing code.
 
 Second, the mixin has several significant disadvantages:
 
@@ -113,11 +113,8 @@ Second, the mixin has several significant disadvantages:
 
 * Mixins often tie you into inheritance trees for organising things. In reality,
   instead of trees you often want a mix-and-match approach to including data or
-  functionality. Mixins do support that, at least in this case, but if you
-  imagine that you'll have a neat hierarchy involving a ``CheckoutPageMixin``
-  that provides both context data and some other functionality, you'll quickly
-  be disappointed when things don't turn out that simple, and you find yourself
-  in a tangle.
+  functionality. Mixins are supposed to support that, but it you quickly find
+  :ref:`they don't really and you end up in a tangle <multiple-mixins>`.
 
 The simple solution is the best!
 

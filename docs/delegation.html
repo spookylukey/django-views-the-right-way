@@ -122,15 +122,15 @@ from our two entry-point view functions.</p>
             <span class="s1">&#39;special_offer&#39;</span><span class="p">:</span> <span class="n">special_offer</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="n">queryset</span><span class="o">=</span><span class="n">special_offer</span><span class="o">.</span><span class="n">get_products</span><span class="p">(),</span>
-        <span class="n">template_name</span><span class="o">=</span><span class="s1">&#39;products/special_offer_detail.html&#39;</span><span class="p">,</span>
-    <span class="p">})</span>
+        <span class="n">template_name</span><span class="o">=</span><span class="s1">&#39;shop/special_offer_detail.html&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">display_product_list</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">template_name</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">apply_product_filtering</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">)</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">25</span><span class="p">))</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -212,7 +212,7 @@ abstractions are among them.</p>
 <p>I recently wrote several implementations of Mozilla’s <a class="reference external" href="https://projectfluent.org/">Fluent</a> localisation language, all of them in Python. One
 of them was a Fluent-to-Python compiler, another was a Fluent-to-Elm compiler.
 These two projects are clearly very similar in nature. So when I started the
-second, I did so with <a class="reference external" href="https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee">one big copy-paste job</a>.
+second, I did so with <a class="reference external" href="https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee">one big copy-paste job of 2500 lines of code</a>.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
 bases still share a huge amount in terms of structure. In a few places they even
@@ -233,7 +233,7 @@ information to make that decision you might decide that it’s not worth it. So
 avoiding all duplication at any cost is not the aim we should have.</p>
 </div>
 <div class="section" id="discussion-multiple-mixins">
-<h2>Discussion: Multiple mixins?<a class="headerlink" href="#discussion-multiple-mixins" title="Permalink to this headline">¶</a></h2>
+<span id="multiple-mixins"></span><h2>Discussion: Multiple mixins?<a class="headerlink" href="#discussion-multiple-mixins" title="Permalink to this headline">¶</a></h2>
 <p>When doing both a single object lookup and a list of objects, contrast the
 simplicity of the above FBV code with <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview">trying to wrangle CBVs into doing this</a>.</p>
 <p>These Django docs do come up with a solution for this case, but it is a house of
@@ -241,48 +241,56 @@ cards that requires lots of extremely careful thinking and knowing the
 implementation as well as interface of all the mixins involved.</p>
 <p>But, after scratching your head and debugging for an hour, at least you have
 less typing with the CBV, right? Unfortunately, the opposite is true:</p>
-<p>With Django CBVs — straight out of the docs linked above:</p>
+<p>Here is our view implemented with Django CBVs — as it happens, it is exactly the
+same as the example in the docs linked above with model names and template names
+changed:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">ListView</span>
 <span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="kn">import</span> <span class="n">SingleObjectMixin</span>
-<span class="kn">from</span> <span class="nn">books.models</span> <span class="kn">import</span> <span class="n">Publisher</span>
+
+<span class="kn">from</span> <span class="nn">shop.models</span> <span class="kn">import</span> <span class="n">SpecialOffer</span>
 
 
-<span class="k">class</span> <span class="nc">PublisherDetail</span><span class="p">(</span><span class="n">SingleObjectMixin</span><span class="p">,</span> <span class="n">ListView</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SpecialOfferDetail</span><span class="p">(</span><span class="n">SingleObjectMixin</span><span class="p">,</span> <span class="n">ListView</span><span class="p">):</span>
     <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;books/publisher_detail.html&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;shop/special_offer_detail.html&quot;</span>
 
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">Publisher</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">SpecialOffer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;publisher&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;special_offer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
         <span class="k">return</span> <span class="n">context</span>
 
     <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">book_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">products</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The Right Way (including calling <code class="docutils literal notranslate"><span class="pre">Paginator</span></code> manually ourselves etc.):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<p>And here is The Right Way (including calling <code class="docutils literal notranslate"><span class="pre">Paginator</span></code> manually ourselves
+without any helpers):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.template.response</span> <span class="kn">import</span> <span class="n">TemplateResponse</span>
 
+<span class="kn">from</span> <span class="nn">shop.models</span> <span class="kn">import</span> <span class="n">SpecialOffer</span>
 
-<span class="k">def</span> <span class="nf">publisher_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
-    <span class="n">publisher</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Publisher</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
-    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">publisher</span><span class="o">.</span><span class="n">book_set</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">special_offer_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    <span class="n">special_offer</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">SpecialOffer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">special_offer</span><span class="o">.</span><span class="n">products</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
     <span class="n">page_obj</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;books/publisher_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span>
-        <span class="s1">&#39;publisher&#39;</span><span class="p">:</span> <span class="n">publisher</span><span class="p">,</span>
+    <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/special_offer_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;special_offer&#39;</span><span class="p">:</span> <span class="n">special_offer</span><span class="p">,</span>
         <span class="s1">&#39;page_obj&#39;</span><span class="p">:</span> <span class="n">page_obj</span><span class="p">,</span>
     <span class="p">})</span>
 </pre></div>
 </div>
-<p>Thankfully the docs do add a “don’t try this at home kids” warning and mention
-that many mixins don’t actually work together. But we need to add to those
-warnings:</p>
+<p>This is a clear win for FBVs by any code size metric.</p>
+<p>Thankfully the Django docs do add a “don’t try this at home kids” warning and
+mention that many mixins don’t actually work together. But we need to add to
+those warnings:</p>
 <ul class="simple">
 <li><p>It’s virtually impossible to know ahead of time which combinations are likely
 to turn out bad. It’s pretty much the point of mixins that you should be able

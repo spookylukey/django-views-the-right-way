@@ -91,7 +91,7 @@ helpers if they have any significant logic in them.</p>
 <p>(You may be interested in a more fancy technique, based on TemplateResponse and
 decorators - TODO - but it really isn’t necessary).</p>
 <div class="section" id="discussion-helpers-vs-mixins">
-<span id="helpers-vs-mixins"></span><h2>Discussion: Helpers vs Mixins<a class="headerlink" href="#discussion-helpers-vs-mixins" title="Permalink to this headline">¶</a></h2>
+<span id="helpers-vs-mixins"></span><h2>Discussion: Helpers vs mixins<a class="headerlink" href="#discussion-helpers-vs-mixins" title="Permalink to this headline">¶</a></h2>
 <p>The solution above is simple and direct. But some might protest it is a bit
 ugly, and has involved a bit of boilerplate. A CBV solution using a mixin is
 surely more elegant:</p>
@@ -110,8 +110,8 @@ less typing than <code class="docutils literal notranslate"><span class="pre">co
 This kind of base class or mixin might also provide some other functionality,
 like doing some pre-condition checks and redirects as necessary.</p>
 <p>My response would be, first, a reminder that a small reduction in typing is a
-poor trade-off if it obfuscates your code even a small amount, due to time we
-spend reading versus writing code.</p>
+poor trade-off if it obfuscates your code even a small amount, due to the time
+we spend reading versus writing code.</p>
 <p>Second, the mixin has several significant disadvantages:</p>
 <ul>
 <li><p>It hides the source of the context data. Any of your base classes could
@@ -138,11 +138,8 @@ treatment of this)</p>
 </li>
 <li><p>Mixins often tie you into inheritance trees for organising things. In reality,
 instead of trees you often want a mix-and-match approach to including data or
-functionality. Mixins do support that, at least in this case, but if you
-imagine that you’ll have a neat hierarchy involving a <code class="docutils literal notranslate"><span class="pre">CheckoutPageMixin</span></code>
-that provides both context data and some other functionality, you’ll quickly
-be disappointed when things don’t turn out that simple, and you find yourself
-in a tangle.</p></li>
+functionality. Mixins are supposed to support that, but it you quickly find
+<a class="reference internal" href="delegation.html#multiple-mixins"><span class="std std-ref">they don’t really and you end up in a tangle</span></a>.</p></li>
 </ul>
 <p>The simple solution is the best!</p>
 <p>This example is part of a larger principle for the best way to write views, and
@@ -186,7 +183,7 @@ which also mentions mixins.</p>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Common context data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-helpers-vs-mixins">Discussion: Helpers vs Mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-helpers-vs-mixins">Discussion: Helpers vs mixins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
