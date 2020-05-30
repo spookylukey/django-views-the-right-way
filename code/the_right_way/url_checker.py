@@ -75,7 +75,10 @@ def check_url_args_match(url_pattern: URLPattern):
     if not parameter_list or parameter_list[0] != 'request':
         if not has_star_args:
             if parameter_list:
-                message = f'View {callback_repr} signature does not start with `request` parameter, found `{parameter_list[0]}`.'
+                message = (
+                    f'View {callback_repr} signature does not start with `request` parameter, '
+                    f'found `{parameter_list[0]}`.'
+                )
             else:
                 message = f'View {callback_repr} signature does not have `request` parameter.'
             errors.append(Error(
@@ -109,7 +112,8 @@ def check_url_args_match(url_pattern: URLPattern):
                 ))
             elif expected_type != found_type:
                 errors.append(Error(
-                    f'For parameter `{name}`, annotated type {found_type.__name__} does not match expected `{expected_type.__name__}` from urlconf',
+                    f'For parameter `{name}`, annotated type {found_type.__name__} does not match'
+                    f' expected `{expected_type.__name__}` from urlconf',
                     obj=url_pattern,
                     id='urlchecker.E002',
                 ))

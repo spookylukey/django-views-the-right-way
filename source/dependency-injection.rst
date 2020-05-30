@@ -23,11 +23,14 @@ our own service, but our entry point is a function that doesn't take a
        ...
        return product_list
 
-
 ``filters`` is a dictionary that contains product filtering info, with allowable
 keys defined elsewhere. Our ``display_product_list`` now needs to convert query
 string parameters from ``request.GET`` to something that can be passed as
 ``filters``.
+
+(For the sake of simplicity, we're doing a much more basic kind of paging in
+this example, in contrast to what ``Paginator`` gives you with page counts
+etc.)
 
 For special offers, however, we have been provided with a **different** function
 to use:
@@ -78,7 +81,6 @@ Something like this:
            template_name='shop/product_list.html',
        )
 
-
    def display_product_list(request, *, context=None, searcher, template_name):
        if context is None:
            context = {}
@@ -92,7 +94,7 @@ Something like this:
 
 
 To explain a little: here we passed the ``product_search`` function into
-``display_product_list`` as the parameter ``searcher``. This is called
+``display_product_list`` as the parameter ``searcher``. This feature is called
 “first class functions” — just like you can pass around any other data as a
 parameter, you pass around functions too. That is the heart of the technique
 here.
@@ -116,9 +118,8 @@ that matches the signature that ``display_product_list`` expects. Inside the
 wrapper function, we'll call the ``special_product_search`` function the way it
 needs to be called. While we're at it, we can do our additional requirements too.
 
-It looks like this, assuming we've been given a ``special_product_search``
-function, and have also written ``log_special_offer_product_view`` function for
-the extra logging:
+It looks like this, assuming we've written ``log_special_offer_product_view``
+function for the extra logging:
 
 
 .. code-block:: python
@@ -186,7 +187,9 @@ class can be helpful).
 A slightly more general concept is “dependency injection”. If you have some code
 that needs to do something, i.e. it has a dependency on some other code, instead
 of depending directly, the dependency gets injected from the outside. If our
-dependency is a just a function, we can pass it as a parameter in.
+dependency is a just a single function call, we can simple accept a function as
+a parameter. If our dependency is a set of related function calls, we might want
+an object with methods as our the parameter.
 
 Often you will hear the term “dependency injection” being used for something
 that goes one step further, and injects dependencies **automatically** in some
@@ -195,8 +198,8 @@ way. I call these “dependency injection frameworks/containers”. Outside of
 never found a need or desire for these in Python.
 
 So, we can call this pattern “first class functions”, or “callbacks”, “strategy
-pattern” or “dependency injection”. But dependency injection sounds the coolest,
-so I used that in the title.
+pattern” or “dependency injection”. But dependency injection is clearly the
+coolest sounding, so I used that in the title.
 
 
 Discussion: DI vs inheritance
@@ -207,8 +210,8 @@ In contrast to the pattern I'm suggesting here (dependency injection / strategy
 of customisation, resulting in the need for class attributes and method
 overrides.
 
-Inheritance brings with it the problems we've also discussed under
-:ref:`helpers-vs-mixins`.
+Inheritance brings with it the problems we've also discussed under :ref:`helpers
+vs mixins <helpers-vs-mixins>`.
 
 To make it more concrete, suppose we had solved the above
 custom-logic-in-the-middle problem by using inheritance and the template method
@@ -218,14 +221,12 @@ method. The base class might look something like this:
 
 .. code-block:: python
 
-   # TODO check these code samples would work
-
    class ProductSearchBase(TemplateView):
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
-           filters = collect_filtering_parameters(request)
+           filters = collect_filtering_parameters(self.request)
            try:
-               page = int(request.GET['page'])
+               page = int(self.request.GET['page'])
            except (KeyError, ValueError):
                page = 1
            context['products'] = self.product_search(filters, page=page)
@@ -241,59 +242,67 @@ We might do something like this:
 
 .. code-block:: python
 
+   class SpecialOfferDetail(ProductSearchBase):
+       template_name = 'shop/special_offer_detail_unpaged.html'
 
-   class SpecialOfferProductList(ProductSearchBase):
-       def get(self, request, **kwargs):
+       def get(self, request, *args, **kwargs):
            special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=kwargs['slug'])
            self.special_offer = special_offer
            return super().get(request, **kwargs)
 
        def product_search(self, filters, page=1):
-           return special_product_search(filters, self.special_offer, page=page)
+           products = special_product_search(filters, self.special_offer, page=page)
+           log_special_offer_product_view(self.request.user, self.special_offer, products)
+           return products
 
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
            context['special_offer'] = self.special_offer
            return context
 
-Here we have separate methods that are forced to communicate with each other via
+Here we have separate methods that are forced to communicate with each other by
 setting data on ``self``. This is hacky and difficult to follow or reason about.
 Your ``product_search`` method now has some hidden inputs that could easily be
-missing. To be sure, you need to know what order your different methods are
-going to get called in. When you are forced to use ``self`` like this, it's
-worth reflecting that what you really wanted was a closure.
+missing. To be sure of correctness, you need to know what order your different
+methods are going to get called in. When you are forced to use ``self`` like
+this, it's worth reflecting on the `objects are a poor man's closures koan
+<https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent>`_.
 
 This kind of code is not uncommon with CBVs. For example, a lot of code that
 uses ``DetailView`` will need to use the fact that ``get_object`` method stores
 its result in ``self.object``.
 
-I recently refactored some CBV code that demonstrated exactly this issue into
-the FBV pattern I recommend above. The initial CBV code had a significant
-advantage over most CBV code you'll find — I was using `my own custom CBV base
-class <https://lukeplant.me.uk/blog/posts/my-approach-to-class-based-views/>`_,
-that I had specifically designed to avoid what I consider to be the worst
-features of Django's offering.
+I recently refactored some CBV views that demonstrated exactly this issue into
+the FBV pattern I recommend above. The initial CBV views had a significant
+advantage over most CBVs you'll find — I was using `my own custom CBV base class
+<https://lukeplant.me.uk/blog/posts/my-approach-to-class-based-views/>`_, that I
+had specifically designed to avoid what I consider to be the worst features of
+Django's offering.
 
-Despite this, rewriting as FBV yielded immediate improvements. There was a
-noticeable reduction in length (542 tokens vs 631). But far more important and
-impressive was the fact that I completed the task without any errors — the new
-code had no bugs and passed all the tests first time.
+Despite this advantage, rewriting as FBVs yielded immediate improvements. There
+was a noticeable reduction in length (542 tokens vs 631). But far more important
+and impressive was the fact that I completed the task without any errors — the
+new code had no bugs and passed all the tests first time.
 
 Was this because I'm some kind of super-programmer? No, it was simply that my
 linter was pointing out every single mistake I made while I was moving code
 around. Once I had fixed all the “undefined name” and “unused variable” errors,
 I was done. The reason for this is that **static analysis has a much easier time
-with code written with functions and closures**.
+with code written using functions and closures**.
 
 The same static analysis is almost impossible with the CBV version. Half of the
-local variables become instance variables, and that means the analysis would
-have to trace all the methods, work out when they are run, and whether
-everything has been set up before it is used etc.
+local variables become instance variables, and not set up in ``__init__``
+either. This means the analyser has to trace all the methods to see if any of
+them create the instance variables. Really, it then needs to check the order in
+which methods are called, to check whether they get set up before they are used.
+Most static analysis tools will not get very far with this, if they even attempt
+it, and it will be almost impossible to get past `this line
+<https://github.com/django/django/blob/8dabdd2cc559a66b519e2a88b64575d304b96ebe/django/views/generic/base.py#L98>`_.
 
-However, the tool is simply automating what you can do as a human. The fact that
-it fails with the CBV and succeeds with the FBV is just pointing out to you the
-much greater complexity of the latter, which has implications for any human
-maintainer of the code, as well as for tools.
+However, the static analysis tools we use are simply automating what you can do
+as a human. The fact that they fail with the CBV and succeed with the FBV is
+just pointing out to you the much greater complexity of the former, which has
+implications for any human maintainer of the code, as well as for tools.
 
 I'm not using anything fancy in terms of linters, by the way — just ``flake8``
 integrated into my editor. If you want to go further and add type hints and use
@@ -302,10 +311,8 @@ and make it possible to automatically verify even more things. On the other
 hand, if your CBV ``self`` object is a rag-bag of stuff as above it will be very
 hard for even the most advanced tools to help you.
 
-
-
-(TODO - run pylint over both sets of code. False positives?)
-
-
-
-(TODO - is it possible to implement using DetailView?)
+pylint gets further than flake8 in trying to detect typos in instance variables,
+and does a reasonable job. However it cannot detect the ordering issue
+mentioned, and it also complains about us setting instance variables outside of
+``__init__`` — a complaint which has some solid reasons, and is essentially
+recommending that we don't structure our code like this.

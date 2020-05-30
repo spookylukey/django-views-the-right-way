@@ -23,4 +23,6 @@ urlpatterns = [
     path('list-view-discussion/', include('the_right_way.list_view.discussion_urls')),
     path('delegation/', include('the_right_way.delegation.urls')),
     path('delegation-discussion/', include('the_right_way.delegation.discussion_urls')),
+    path('dependency-injection/', include('the_right_way.dependency_injection.urls')),
+    path('dependency-injection-discussion/', include('the_right_way.dependency_injection.discussion_urls')),
 ]

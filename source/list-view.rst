@@ -23,7 +23,7 @@ something like:
 
    def product_list(request):
        products = Product.objects.all()
-       paginator = Paginator(products, 25)  # Show 25 products per page.
+       paginator = Paginator(products, 5)  # Show 5 products per page.
        page_number = request.GET.get('page')
        page_obj = paginator.get_page(page_number)
        return TemplateResponse(request, 'shop/product_list.html', {
@@ -45,7 +45,7 @@ a bit shorter:
    def product_list(request):
        products = Product.objects.all()
        context = {}
-       context.update(paged_object_list_context(request, products, paginate_by=25))
+       context.update(paged_object_list_context(request, products, paginate_by=5))
        return TemplateResponse(request, 'shop/product_list.html', context)
 
 

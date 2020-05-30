@@ -96,7 +96,7 @@ from our two entry-point view functions.
        if context is None:
            context = {}
        queryset = apply_product_filtering(request, queryset)
-       context.update(paged_object_list_context(request, queryset, paginate_by=25))
+       context.update(paged_object_list_context(request, queryset, paginate_by=5))
        return TemplateResponse(request, template_name, context)
 
 
@@ -290,7 +290,7 @@ without any helpers):
            'page_obj': page_obj,
        })
 
-This is a clear win by any code size metric.
+This is a clear win for FBVs by any code size metric.
 
 Thankfully the Django docs do add a “don't try this at home kids” warning and
 mention that many mixins don't actually work together. But we need to add to

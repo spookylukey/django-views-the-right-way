@@ -1,1 +1,1 @@
-from . import url_checker
+from . import url_checker  # noqa

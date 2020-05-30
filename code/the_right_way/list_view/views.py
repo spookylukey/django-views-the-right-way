@@ -12,7 +12,7 @@ def product_list_unpaged(request):
 
 def product_list(request):
     products = Product.objects.all()
-    paginator = Paginator(products, 25)  # Show 25 products per page.
+    paginator = Paginator(products, 5)  # Show 25 products per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return TemplateResponse(request, 'shop/product_list.html', {
