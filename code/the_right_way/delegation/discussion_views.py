@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
+
 from shop.models import SpecialOffer
 
 

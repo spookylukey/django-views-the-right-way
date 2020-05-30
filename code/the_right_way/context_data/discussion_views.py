@@ -1,6 +1,6 @@
-from django.views.generic import TemplateView
-
 from datetime import date
+
+from django.views.generic import TemplateView
 
 
 class HomeView(TemplateView):

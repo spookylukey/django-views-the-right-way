@@ -1,5 +1,6 @@
 from datetime import date
-from django.http import HttpResponse, Http404
+
+from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 from django.urls import get_resolver, get_urlconf
 

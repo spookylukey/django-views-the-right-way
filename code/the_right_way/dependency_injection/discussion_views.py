@@ -3,7 +3,9 @@ from django.views.generic import TemplateView
 
 from shop.models import SpecialOffer
 
-from .search import product_search as all_product_search, special_product_search, Filter
+from .search import Filter
+from .search import product_search as all_product_search
+from .search import special_product_search
 
 
 class ProductSearchBase(TemplateView):

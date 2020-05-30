@@ -16,14 +16,12 @@
 # - Probably lots of bugs...
 
 import uuid
-
 from inspect import Parameter, signature
 
 from django.conf import settings
 from django.core.checks import Error, Tags, Warning, register
-from django.urls import URLPattern, URLResolver, get_resolver
+from django.urls import URLPattern, URLResolver, converters, get_resolver
 from django.urls.resolvers import RoutePattern
-from django.urls import converters
 
 
 @register(Tags.urls)

@@ -1,8 +1,9 @@
-from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 
 from shop.models import SpecialOffer
-from .search import product_search, special_product_search, Filter
+
+from .search import Filter, product_search, special_product_search
 
 
 def product_list(request):
