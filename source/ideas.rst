@@ -1,106 +1,15 @@
-DONE
-====
-
-
-
-
-- The Pattern
-
-- How to do X with a function based view: do X
-  - It's easy!
-
-
-- Context data
-
-  - Discussion: embarrassingly simple
-
-- Common context data
-
-  Discussion: testable code vs mixins
-
-
-- Accept a URL parameter
-  - Discussion: perils of generic code
-  - Discussion: checkable URLconf
-
-
-
-
-- Display an object.
-  - Show full pattern with raise Http404
-
-  - Discussion - DetailView vs get_object_or_404
-
-
-- Display a list of objects
-
-
-
----
-Custom logic at the start - delegation
-
-- Example product list view,
-  second is like the first but a "special offers" page, with extra
-  info at the top.
-
-
----
-
-Custom logic in the middle - Callbacks
-
-- Example, our product listing page actually uses some different services
-  for getting product lists, not QuerySet based. Could be some other ORM,
-  or external HTTP service.
-
- 
-  We've been given this function:
-
-  get_product_list(filter_dict, sort_spec)
-
-  For special offers, we have to pass {'special_offer': '<special-offer-name>'} in filter_dict
-
-  Main product_list function will build filter_dict, we need to somehow add to it.
-
-  Also, for the special offer case, just after we call ``get_product_list``, we
-  also want to do some extra logging of the product list that got returned, for
-  some reason, along with with some data from the request (like user etc.)
-  
-  and want 
-  Could pass the extra arguments through, but that is ugly.
-
-
-
 TODO
 ====
-
-
- - Discussion - Callbacks vs template method
-
-
-Discussion - closures vs instances
-
-   - Use CCIW example of PopupEmailAction
-
-
----
 
 Customising the start - pre-conditions
 
 - Decorators
 
-
----
-
-
+- Forms
 
 - Redirects
   - HTTP level
   - Discussion: codeless views? or “look ma, no code!”
-
-
-
-  Discussion -
-
 
 
   - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView
@@ -154,26 +63,42 @@ Function wrapper of CBV::
         )(request, pk=pk)
 
 
+URL conf
 
+RedirectView vs make_redirect
+
+Discussion - views in the URLconf
+
+-----
+
+Forms
+
+Ways in which FormView will fail you:
+
+1) Multiple forms on same page (alternatives to each other)
+
+2) Special flow. For example, in some cases, you want extra confirmation.
+   Like "This will create an Foo with the same name as an existing Foo, are you sure?".
+   In this case you need to re-display the form but differently, with a "confirm" button
+   instead of just "save", and then need to be able to detect the "confirm" button
+   was pressed.
+
+   Totally straightforward if you are in charge of the control flow yourself, horrible
+   if you are trying to fit into FormView
+
+
+-----
 
 
 
 - Simple customisation
   - keyword args in the URLconf
 
-- Custom logic
-
-  - Write some code. Do it yourself, it's not hard.
-  - Discussion: codeless views?
-    History of CBVs.
-
 
 
 Customising the end
 
 
-
-Security
 
 
 Thin views, fat models
@@ -182,75 +107,6 @@ Thin views, fat models
 
 
 ---
-
-CCIW - Transformed PopupEmailAction to CBVs
-
-- Use of ``self.foo`` to pass data around is eliminated - just have ``foo``
-  - explicitly passed
-
-  - closures
-
-- no hidden inputs
-- everything checked by flake8, even better by mypy
-  - positively and negatively - unused local variables highlighted, typos
-
-
-
-Explicit contract - defined by the signature of the functions.
- - this is wonderful for code comprehension
- - it also works great for static type checkers
-
-
-
-Length - not the most important measure
-
-Code got significantly more succinct:
-
-(as formatted by ``black``:
-Before:
-631 tokens
-83 non-blank lines
-103 total lines
-
-After:
-542 tokens
-86 non-blank lines
-96 total lines
-
-(tokens are the most objective measure of size by my book)
-
-This is despite the fact that before, I was using only minimal CBV base classes
-that I had explicitly designed for my own purposes. It would have been more
-extreme if I had been trying to use Django's CBVs.
-
-
-Accuracy - the refactor was bugless on my first attempt, which is pretty much a
-miracle for me - except it wasn't a miracle, there were good reasons why it
-happened. Instead of common setup code that was storing data on ``self`` for use
-by other methods, I was just using local variables, and so my linter was pointing out
-my mistakes every step of the way - e.g. undefined and unused locals - until
-everything was in shape, at which point the code worked. (I'm using flake8 in
-emacs, but most IDEs will have just as capable linters that will catch the same
-errors).
-
-The opposite refactoring would not have worked like this. In Python, if you are
-sticking attributes onto ``self`` at various points, and reading them at others,
-it's going to be extremely hard for any static analysis to work out of you are
-doing that correctly.
-
-
-Automated static analysis that linters can do is just a sign of a deeper
-reality - the FBV is simpler and easier to understand. The fact that it reaches
-a stage where, despite Python's dynamism, an automated process can understand it
-and catch most errors is great, but what is even better is the benefit for
-humans trying to understand or modify this kind of code.
-
-In doing this refactoring, I had just one twinge of sadness — my code seems a
-little bit plainer now. I have fewer OOP hierarchies and clever tricks to feel
-smug about. But this is misplaced sadness. If you are into smugness-driven
-development, nothing can beat the feeling you get when you come back to some
-code 3 months or 3 years later and find it's so easy to work with that after
-doing ``git praise`` you feel the need to give yourself a little hug.
 
 
 Security:
@@ -301,52 +157,11 @@ far more base classes and complexity.
 
 
 
-URL checking
-
-https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d
-
-Especially useful if you have registered a view in more than one way
-
-
-e.g.
-
-/foo/<int:year>/
-
-/foo/<int:from_year>-<int:to_year>/
-
-
-def show_foo(request, year=None, from_year=None, to_year=None)
-
-
-Type checker will ensure that you don't accidentally have something like:
-
-def show_foo(request, year, from_year=None, to_year=None)
-
-
------
-Redirects
- - HTTP
-
-
-URL conf
-
-RedirectView vs make_redirect
-
-Discussion - views in the URLconf
-
------
-
-
 View factory / mass produced views
 
 - Redirect views for a whole family of views, each needing same kwargs passed on.
 
   - Will do the same custom logic each time.
-
------
-
-Discussion - convention or configuration
-
 
 
 
@@ -413,21 +228,6 @@ is many times easier to understand, and no crazy metaclass fixes are necessary.
 
 
 ------
-Forms
-
-Ways in which it will fail you:
-
-1) Multiple forms on same page (alternatives to each other)
-
-2) Special flow. For example, in some cases, you want extra confirmation.
-   Like "This will create an Foo with the same name as an existing Foo, are you sure?".
-   In this case you need to re-display the form but differently, with a "confirm" button
-   instead of just "save", and then need to be able to detect the "confirm" button
-   was pressed.
-
-   Totally straightforward if you are in charge of the control flow yourself, horrible
-   if you are trying to fit into FormView
-
 
 ------
 
@@ -448,38 +248,28 @@ https://youtu.be/S0No2zSJmks?t=3095
 -----
 
 
-from django.views.generic import ListView
-from django.views.generic.detail import SingleObjectMixin
-from books.models import Publisher
 
-class PublisherDetail(SingleObjectMixin, ListView):
-    paginate_by = 2
-    template_name = "books/publisher_detail.html"
+CCIW - Transformed PopupEmailAction to CBVs
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Publisher.objects.all())
-        return super().get(request, *args, **kwargs)
+(as formatted by ``black``:
+Before:
+631 tokens
+83 non-blank lines
+103 total lines
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['publisher'] = self.object
-        return context
+After:
+542 tokens
+86 non-blank lines
+96 total lines
 
-    def get_queryset(self):
-        return self.object.book_set.all()
+(tokens are the most objective measure of size by my book)
 
 
+DI:
 
-from django.shortcuts import get_object_or_404
-from django.template.response import TemplateResponse
-
-
-def publisher_detail(request, slug):
-    publisher = get_object_or_404(Publisher.objects.all(), slug=slug)
-    paginator = Paginator(publisher.book_set.all(), 2)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return TemplateResponse(request, 'books/publisher_detail.html', {
-        'publisher': publisher,
-        'page_obj': page_obj,
-    })
+[Alt: Misplaced sadness! Where a developer wishes to be smug, they should always
+write plain code. To come with a bucket full of tricks, is to come with an
+inability to minister to the vanity of you future self when you come back in 3
+months or 3 years time to maintain it, which a sensible developer will always
+avoid. If you have the misfortune of knowing anything fancy, you should conceal
+it as best you can.]

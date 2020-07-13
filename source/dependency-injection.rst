@@ -168,7 +168,9 @@ have to modify its signature, nor the signature of the ``searcher`` parameter it
 expects. Also, this works really well with static analysis, like the linters
 that are built-in to many IDEs which can point out undefined names and so on.
 
-Next up: TODO preconditions
+In our theme of re-using logic, I want to cover :doc:`preconditions`, but before
+that we're going to go back to some basics, the first of which is
+:doc:`redirects` and then :doc:`forms`.
 
 
 Note — terminology
@@ -243,7 +245,7 @@ We might do something like this:
 .. code-block:: python
 
    class SpecialOfferDetail(ProductSearchBase):
-       template_name = 'shop/special_offer_detail_unpaged.html'
+       template_name = 'shop/special_offer_detail.html'
 
        def get(self, request, *args, **kwargs):
            special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=kwargs['slug'])
@@ -316,3 +318,12 @@ and does a reasonable job. However it cannot detect the ordering issue
 mentioned, and it also complains about us setting instance variables outside of
 ``__init__`` — a complaint which has some solid reasons, and is essentially
 recommending that we don't structure our code like this.
+
+When I had completed this refactoring, which in the end completely removed my
+custom CBV base class, I confess I had a little twinge of sadness — my final
+code seemed just a little bit… *plain*. I had fewer OOP hierarchies and clever
+tricks to feel smug about. But this is misplaced sadness. If you are into
+smugness-driven development, nothing can beat the feeling you get when you come
+back to some code 3 months or 3 years later and find it's so straightforward to
+work with that after doing ``git praise`` you feel the need to give yourself a
+little hug.
