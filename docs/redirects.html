@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirects</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Forms" href="forms.html" />
+    <link rel="prev" title="Custom logic in the middle — dependency injection" href="dependency-injection.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="dependency-injection.html" title="Previous document">Custom logic in the middle — dependency injection</a>
+        </li>
+        <li>
+          <a href="forms.html" title="Next document">Forms</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="redirects">
+<h1>Redirects<a class="headerlink" href="#redirects" title="Permalink to this headline">¶</a></h1>
+<p>To implement redirects in Django, you need to know how they work in HTTP.</p>
+<p>In HTTP, a redirect is an HTTP response with a status code in the 300-399 range,
+and a <code class="docutils literal notranslate"><span class="pre">Location</span></code> header that tells a browser which URL to go to. If your view
+returns a response like this, the browser will immediately make another request,
+to the specified URL.</p>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection">different 3XX codes have different meanings</a> -
+make sure you use the right one.</p>
+<p>That is 95% of what you need to know at the HTTP level. In Django, the most
+common functionality has been wrapped up for you in <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpResponseRedirect">HttpResponseRedirect</a>.</p>
+<p>So this view, for example, does an unconditional, temporary redirect:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s1">&#39;/other/url/&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">307</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition, Django provides some shortcuts:</p>
+<ul>
+<li><p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/#redirect">redirect</a>, a
+utility that returns an HTTP response object and has built-in logic for
+redirecting to named views, and other things.</p></li>
+<li><p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#redirectview">RedirectView</a>
+— a class that provides an entire view that does redirection, and has a few
+neat features like being able to look up view by name, including arguments
+from a path, and also copy the query string. I recommend using this if the
+only thing that your view does is a redirect, otherwise just use
+<code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code> objects directly.</p>
+<p>For example, if you have an old URL at <code class="docutils literal notranslate"><span class="pre">old-path/&lt;number&gt;/</span></code> and want to
+permanently redirect it to <code class="docutils literal notranslate"><span class="pre">new-path/&lt;number&gt;/</span></code>, you can use do it from
+<code class="docutils literal notranslate"><span class="pre">urls.py</span></code> like this:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;old-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">RedirectView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span>
+        <span class="n">pattern_name</span><span class="o">=</span><span class="s1">&#39;my_view&#39;</span><span class="p">,</span>
+        <span class="n">permanent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;new-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">my_view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_view&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p>That’s it! On to <a class="reference internal" href="forms.html"><span class="doc">Forms</span></a>.</p>
+<div class="section" id="discussion-configuration-in-urls-py">
+<h2>Discussion: configuration in urls.py<a class="headerlink" href="#discussion-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
+<p>If you can reduce a set of common functionality down to something that can be
+configured directly in <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>, I think this is quite a nice pattern for
+making very simple views.</p>
+<p>For redirects, <code class="docutils literal notranslate"><span class="pre">RedirectView</span></code> can work nicely. In my opinion once you get more
+complicated and need other logic, a function that uses <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code> objects
+will serve you better, or perhaps a function that <strong>delegates</strong> to
+<code class="docutils literal notranslate"><span class="pre">RedirectView</span></code>, rather than subclassing it.</p>
+<p>Delegating to <code class="docutils literal notranslate"><span class="pre">RedirectView</span></code> is not perhaps the most obvious thing, due to how
+<code class="docutils literal notranslate"><span class="pre">as_view</span></code> works. It looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
+   <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="n">path</span><span class="p">(</span><span class="s1">&#39;old-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">my_old_view</span><span class="p">)</span>
+       <span class="n">path</span><span class="p">(</span><span class="s1">&#39;new-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">my_view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_view&#39;</span><span class="p">),</span>
+   <span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_old_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">RedirectView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span>
+           <span class="n">pattern_name</span><span class="o">=</span><span class="s1">&#39;my_view&#39;</span><span class="p">,</span>
+           <span class="n">permanent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+           <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="discussion-fbv-configuration-in-urls-py">
+<h2>Discussion: FBV configuration in urls.py<a class="headerlink" href="#discussion-fbv-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
+<p>We should note that the pattern of defining views entirely within <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>
+can be achieved just as well using functions as well as <code class="docutils literal notranslate"><span class="pre">View</span></code> sub-classes.</p>
+<p>Here are two methods for doing this:</p>
+<ul>
+<li><p>Extra keyword arguments in urls.py — see the docs for <a class="reference external" href="https://docs.djangoproject.com/en/2.2/topics/http/urls/#views-extra-options">passing extra options
+to view functions</a>.</p>
+<p>So, for example, if we want to reproduce the functionality of
+<code class="docutils literal notranslate"><span class="pre">RedirectView</span></code>, complete with ”configure it within urls.py”, we could have a
+view function like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_redirect</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">pattern_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+   <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">pattern_name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+   <span class="c1"># More of ``RedirectView`` logic here, using ``permanent`` and</span>
+   <span class="c1"># ``query_string`` etc.</span>
+   <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
+
+ <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="n">path</span><span class="p">(</span><span class="s1">&#39;old-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">do_redirect</span><span class="p">,</span> <span class="p">{</span>
+         <span class="s1">&#39;pattern_name&#39;</span><span class="p">:</span> <span class="s1">&#39;my_view&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;permanent&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+         <span class="s1">&#39;query_string&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+     <span class="p">}),</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>View factories.</p>
+<p>One of the issues with the above is you have a possibility of a clash between
+the contents of the captured <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> and the other keyword arguments the
+view accepts. We can solve this using a function that returns a view function
+(in the same way that <code class="docutils literal notranslate"><span class="pre">RedirectView.as_view</span></code> returns a view function). I call
+this a “view factory”. The outer function has keyword arguments for configuring
+the view, the inner function is the view itself:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_redirector</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">pattern_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+   <span class="k">def</span> <span class="nf">redirector</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+       <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">pattern_name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+       <span class="c1"># More of ``RedirectView`` logic here, using ``permanent`` and</span>
+       <span class="c1"># ``query_string`` etc.</span>
+       <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">redirector</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
+
+ <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="n">path</span><span class="p">(</span><span class="s1">&#39;old-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">make_redirector</span><span class="p">(</span>
+         <span class="n">pattern_name</span><span class="o">=</span><span class="s1">&#39;my_view&#39;</span><span class="p">,</span>
+         <span class="n">permanent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+         <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+     <span class="p">)),</span>
+ <span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="dependency-injection.html" title="Previous document">Custom logic in the middle — dependency injection</a>
+        </li>
+        <li>
+          <a href="forms.html" title="Next document">Forms</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Redirects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-configuration-in-urls-py">Discussion: configuration in urls.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="dependency-injection.html" title="previous chapter">Custom logic in the middle — dependency injection</a></li>
+      <li>Next: <a href="forms.html" title="next chapter">Forms</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/redirects.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

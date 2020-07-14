@@ -72,7 +72,8 @@ that for clarity, especially to highlight things that have changed. So this
 example adds one line to our pattern, and I’ve formatted it accordingly.
 There is no need to following the formatting, and you (or your tools) might
 have other ideas!</p>
-<p><strong>Imports:</strong> For brevity I’ll omit any imports I’ve already mentioned.</p>
+<p><strong>Imports:</strong> For brevity I’ll omit any imports I’ve already mentioned. If you
+want full source code, have a look at the <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/tree/master/code">code folder</a>.</p>
 </div>
 <p>The template will decide how to format the date (most likely using the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date">date
 filter</a>),
@@ -150,7 +151,7 @@ comprehension, not typing reduction.</strong></p>
 <p>For example, if we wanted, we could reduce the “repetition” of having
 <code class="docutils literal notranslate"><span class="pre">request</span></code> as an parameter to each view function using threadlocals and an
 import. We could go further, and remove the import using some magic like web2py
-does. But <a class="reference external" href="https://youtu.be/S0No2zSJmks?t=1716">we recognise both of these as bad ideas</a>, because they reduces clarity. Those
+does. But <a class="reference external" href="https://youtu.be/S0No2zSJmks?t=1716">we recognise both of these as bad ideas</a>, because they reduce clarity. Those
 functions have <code class="docutils literal notranslate"><span class="pre">request</span></code> as a parameter because it is an input to the
 function. Making it an implicit one, instead of an explicit one, would hurt you
 in lots of ways.</p>
@@ -243,6 +244,9 @@ it is difficult to argue this is a win for comprehension.</p>
 <li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
 </ul>
 
 

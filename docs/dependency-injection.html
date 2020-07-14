@@ -14,6 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Redirects" href="redirects.html" />
     <link rel="prev" title="Custom logic at the start — delegation" href="delegation.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -34,6 +35,10 @@
         <li>
           &larr;
           <a href="delegation.html" title="Previous document">Custom logic at the start — delegation</a>
+        </li>
+        <li>
+          <a href="redirects.html" title="Next document">Redirects</a>
+          &rarr;
         </li>
     </ul>
   </nav>
@@ -183,7 +188,9 @@ the common logic.</p>
 have to modify its signature, nor the signature of the <code class="docutils literal notranslate"><span class="pre">searcher</span></code> parameter it
 expects. Also, this works really well with static analysis, like the linters
 that are built-in to many IDEs which can point out undefined names and so on.</p>
-<p>Next up: TODO preconditions</p>
+<p>In our theme of re-using logic, I want to cover <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>, but before
+that we’re going to go back to some basics, the first of which is
+<a class="reference internal" href="redirects.html"><span class="doc">Redirects</span></a> and then <a class="reference internal" href="forms.html"><span class="doc">Forms</span></a>.</p>
 <div class="section" id="note-terminology">
 <h2>Note — terminology<a class="headerlink" href="#note-terminology" title="Permalink to this headline">¶</a></h2>
 <p>In OO languages, the standard solution to this question is the “strategy
@@ -237,11 +244,12 @@ method. The base class might look something like this:</p>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Now, how do we implement <code class="docutils literal notranslate"><span class="pre">product_search</span></code> for our “special offer“ subclass? We
-need access to the <code class="docutils literal notranslate"><span class="pre">special_offer</span></code> object that we already looked up somewhere.
-We might do something like this:</p>
+<p>Now, how do we implement <code class="docutils literal notranslate"><span class="pre">product_search</span></code> for our “special offer“ subclass? To
+call <code class="docutils literal notranslate"><span class="pre">special_product_search</span></code>, we need access to the <code class="docutils literal notranslate"><span class="pre">special_offer</span></code> object
+that we already looked up in a different method. We could solve this by saving
+the object onto <code class="docutils literal notranslate"><span class="pre">self</span></code>, something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SpecialOfferDetail</span><span class="p">(</span><span class="n">ProductSearchBase</span><span class="p">):</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;shop/special_offer_detail_unpaged.html&#39;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;shop/special_offer_detail.html&#39;</span>
 
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">special_offer</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">SpecialOffer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;slug&#39;</span><span class="p">])</span>
@@ -304,6 +312,15 @@ and does a reasonable job. However it cannot detect the ordering issue
 mentioned, and it also complains about us setting instance variables outside of
 <code class="docutils literal notranslate"><span class="pre">__init__</span></code> — a complaint which has some solid reasons, and is essentially
 recommending that we don’t structure our code like this.</p>
+<p>When I had completed this refactoring, which in the end completely removed my
+custom CBV base class, I confess I had a little twinge of sadness — my final
+code seemed just a little bit… <em>plain</em>. I now had just a bunch of simple
+functions and a few closures, and fewer OOP hierarchies and clever tricks to
+feel smug about. But this is misplaced sadness. If you are into smugness-driven
+development, nothing can beat the feeling you get when you come back to some
+code 3 months or 3 years later and find it’s so straightforward to work with
+that, after doing <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">praise</span></code>, you feel the need to give yourself a little
+hug.</p>
 </div>
 </div>
 
@@ -316,6 +333,10 @@ recommending that we don’t structure our code like this.</p>
         <li>
           &larr;
           <a href="delegation.html" title="Previous document">Custom logic at the start — delegation</a>
+        </li>
+        <li>
+          <a href="redirects.html" title="Next document">Redirects</a>
+          &rarr;
         </li>
     </ul>
   </nav>
@@ -340,6 +361,9 @@ recommending that we don’t structure our code like this.</p>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-di-vs-inheritance">Discussion: DI vs inheritance</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
 </ul>
 
 
@@ -357,6 +381,7 @@ recommending that we don’t structure our code like this.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="delegation.html" title="previous chapter">Custom logic at the start — delegation</a></li>
+      <li>Next: <a href="redirects.html" title="next chapter">Redirects</a></li>
   </ul></li>
 </ul>
 </div>

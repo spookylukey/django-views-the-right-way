@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>DONE</title>
+    <title>TODO</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -37,81 +37,16 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="done">
-<h1>DONE<a class="headerlink" href="#done" title="Permalink to this headline">¶</a></h1>
-<ul>
-<li><p>The Pattern</p></li>
-<li><p>How to do X with a function based view: do X
-- It’s easy!</p></li>
-<li><p>Context data</p>
-<ul class="simple">
-<li><p>Discussion: embarrassingly simple</p></li>
-</ul>
-</li>
-<li><p>Common context data</p>
-<p>Discussion: testable code vs mixins</p>
-</li>
-<li><p>Accept a URL parameter
-- Discussion: perils of generic code
-- Discussion: checkable URLconf</p></li>
-<li><p>Display an object.
-- Show full pattern with raise Http404</p>
-<ul class="simple">
-<li><p>Discussion - DetailView vs get_object_or_404</p></li>
-</ul>
-</li>
-<li><p>Display a list of objects</p></li>
-</ul>
-<p>—
-Custom logic at the start - delegation</p>
-<ul class="simple">
-<li><p>Example product list view,
-second is like the first but a “special offers” page, with extra
-info at the top.</p></li>
-</ul>
-<p>—</p>
-<p>Custom logic in the middle - Callbacks</p>
-<ul>
-<li><p>Example, our product listing page actually uses some different services
-for getting product lists, not QuerySet based. Could be some other ORM,
-or external HTTP service.</p>
-<p>We’ve been given this function:</p>
-<p>get_product_list(filter_dict, sort_spec)</p>
-<p>For special offers, we have to pass {‘special_offer’: ‘&lt;special-offer-name&gt;’} in filter_dict</p>
-<p>Main product_list function will build filter_dict, we need to somehow add to it.</p>
-<p>Also, for the special offer case, just after we call <code class="docutils literal notranslate"><span class="pre">get_product_list</span></code>, we
-also want to do some extra logging of the product list that got returned, for
-some reason, along with with some data from the request (like user etc.)</p>
-<p>and want
-Could pass the extra arguments through, but that is ugly.</p>
-</li>
-</ul>
-</div>
-<div class="section" id="todo">
+  <div class="section" id="todo">
 <h1>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h1>
-<blockquote>
-<div><ul class="simple">
-<li><p>Discussion - Callbacks vs template method</p></li>
-</ul>
-</div></blockquote>
-<p>Discussion - closures vs instances</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Use CCIW example of PopupEmailAction</p></li>
-</ul>
-</div></blockquote>
-<p>—</p>
 <p>Customising the start - pre-conditions</p>
 <ul class="simple">
 <li><p>Decorators</p></li>
-</ul>
-<p>—</p>
-<ul>
+<li><p>Forms</p></li>
 <li><p>Redirects
 - HTTP level
 - Discussion: codeless views? or “look ma, no code!”</p>
-<p>Discussion -</p>
-<ul class="simple">
+<ul>
 <li><p>RedirectView - rewrite example in docs - <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView">https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView</a></p></li>
 </ul>
 </li>
@@ -165,78 +100,13 @@ return super().get_redirect_url(<a href="#id5"><span class="problematic" id="id6
     <span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>Simple customisation
-- keyword args in the URLconf</p></li>
-<li><p>Custom logic</p>
-<ul>
-<li><p>Write some code. Do it yourself, it’s not hard.</p></li>
-<li><p>Discussion: codeless views?
-History of CBVs.</p></li>
-</ul>
-</li>
-</ul>
+<p>URL conf</p>
+<p>RedirectView vs make_redirect</p>
+<p>Discussion - views in the URLconf</p>
+<hr class="docutils" />
 <p>Customising the end</p>
-<p>Security</p>
 <p>Thin views, fat models</p>
 <p>—</p>
-<p>CCIW - Transformed PopupEmailAction to CBVs</p>
-<ul class="simple">
-<li><p>Use of <code class="docutils literal notranslate"><span class="pre">self.foo</span></code> to pass data around is eliminated - just have <code class="docutils literal notranslate"><span class="pre">foo</span></code>
-- explicitly passed</p>
-<ul>
-<li><p>closures</p></li>
-</ul>
-</li>
-<li><p>no hidden inputs</p></li>
-<li><p>everything checked by flake8, even better by mypy
-- positively and negatively - unused local variables highlighted, typos</p></li>
-</ul>
-<dl class="simple">
-<dt>Explicit contract - defined by the signature of the functions.</dt><dd><ul class="simple">
-<li><p>this is wonderful for code comprehension</p></li>
-<li><p>it also works great for static type checkers</p></li>
-</ul>
-</dd>
-</dl>
-<p>Length - not the most important measure</p>
-<p>Code got significantly more succinct:</p>
-<p>(as formatted by <code class="docutils literal notranslate"><span class="pre">black</span></code>:
-Before:
-631 tokens
-83 non-blank lines
-103 total lines</p>
-<p>After:
-542 tokens
-86 non-blank lines
-96 total lines</p>
-<p>(tokens are the most objective measure of size by my book)</p>
-<p>This is despite the fact that before, I was using only minimal CBV base classes
-that I had explicitly designed for my own purposes. It would have been more
-extreme if I had been trying to use Django’s CBVs.</p>
-<p>Accuracy - the refactor was bugless on my first attempt, which is pretty much a
-miracle for me - except it wasn’t a miracle, there were good reasons why it
-happened. Instead of common setup code that was storing data on <code class="docutils literal notranslate"><span class="pre">self</span></code> for use
-by other methods, I was just using local variables, and so my linter was pointing out
-my mistakes every step of the way - e.g. undefined and unused locals - until
-everything was in shape, at which point the code worked. (I’m using flake8 in
-emacs, but most IDEs will have just as capable linters that will catch the same
-errors).</p>
-<p>The opposite refactoring would not have worked like this. In Python, if you are
-sticking attributes onto <code class="docutils literal notranslate"><span class="pre">self</span></code> at various points, and reading them at others,
-it’s going to be extremely hard for any static analysis to work out of you are
-doing that correctly.</p>
-<p>Automated static analysis that linters can do is just a sign of a deeper
-reality - the FBV is simpler and easier to understand. The fact that it reaches
-a stage where, despite Python’s dynamism, an automated process can understand it
-and catch most errors is great, but what is even better is the benefit for
-humans trying to understand or modify this kind of code.</p>
-<p>In doing this refactoring, I had just one twinge of sadness — my code seems a
-little bit plainer now. I have fewer OOP hierarchies and clever tricks to feel
-smug about. But this is misplaced sadness. If you are into smugness-driven
-development, nothing can beat the feeling you get when you come back to some
-code 3 months or 3 years later and find it’s so easy to work with that after
-doing <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">praise</span></code> you feel the need to give yourself a little hug.</p>
 <p>Security:</p>
 <p>e.g. this view that shows the return page when people come back from PayPal. It
 needs <code class="docutils literal notranslate"><span class="pre">csrf_exempt</span></code> because PayPal insists on making browsers do a POST
@@ -275,19 +145,6 @@ everything I need:</p>
 </div>
 <p>Which would you rather? And this is a very simple example, real CBVs often gain
 far more base classes and complexity.</p>
-<p>URL checking</p>
-<p><a class="reference external" href="https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d">https://gist.github.com/spookylukey/ebc68928d831da1f89bce15d9e18809d</a></p>
-<p>Especially useful if you have registered a view in more than one way</p>
-<p>e.g.</p>
-<p>/foo/&lt;int:year&gt;/</p>
-<p>/foo/&lt;int:from_year&gt;-&lt;int:to_year&gt;/</p>
-<p>def show_foo(request, year=None, from_year=None, to_year=None)</p>
-<p>Type checker will ensure that you don’t accidentally have something like:</p>
-<p>def show_foo(request, year, from_year=None, to_year=None)</p>
-<p>URL conf</p>
-<p>RedirectView vs make_redirect</p>
-<p>Discussion - views in the URLconf</p>
-<hr class="docutils" />
 <p>View factory / mass produced views</p>
 <ul class="simple">
 <li><p>Redirect views for a whole family of views, each needing same kwargs passed on.</p>
@@ -296,8 +153,6 @@ far more base classes and complexity.</p>
 </ul>
 </li>
 </ul>
-<hr class="docutils" />
-<p>Discussion - convention or configuration</p>
 <hr class="docutils" />
 <p>MRO problem:</p>
 <p>Before:</p>
@@ -353,18 +208,7 @@ far more base classes and complexity.</p>
 tokens vs 102), despite the fact that it includes all the form flow control
 logic and all other logic, rather than delegating to base classes. However, it
 is many times easier to understand, and no crazy metaclass fixes are necessary.</p>
-<p>Ways in which it will fail you:</p>
-<ol class="arabic">
-<li><p>Multiple forms on same page (alternatives to each other)</p></li>
-<li><p>Special flow. For example, in some cases, you want extra confirmation.
-Like “This will create an Foo with the same name as an existing Foo, are you sure?”.
-In this case you need to re-display the form but differently, with a “confirm” button
-instead of just “save”, and then need to be able to detect the “confirm” button
-was pressed.</p>
-<p>Totally straightforward if you are in charge of the control flow yourself, horrible
-if you are trying to fit into FormView</p>
-</li>
-</ol>
+<hr class="docutils" />
 <hr class="docutils" />
 <p><a class="reference external" href="https://twitter.com/rasulkireev/status/1230974745644060678">https://twitter.com/rasulkireev/status/1230974745644060678</a></p>
 <p><a class="reference external" href="https://twitter.com/rasulkireev/status/1231267109717626880">https://twitter.com/rasulkireev/status/1231267109717626880</a></p>
@@ -372,40 +216,24 @@ if you are trying to fit into FormView</p>
 <p>Brandon Rhodes on Python mixins:</p>
 <p><a class="reference external" href="https://youtu.be/S0No2zSJmks?t=3095">https://youtu.be/S0No2zSJmks?t=3095</a></p>
 <hr class="docutils" />
-<p>from django.views.generic import ListView
-from django.views.generic.detail import SingleObjectMixin
-from books.models import Publisher</p>
-<dl>
-<dt>class PublisherDetail(SingleObjectMixin, ListView):</dt><dd><p>paginate_by = 2
-template_name = “books/publisher_detail.html”</p>
-<dl class="simple">
-<dt>def get(self, request, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs):</dt><dd><p>self.object = self.get_object(queryset=Publisher.objects.all())
-return super().get(request, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)</p>
-</dd>
-<dt>def get_context_data(self, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs)
-context[‘publisher’] = self.object
-return context</p>
-</dd>
-<dt>def get_queryset(self):</dt><dd><p>return self.object.book_set.all()</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>from django.shortcuts import get_object_or_404
-from django.template.response import TemplateResponse</p>
-<dl>
-<dt>def publisher_detail(request, slug):</dt><dd><p>publisher = get_object_or_404(Publisher.objects.all(), slug=slug)
-paginator = Paginator(publisher.book_set.all(), 2)
-page_number = request.GET.get(‘page’)
-page_obj = paginator.get_page(page_number)
-return TemplateResponse(request, ‘books/publisher_detail.html’, {</p>
-<blockquote>
-<div><p>‘publisher’: publisher,
-‘page_obj’: page_obj,</p>
-</div></blockquote>
-<p>})</p>
-</dd>
-</dl>
+<p>CCIW - Transformed PopupEmailAction to CBVs</p>
+<p>(as formatted by <code class="docutils literal notranslate"><span class="pre">black</span></code>:
+Before:
+631 tokens
+83 non-blank lines
+103 total lines</p>
+<p>After:
+542 tokens
+86 non-blank lines
+96 total lines</p>
+<p>(tokens are the most objective measure of size by my book)</p>
+<p>DI:</p>
+<p>[Alt: Misplaced sadness! Where a developer wishes to be smug, they should always
+write plain code. To come with a bucket full of tricks, is to come with an
+inability to minister to the vanity of you future self when you come back in 3
+months or 3 years time to maintain it, which a sensible developer will always
+avoid. If you have the misfortune of knowing anything fancy, you should conceal
+it as best you can.]</p>
 </div>
 
 
@@ -433,6 +261,9 @@ return TemplateResponse(request, ‘books/publisher_detail.html’, {</p>
 <li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
 </ul>
 
 

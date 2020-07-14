@@ -40,12 +40,12 @@ is**, and they have some idea of what they want this view to do, then they will
 likely have a good idea of what code they need to write. The code structure in
 front of them will not be an obstacle.
 
-The same is not true of using CBVs are a starting point. As soon as you need any
+The same is not true of using CBVs as a starting point. As soon as you need any
 logic, you have to start adding configuration or defining methods, which brings
 you pain:
 
-* You've got to know which methods to define, which involves knowing this
-  massive API.
+* You've got to know which methods or attributes to define, which involves
+  knowing a massive API.
 * You could easily get it wrong in a way which introduces serious bugs. (TODO
   link)
 * You've got to add the method, which is extra boilerplate.
@@ -58,4 +58,4 @@ switch to an FBV later as needed. But in reality that doesn't happen. Most
 developers are much more likely to stick with the existing structure of the
 code, because that is a safe option, and usually involves less work. Plus, once
 you have started down the CBV route, you quickly gain various mixins etc. that
-make using plain functions less attractive.
+make plain functions appear less attractive.

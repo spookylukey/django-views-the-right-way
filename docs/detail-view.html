@@ -116,7 +116,7 @@ local effects on your code. For example, when we introduced
 some typing, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn’t hurt your code base, this is vital.</p>
-<p>In a Django code base, tell-tale signs of inappropriately coupled code would
+<p>In a Django project, tell-tale signs of inappropriately coupled code would
 include things like passing the <code class="docutils literal notranslate"><span class="pre">request</span></code> object around everywhere, especially
 into the model layer, or code outside the view layer that returns HTTP responses
 objects or generates HTML.</p>
@@ -447,6 +447,9 @@ be sure that it is worth it.</p>
 <li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
 </ul>
 
 

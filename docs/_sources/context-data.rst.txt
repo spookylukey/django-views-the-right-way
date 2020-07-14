@@ -30,7 +30,9 @@ As we said, the answer to how do anything in a view is “Just do it”:
    There is no need to following the formatting, and you (or your tools) might
    have other ideas!
 
-   **Imports:** For brevity I'll omit any imports I've already mentioned.
+   **Imports:** For brevity I'll omit any imports I've already mentioned. If you
+   want full source code, have a look at the `code folder
+   <https://github.com/spookylukey/django-views-the-right-way/tree/master/code>`_.
 
 The template will decide how to format the date (most likely using the `date
 filter <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_),
@@ -136,7 +138,7 @@ For example, if we wanted, we could reduce the “repetition” of having
 ``request`` as an parameter to each view function using threadlocals and an
 import. We could go further, and remove the import using some magic like web2py
 does. But `we recognise both of these as bad ideas
-<https://youtu.be/S0No2zSJmks?t=1716>`_, because they reduces clarity. Those
+<https://youtu.be/S0No2zSJmks?t=1716>`_, because they reduce clarity. Those
 functions have ``request`` as a parameter because it is an input to the
 function. Making it an implicit one, instead of an explicit one, would hurt you
 in lots of ways.

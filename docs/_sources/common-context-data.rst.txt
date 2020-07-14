@@ -2,21 +2,30 @@ Common context data
 ===================
 
 Suppose we have a bunch of views that end up all needing the same bits of
-context data.
+context data. How should we handle that?
 
-If the data is going to be needed by pretty much every page in your site, the
-answer is `context processors
-<https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext>`_.
-If you have context processors that are expensive to evaluate, and are used in
-lots of places but not everywhere, one technique is to use `lazy evaluation in
-your context processor <https://stackoverflow.com/a/28146359/182604>`_.
+There are a few different answers:
 
-If the data is needed for common navigation elements, I might well decide that
-this is best handled at the template level. A base template might require a
-navigation element, so that template should be responsible for the data it
-needs. This can be done most easily by using a `custom inclusion template tag
-<https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/#inclusion-tags/>`_
-which can load its own data.
+1. Is the data going to be needed by pretty much every page in your site, the
+   answer is `context processors
+   <https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext>`_.
+
+2. Is the data going to be needed in a large fraction of your site, but not
+   everywhere and is expensive to evaluate? I'd recommend using `lazy evaluation
+   in your context processor <https://stackoverflow.com/a/28146359/182604>`_.
+
+
+3. Is the data needed for a ”component” that exists really at the template level, perhaps
+   in a base template or is included in several templates?
+
+   For example, it might be data needed for common navigation elements that
+   appear in a header on lots of pages.
+
+   In general this can be done most easily by using a `custom inclusion template
+   tag
+   <https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/#inclusion-tags/>`_
+   which can load its own data — that way you don't have to worry about changing
+   view functions every time you include this component.
 
 But suppose none of these apply — we just have some common data that is used for
 a group of a pages. Perhaps we have an e-commerce site, and all the checkout

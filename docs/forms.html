@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Forms</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Preconditions" href="preconditions.html" />
+    <link rel="prev" title="Redirects" href="redirects.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="redirects.html" title="Previous document">Redirects</a>
+        </li>
+        <li>
+          <a href="preconditions.html" title="Next document">Preconditions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="forms">
+<h1>Forms<a class="headerlink" href="#forms" title="Permalink to this headline">¶</a></h1>
+<p>The fundamental pattern for a view that handles a form is covered fully in the
+<a class="reference external" href="https://docs.djangoproject.com/en/2.2/topics/forms/#the-view">Django form docs</a>, so I don’t
+have much to add, except a few notes:</p>
+<ul>
+<li><p>You don’t need to use <code class="docutils literal notranslate"><span class="pre">FormView</span></code>, and I recommend you don’t.</p></li>
+<li><p>You don’t actually need <code class="docutils literal notranslate"><span class="pre">Form</span></code> either. It’s an API that provides a very
+helpful set of behaviours (validation etc.), but it’s entirely possible to
+build forms in Django without it. You need to know how forms work at the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Learn/Forms">HTML
+level</a>, and you need
+to process <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpRequest.GET">request.GET</a>
+or <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpRequest.POST">request.POST</a>
+yourself to get the submitted data and do something with it.</p>
+<p>Normally, this would be very tedious compared to using <code class="docutils literal notranslate"><span class="pre">Form</span></code>, but in some
+cases it will be better. For example, if you have a page with dynamically
+generated controls (e.g. lots of buttons or input boxes) it can be easiest to
+build them up and process them without using <code class="docutils literal notranslate"><span class="pre">Form</span></code>.</p>
+</li>
+</ul>
+<p>That’s it! Next up - <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>.</p>
+<div class="section" id="discussion-complex-form-cases">
+<h2>Discussion: Complex form cases<a class="headerlink" href="#discussion-complex-form-cases" title="Permalink to this headline">¶</a></h2>
+<p>Why not <code class="docutils literal notranslate"><span class="pre">FormView</span></code>? Of all the CBVs, it is perhaps the most tempting, due to
+the control flow boilerplate that it eliminates. But overall, I still feel it is
+not worth it.</p>
+<p>First, it requires you to know and use a second API (<code class="docutils literal notranslate"><span class="pre">get_form_class</span></code>,
+<code class="docutils literal notranslate"><span class="pre">form_valid</span></code>, <code class="docutils literal notranslate"><span class="pre">get_initial</span></code> etc.). All of these are more awkward to use than
+just using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly.</p>
+<p>It also makes some relatively common things much harder to do, and provides a
+very bad starting point for most customisations.</p>
+<p>For example, if you find you have a page that has two forms on it (perhaps
+alternative flows that the user can choose between), <code class="docutils literal notranslate"><span class="pre">FormView</span></code> will cause you
+lots of pain.</p>
+<p>Another example is when you need multiple different submit buttons, which do
+something different. This is an easy thing in HTML/HTTP, and easy if you are
+using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly and in charge of the control flow yourself, but horrible
+if you are trying to fit it into <code class="docutils literal notranslate"><span class="pre">FormView</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="redirects.html" title="Previous document">Redirects</a>
+        </li>
+        <li>
+          <a href="preconditions.html" title="Next document">Preconditions</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list-view.html">Displaying a list of objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Forms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-complex-form-cases">Discussion: Complex form cases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="redirects.html" title="previous chapter">Redirects</a></li>
+      <li>Next: <a href="preconditions.html" title="next chapter">Preconditions</a></li>
+  </ul></li>
+</ul>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Luke Plant.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/forms.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

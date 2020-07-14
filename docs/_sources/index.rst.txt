@@ -58,9 +58,9 @@ reference docs. All example code can be found in full in the `GitHub repo
 Second, discussion — the **why**: a longer, in-depth explanation of why everyone
 else who tells you differently is wrong :-). It's targeted at slightly more
 experienced developers, and especially those who are responsible for teaching
-other people, or making decisions about the patterns used in a code base. In
-each one I'll tackle one or two different aspects of the comparisons between
-CBVs and FBVs, and more general programming principles.
+other people, or making decisions about the patterns used in a code base. These
+discussion sections are really about general programming principles, and how
+they apply in Python and Django.
 
 So let's go!
 
@@ -77,6 +77,9 @@ So let's go!
    list-view
    delegation
    dependency-injection
+   redirects
+   forms
+   preconditions
 
 Caveats and disclaimers etc.
 ============================
