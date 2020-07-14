@@ -71,31 +71,6 @@ Discussion - views in the URLconf
 
 -----
 
-Forms
-
-Ways in which FormView will fail you:
-
-1) Multiple forms on same page (alternatives to each other)
-
-2) Special flow. For example, in some cases, you want extra confirmation.
-   Like "This will create an Foo with the same name as an existing Foo, are you sure?".
-   In this case you need to re-display the form but differently, with a "confirm" button
-   instead of just "save", and then need to be able to detect the "confirm" button
-   was pressed.
-
-   Totally straightforward if you are in charge of the control flow yourself, horrible
-   if you are trying to fit into FormView
-
-
------
-
-
-
-- Simple customisation
-  - keyword args in the URLconf
-
-
-
 Customising the end
 
 

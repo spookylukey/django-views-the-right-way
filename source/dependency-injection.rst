@@ -238,9 +238,10 @@ method. The base class might look something like this:
            raise NotImplementedError()
 
 
-Now, how do we implement ``product_search`` for our “special offer“ subclass? We
-need access to the ``special_offer`` object that we already looked up somewhere.
-We might do something like this:
+Now, how do we implement ``product_search`` for our “special offer“ subclass? To
+call ``special_product_search``, we need access to the ``special_offer`` object
+that we already looked up in a different method. We could solve this by saving
+the object onto ``self``, something like this:
 
 .. code-block:: python
 
@@ -321,9 +322,10 @@ recommending that we don't structure our code like this.
 
 When I had completed this refactoring, which in the end completely removed my
 custom CBV base class, I confess I had a little twinge of sadness — my final
-code seemed just a little bit… *plain*. I had fewer OOP hierarchies and clever
-tricks to feel smug about. But this is misplaced sadness. If you are into
-smugness-driven development, nothing can beat the feeling you get when you come
-back to some code 3 months or 3 years later and find it's so straightforward to
-work with that after doing ``git praise`` you feel the need to give yourself a
-little hug.
+code seemed just a little bit… *plain*. I now had just a bunch of simple
+functions and a few closures, and fewer OOP hierarchies and clever tricks to
+feel smug about. But this is misplaced sadness. If you are into smugness-driven
+development, nothing can beat the feeling you get when you come back to some
+code 3 months or 3 years later and find it's so straightforward to work with
+that, after doing ``git praise``, you feel the need to give yourself a little
+hug.

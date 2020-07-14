@@ -44,7 +44,6 @@ In addition, Django provides some shortcuts:
 
    .. code-block:: python
 
-
       urls = [
           path('old-path/<int:pk>/', RedirectView.as_view(
               pattern_name='my_view',
@@ -53,6 +52,9 @@ In addition, Django provides some shortcuts:
           ),
           path('new-path/<int:pk>/', views.my_view, name='my_view'),
       ]
+
+
+That's it! On to :doc:`forms`.
 
 
 Discussion: configuration in urls.py
@@ -68,7 +70,7 @@ will serve you better, or perhaps a function that **delegates** to
 ``RedirectView``, rather than subclassing it.
 
 Delegating to ``RedirectView`` is not perhaps the most obvious thing, due to how
-``as_view``. It looks like this:
+``as_view`` works. It looks like this:
 
 .. code-block:: python
 
@@ -88,13 +90,69 @@ Delegating to ``RedirectView`` is not perhaps the most obvious thing, due to how
        )(request, pk)
 
 
+Discussion: FBV configuration in urls.py
+----------------------------------------
+
 We should note that the pattern of defining views entirely within ``urls.py``
 can be achieved just as well using functions as well as ``View`` sub-classes.
 
-Two methods:
+Here are two methods for doing this:
 
-* view factory
+* Extra keyword arguments in urls.py — see the docs for `passing extra options
+  to view functions
+  <https://docs.djangoproject.com/en/2.2/topics/http/urls/#views-extra-options>`_.
 
-* extra keyword arguments in urls.py
+  So, for example, if we want to reproduce the functionality of
+  ``RedirectView``, complete with ”configure it within urls.py”, we could have a
+  view function like this:
 
-TODO
+  .. code-block:: python
+
+      def do_redirect(request, *args, pattern_name=None, permanent=False, query_string=True, **kwargs):
+         url = reverse(pattern_name, args=args, kwargs=kwargs)
+         # More of ``RedirectView`` logic here, using ``permanent`` and
+         # ``query_string`` etc.
+         return HttpResponseRedirect(url)
+
+  .. code-block:: python
+
+     # urls.py
+
+      urls = [
+          path('old-path/<int:pk>/', do_redirect, {
+              'pattern_name': 'my_view',
+              'permanent': True,
+              'query_string': True,
+          }),
+      ]
+
+* View factories.
+
+  One of the issues with the above is you have a possibility of a clash between
+  the contents of the captured ``**kwargs`` and the other keyword arguments the
+  view accepts. We can solve this using a function that returns a view function
+  (in the same way that ``RedirectView.as_view`` returns a view function). I call
+  this a “view factory”. The outer function has keyword arguments for configuring
+  the view, the inner function is the view itself:
+
+  .. code-block:: python
+
+      def make_redirector(*, pattern_name=None, permanent=False, query_string=False):
+         def redirector(request, *args, **kwargs):
+             url = reverse(pattern_name, args=args, kwargs=kwargs)
+             # More of ``RedirectView`` logic here, using ``permanent`` and
+             # ``query_string`` etc.
+             return HttpResponseRedirect(url)
+         return redirector
+
+  .. code-block:: python
+
+     # urls.py
+
+      urls = [
+          path('old-path/<int:pk>/', make_redirector(
+              pattern_name='my_view',
+              permanent=True,
+              query_string=True,
+          )),
+      ]

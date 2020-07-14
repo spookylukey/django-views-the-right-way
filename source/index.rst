@@ -77,6 +77,9 @@ So let's go!
    list-view
    delegation
    dependency-injection
+   redirects
+   forms
+   preconditions
 
 Caveats and disclaimers etc.
 ============================
