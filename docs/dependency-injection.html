@@ -91,17 +91,14 @@ to many programming situations, not just view functions:</p>
 </div></blockquote>
 <p>We can think of this is as just another example of <a class="reference external" href="https://www.toptal.com/python/python-parameterized-design-patterns">parameterisation</a>. We need
 a parameter that will capture “what we need to do in the middle”.</p>
-<p>To implement this in Python, we can use <strong>first class functions</strong>. These are
-functions that we pass around as values.</p>
 <p>Let’s start with the easier case — just the <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view, factored out
 <a class="reference internal" href="delegation.html"><span class="doc">as before</span></a> into the main view and the
 <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> function it delegates to. The latter now needs
 changing:</p>
 <ol class="arabic simple">
 <li><p>It no longer takes a <code class="docutils literal notranslate"><span class="pre">queryset</span></code> parameter, but a <code class="docutils literal notranslate"><span class="pre">searcher</span></code> parameter.</p></li>
-<li><p>It must collect the filters to be passed to <code class="docutils literal notranslate"><span class="pre">product_search</span></code>. I’ll assume we can
-rewrite our (imagined) <code class="docutils literal notranslate"><span class="pre">apply_product_filtering</span></code> into <code class="docutils literal notranslate"><span class="pre">collect_filtering_parameters</span></code>.</p></li>
-<li><p>It needs to actually use the <code class="docutils literal notranslate"><span class="pre">searcher</span></code> parameter.</p></li>
+<li><p>It has to be adapted to use this <code class="docutils literal notranslate"><span class="pre">searcher</span></code> parameter instead of
+manipulating a passed in <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>.</p></li>
 </ol>
 <p>Something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">somewhere</span> <span class="kn">import</span> <span class="n">product_search</span>
@@ -136,16 +133,17 @@ we’ll have a problem. Our passed in function gets called as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">searcher</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>But that doesn’t match the signature of <code class="docutils literal notranslate"><span class="pre">special_product_search</span></code> — it has an
+<p>But that doesn’t match the signature of <code class="docutils literal notranslate"><span class="pre">special_product_search</span></code> which has an
 extra parameter. How can we get that parameter passed?</p>
 <p>You might be tempted to make <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> accept the additional
 parameters needed, but this is clunky — we’ll have to pass these parameters that
 it doesn’t care about, just so that it can pass them on to somewhere else. Plus
 it is unnecessary.</p>
 <p>Instead, what we do is make <code class="docutils literal notranslate"><span class="pre">special_offer_detail</span></code> provide a wrapper function
-that matches the signature that <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> expects. Inside the
-wrapper function, we’ll call the <code class="docutils literal notranslate"><span class="pre">special_product_search</span></code> function the way it
-needs to be called. While we’re at it, we can do our additional requirements too.</p>
+that matches the signature that <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> expects for
+<code class="docutils literal notranslate"><span class="pre">searcher</span></code>. Inside the wrapper function, we’ll call the
+<code class="docutils literal notranslate"><span class="pre">special_product_search</span></code> function the way it needs to be called. While we’re
+at it, we can do our additional requirements too.</p>
 <p>It looks like this, assuming we’ve written <code class="docutils literal notranslate"><span class="pre">log_special_offer_product_view</span></code>
 function for the extra logging:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">somewhere</span> <span class="kn">import</span> <span class="n">special_product_search</span>
@@ -170,8 +168,8 @@ function for the extra logging:</p>
 </div>
 <p>There are some important things to note about this:</p>
 <ul>
-<li><p>We defined our wrapper function inside the body of the main view. This is
-important for the functionality that follows.</p></li>
+<li><p>We defined our wrapper function <code class="docutils literal notranslate"><span class="pre">special_product_search_wrapper</span></code> inside the
+body of the main view. This is important for the functionality that follows.</p></li>
 <li><p>We made its signature match the one expected by <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code>.</p></li>
 <li><p>Our wrapper function has access to the <code class="docutils literal notranslate"><span class="pre">special_offer</span></code> object from the
 enclosing scope, and also <code class="docutils literal notranslate"><span class="pre">request</span></code>. These objects “stay with it” when the
@@ -188,8 +186,12 @@ the common logic.</p>
 have to modify its signature, nor the signature of the <code class="docutils literal notranslate"><span class="pre">searcher</span></code> parameter it
 expects. Also, this works really well with static analysis, like the linters
 that are built-in to many IDEs which can point out undefined names and so on.</p>
-<p>In our theme of re-using logic, I want to cover <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>, but before
-that we’re going to go back to some basics, the first of which is
+<p>Closures are a concept that some find intimidating, but they are extremely
+useful in a wide variety of programming situations. If you found the above
+confusing, have a look at this <a class="reference external" href="https://www.programiz.com/python-programming/closure">Python closures primer</a> and then come back to
+the more complex example here.</p>
+<p>In our theme of re-using logic, I next want to cover <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>, but
+before that we’re going to go back to some basics, the first of which is
 <a class="reference internal" href="redirects.html"><span class="doc">Redirects</span></a> and then <a class="reference internal" href="forms.html"><span class="doc">Forms</span></a>.</p>
 <div class="section" id="note-terminology">
 <h2>Note — terminology<a class="headerlink" href="#note-terminology" title="Permalink to this headline">¶</a></h2>
@@ -206,12 +208,12 @@ that needs to do something, i.e. it has a dependency on some other code, instead
 of depending directly, the dependency gets injected from the outside. If our
 dependency is a just a single function call, we can simple accept a function as
 a parameter. If our dependency is a set of related function calls, we might want
-an object with methods as our the parameter.</p>
+an object with methods as the parameter.</p>
 <p>Often you will hear the term “dependency injection” being used for something
 that goes one step further, and injects dependencies <strong>automatically</strong> in some
 way. I call these “dependency injection frameworks/containers”. Outside of
 <a class="reference external" href="https://docs.pytest.org/en/latest/fixture.html">pytest’s fixtures</a> I have
-never found a need or desire for these in Python.</p>
+not yet found a need or desire for these in Python.</p>
 <p>So, we can call this pattern “first class functions”, or “callbacks”, “strategy
 pattern” or “dependency injection”. But dependency injection is clearly the
 coolest sounding, so I used that in the title.</p>

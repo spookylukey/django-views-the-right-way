@@ -55,18 +55,14 @@ We can think of this is as just another example of `parameterisation
 <https://www.toptal.com/python/python-parameterized-design-patterns>`_. We need
 a parameter that will capture “what we need to do in the middle”.
 
-To implement this in Python, we can use **first class functions**. These are
-functions that we pass around as values.
-
 Let's start with the easier case — just the ``product_list`` view, factored out
 :doc:`as before <delegation>` into the main view and the
 ``display_product_list`` function it delegates to. The latter now needs
 changing:
 
 1. It no longer takes a ``queryset`` parameter, but a ``searcher`` parameter.
-2. It must collect the filters to be passed to ``product_search``. I'll assume we can
-   rewrite our (imagined) ``apply_product_filtering`` into ``collect_filtering_parameters``.
-3. It needs to actually use the ``searcher`` parameter.
+2. It has to be adapted to use this ``searcher`` parameter instead of
+   manipulating a passed in ``QuerySet``.
 
 Something like this:
 
@@ -105,7 +101,7 @@ we'll have a problem. Our passed in function gets called as::
 
   searcher(filters, page=page)
 
-But that doesn't match the signature of ``special_product_search`` — it has an
+But that doesn't match the signature of ``special_product_search`` which has an
 extra parameter. How can we get that parameter passed?
 
 You might be tempted to make ``display_product_list`` accept the additional
@@ -114,9 +110,10 @@ it doesn't care about, just so that it can pass them on to somewhere else. Plus
 it is unnecessary.
 
 Instead, what we do is make ``special_offer_detail`` provide a wrapper function
-that matches the signature that ``display_product_list`` expects. Inside the
-wrapper function, we'll call the ``special_product_search`` function the way it
-needs to be called. While we're at it, we can do our additional requirements too.
+that matches the signature that ``display_product_list`` expects for
+``searcher``. Inside the wrapper function, we'll call the
+``special_product_search`` function the way it needs to be called. While we're
+at it, we can do our additional requirements too.
 
 It looks like this, assuming we've written ``log_special_offer_product_view``
 function for the extra logging:
@@ -145,8 +142,8 @@ function for the extra logging:
 
 There are some important things to note about this:
 
-* We defined our wrapper function inside the body of the main view. This is
-  important for the functionality that follows.
+* We defined our wrapper function ``special_product_search_wrapper`` inside the
+  body of the main view. This is important for the functionality that follows.
 
 * We made its signature match the one expected by ``display_product_list``.
 
@@ -168,8 +165,14 @@ have to modify its signature, nor the signature of the ``searcher`` parameter it
 expects. Also, this works really well with static analysis, like the linters
 that are built-in to many IDEs which can point out undefined names and so on.
 
-In our theme of re-using logic, I want to cover :doc:`preconditions`, but before
-that we're going to go back to some basics, the first of which is
+Closures are a concept that some find intimidating, but they are extremely
+useful in a wide variety of programming situations. If you found the above
+confusing, have a look at this `Python closures primer
+<https://www.programiz.com/python-programming/closure>`_ and then come back to
+the more complex example here.
+
+In our theme of re-using logic, I next want to cover :doc:`preconditions`, but
+before that we're going to go back to some basics, the first of which is
 :doc:`redirects` and then :doc:`forms`.
 
 
@@ -191,13 +194,13 @@ that needs to do something, i.e. it has a dependency on some other code, instead
 of depending directly, the dependency gets injected from the outside. If our
 dependency is a just a single function call, we can simple accept a function as
 a parameter. If our dependency is a set of related function calls, we might want
-an object with methods as our the parameter.
+an object with methods as the parameter.
 
 Often you will hear the term “dependency injection” being used for something
 that goes one step further, and injects dependencies **automatically** in some
 way. I call these “dependency injection frameworks/containers”. Outside of
 `pytest's fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I have
-never found a need or desire for these in Python.
+not yet found a need or desire for these in Python.
 
 So, we can call this pattern “first class functions”, or “callbacks”, “strategy
 pattern” or “dependency injection”. But dependency injection is clearly the
