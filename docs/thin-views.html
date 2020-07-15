@@ -4,26 +4,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Search</title>
+    <title>Thin views</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
-    <script src="_static/searchtools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" />
-  <script src="searchindex.js" defer></script>
-  
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Preconditions" href="preconditions.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
 
   </head><body>
   
@@ -35,6 +31,10 @@
                 &nbsp;
   <nav id="rellinks">
     <ul>
+        <li>
+          &larr;
+          <a href="preconditions.html" title="Previous document">Preconditions</a>
+        </li>
     </ul>
   </nav>
               </div>
@@ -42,33 +42,27 @@
 
           <div class="body" role="main">
             
-  <h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script>$('#fallback').hide();</script>
-  <p>
-    Please activate JavaScript to enable the search
-    functionality.
-  </p>
-  </div>
-  <p>
-    Searching for multiple words only shows matches that contain
-    all words.
-  </p>
-  <form action="" method="get">
-    <input type="text" name="q" aria-labelledby="search-documentation" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form>
-  
-  <div id="search-results">
-  
-  </div>
+  <div class="section" id="thin-views">
+<h1>Thin views<a class="headerlink" href="#thin-views" title="Permalink to this headline">¶</a></h1>
+<p>TODO!</p>
+<p>Thin views / fat models pattern.</p>
+<p>Custom QuerySet methods instead of <code class="docutils literal notranslate"><span class="pre">.filter()</span></code> in view code.</p>
+<p><a class="reference external" href="https://www.dabapps.com/blog/higher-level-query-api-django-orm/">https://www.dabapps.com/blog/higher-level-query-api-django-orm/</a></p>
+<p><a class="reference external" href="https://simpleisbetterthancomplex.com/tips/2016/08/16/django-tip-11-custom-manager-with-chainable-querysets.html">https://simpleisbetterthancomplex.com/tips/2016/08/16/django-tip-11-custom-manager-with-chainable-querysets.html</a></p>
+<p>Service layer? Probably not
+<a class="reference external" href="https://www.b-list.org/weblog/2020/mar/16/no-service/">https://www.b-list.org/weblog/2020/mar/16/no-service/</a></p>
+</div>
+
 
           </div>
               <div class="related bottom">
                 &nbsp;
   <nav id="rellinks">
     <ul>
+        <li>
+          &larr;
+          <a href="preconditions.html" title="Previous document">Preconditions</a>
+        </li>
     </ul>
   </nav>
               </div>
@@ -90,7 +84,7 @@
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
 <li class="toctree-l1"><a class="reference internal" href="context-data.html">Adding data to a template</a></li>
@@ -103,13 +97,24 @@
 <li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="preconditions.html">Preconditions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="thin-views.html">Thin views</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Thin views</a></li>
 </ul>
 
-<div class="relations">
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="preconditions.html" title="previous chapter">Preconditions</a></li>
   </ul></li>
 </ul>
 </div>
@@ -124,6 +129,9 @@
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
+      |
+      <a href="_sources/thin-views.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     
