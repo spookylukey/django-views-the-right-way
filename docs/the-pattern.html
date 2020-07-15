@@ -74,7 +74,7 @@
 <code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">article_list</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">example.html</span></code> should be the path to the template you are using. I’m not
 going to cover how to write templates anywhere in this guide. Please see the
-<a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial03/">Django tutorial on views and templates</a>, and the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/language/">Django
+<a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/">Django tutorial on views and templates</a>, and the <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/templates/language/">Django
 template language topic</a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">{}</span></code>, the third argument to <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code>, is the context data you
 want available in your template.</p></li>
@@ -87,7 +87,7 @@ can remove it, or add more, but have to change the URLconf to match.</p></li>
 <li><p>the matched URL (with any captured parts),</p></li>
 <li><p>your view function defined above,</p></li>
 <li><p>and an optional name that needs to be unique across your project, e.g.
-<code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">myapp_articles_list</span></code>, to enable <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#reverse-resolution-of-urls">URL reversing</a>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">home</span></code> or <code class="docutils literal notranslate"><span class="pre">myapp_articles_list</span></code>, to enable <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#reverse-resolution-of-urls">URL reversing</a>.</p></li>
 </ul>
 </li>
 </ul>
@@ -96,7 +96,7 @@ can remove it, or add more, but have to change the URLconf to match.</p></li>
 Django views, so this page is quite a bit longer than most, for an explanation.</p>
 </div>
 <div class="section" id="the-explanation">
-<h2>The explanation<a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
+<h2>The Explanation<a class="headerlink" href="#the-explanation" title="Permalink to this headline">¶</a></h2>
 <p>First, it’s vital to know what a view <strong>is</strong>. As the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/views/">Django docs state</a>:</p>
 <blockquote>
 <div><p>A view…is a Python function that takes a Web request and returns a Web response</p>
@@ -118,7 +118,7 @@ user’s browser — HTTP headers and body, which is typically a web page. In ou
 case, we sent just the text <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">world!</span></code>. This request-response cycle is the
 heart of the Django web framework.</p>
 <p>In order to get Django to actually call our view function, we have to hook it
-into a <code class="docutils literal notranslate"><span class="pre">urlconf</span></code> somewhere. This is covered in the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial01/#write-your-first-view">Django tutorial part 1</a>,
+into a “URLconf” somewhere. This is covered in the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial01/#write-your-first-view">Django tutorial part 1</a>,
 so I won’t cover all the app layout stuff in detail — in brief, we’ll have this
 in our urls.py:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
@@ -178,14 +178,14 @@ loading a template, rendering it and putting it into a response — <a class="re
 </div>
 <p>The third parameter here is the empty context dictionary.</p>
 <p>This is a great pattern for writing views. Django has one more trick up its
-sleeve, however — <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/template-response/#templateresponse-objects">TemplateResponse</a>.</p>
+sleeve, however — <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/template-response/#templateresponse-objects">TemplateResponse</a>.</p>
 <p>The issue with just using <code class="docutils literal notranslate"><span class="pre">render</span></code> is that you get a plain <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code>
 object back that has no memory that it ever came from a template. Sometimes,
 however, it is useful to have functions return a value that does remember what
 it’s “made of” — something that stores the template it is from, and the context.
 This can be really useful in testing, but also if we want to something outside
 of our view function (such as decorators or middleware) to check or even change
-whats in the response before it finally gets ‘rendered’ and sent to the user.
+what’s in the response before it finally gets ‘rendered’ and sent to the user.
 We’ll cover use cases of this later in the guide.</p>
 <p>For now, you can just accept that <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code> is a more useful return
 value than a plain <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code>. (If you are already using <code class="docutils literal notranslate"><span class="pre">render</span></code>
@@ -209,10 +209,10 @@ inheritance trees or method flowcharts. They will only make your life harder.
 Print out their documentation, put in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how
 much there is</a> — fill the warehouse with dynamite and
 <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t look back</a>.</p>
-<p>Next up - <a class="reference internal" href="anything.html"><span class="doc">How to do anything in a view</span></a>.</p>
+<p>Next up — <a class="reference internal" href="anything.html"><span class="doc">How to do anything in a view</span></a>.</p>
 </div>
-<div class="section" id="discussion-keep-the-view-visible">
-<span id="visibility"></span><h2>Discussion — keep the view visible!<a class="headerlink" href="#discussion-keep-the-view-visible" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="discussion-keep-the-view-viewable">
+<span id="visibility"></span><h2>Discussion — keep the view viewable!<a class="headerlink" href="#discussion-keep-the-view-viewable" title="Permalink to this headline">¶</a></h2>
 <p>The most important thing about the pattern I’m recommending is that the view
 itself is visible. The fundamental nature of a view is that it is a function (or
 callable) that takes a request and returns a response. This is pretty obvious in
@@ -229,7 +229,8 @@ the pattern above — we have:</p>
      <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;example.html&quot;</span>
 </pre></div>
 </div>
-<p>But now <strong>all 3 essential elements of the view have disappeared</strong>. To have any
+<p>But now <strong>all 3 essential elements of the view have disappeared</strong>. Where is the
+function or callable? Where is the request? Where is the response? To have any
 idea that this matches the description of what a view is you have to know what
 the base classes do, and the fundamental simplicity of what you are doing has
 been obscured.</p>
@@ -262,13 +263,25 @@ this advantage disappears, and we’ll find we have <a class="reference internal
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">The Right Way</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-pattern">The Pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-explanation">The explanation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-keep-the-view-visible">Discussion — keep the view visible!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-explanation">The Explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-keep-the-view-viewable">Discussion — keep the view viewable!</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>

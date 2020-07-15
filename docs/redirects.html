@@ -57,7 +57,7 @@ to the specified URL.</p>
 <p>The <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection">different 3XX codes have different meanings</a> -
 make sure you use the right one.</p>
 <p>That is 95% of what you need to know at the HTTP level. In Django, the most
-common functionality has been wrapped up for you in <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpResponseRedirect">HttpResponseRedirect</a>.</p>
+common functionality has been wrapped up for you in <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponseRedirect">HttpResponseRedirect</a>.</p>
 <p>So this view, for example, does an unconditional, temporary redirect:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s1">&#39;/other/url/&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">307</span><span class="p">)</span>
@@ -65,10 +65,10 @@ common functionality has been wrapped up for you in <a class="reference external
 </div>
 <p>In addition, Django provides some shortcuts:</p>
 <ul>
-<li><p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/#redirect">redirect</a>, a
+<li><p><a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#redirect">redirect</a>, a
 utility that returns an HTTP response object and has built-in logic for
 redirecting to named views, and other things.</p></li>
-<li><p><a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#redirectview">RedirectView</a>
+<li><p><a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/class-based-views/base/#redirectview">RedirectView</a>
 — a class that provides an entire view that does redirection, and has a few
 neat features like being able to look up view by name, including arguments
 from a path, and also copy the query string. I recommend using this if the
@@ -122,11 +122,11 @@ will serve you better, or perhaps a function that <strong>delegates</strong> to
 <div class="section" id="discussion-fbv-configuration-in-urls-py">
 <h2>Discussion: FBV configuration in urls.py<a class="headerlink" href="#discussion-fbv-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
 <p>We should note that the pattern of defining views entirely within <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>
-can be achieved just as well using functions as well as <code class="docutils literal notranslate"><span class="pre">View</span></code> sub-classes.</p>
+can be achieved just as well using functions as with <code class="docutils literal notranslate"><span class="pre">View</span></code> sub-classes.</p>
 <p>Here are two methods for doing this:</p>
-<ul>
-<li><p>Extra keyword arguments in urls.py — see the docs for <a class="reference external" href="https://docs.djangoproject.com/en/2.2/topics/http/urls/#views-extra-options">passing extra options
-to view functions</a>.</p>
+<div class="section" id="additional-keyword-parameters">
+<h3>Additional keyword parameters<a class="headerlink" href="#additional-keyword-parameters" title="Permalink to this headline">¶</a></h3>
+<p>See the docs for <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#views-extra-options">passing extra options to view functions</a>.</p>
 <p>So, for example, if we want to reproduce the functionality of
 <code class="docutils literal notranslate"><span class="pre">RedirectView</span></code>, complete with ”configure it within urls.py”, we could have a
 view function like this:</p>
@@ -148,15 +148,16 @@ view function like this:</p>
  <span class="p">]</span>
 </pre></div>
 </div>
-</li>
-<li><p>View factories.</p>
+</div>
+<div class="section" id="mass-produced-views-view-factories">
+<h3>Mass-produced views — “view factories”<a class="headerlink" href="#mass-produced-views-view-factories" title="Permalink to this headline">¶</a></h3>
 <p>One of the issues with the above is you have a possibility of a clash between
 the contents of the captured <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> and the other keyword arguments the
 view accepts. We can solve this using a function that returns a view function
-(in the same way that <code class="docutils literal notranslate"><span class="pre">RedirectView.as_view</span></code> returns a view function). I call
+(in the same way that <code class="docutils literal notranslate"><span class="pre">RedirectView.as_view()</span></code> returns a view function). I call
 this a “view factory”. The outer function has keyword arguments for configuring
 the view, the inner function is the view itself:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_redirector</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">pattern_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_redirector</span><span class="p">(</span><span class="n">pattern_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
    <span class="k">def</span> <span class="nf">redirector</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">pattern_name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
        <span class="c1"># More of ``RedirectView`` logic here, using ``permanent`` and</span>
@@ -176,8 +177,13 @@ the view, the inner function is the view itself:</p>
  <span class="p">]</span>
 </pre></div>
 </div>
-</li>
-</ul>
+<p>This technique of “mass producing” view functions can be used to great effect in
+many other situations, especially if you have lots of extremely similar views
+that just need to be differently configured.</p>
+<p>Unlike the example above where the view function accepts <code class="docutils literal notranslate"><span class="pre">*args,</span> <span class="pre">**kwargs</span></code>,
+the inner view function can have a signature that is as specific as you need it
+to be, so this will play well with <a class="reference internal" href="url-parameters.html#type-checked-parameters"><span class="std std-ref">type-checked parameters</span></a> if you want it to.</p>
+</div>
 </div>
 </div>
 
@@ -202,7 +208,19 @@ the view, the inner function is the view itself:</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
@@ -216,7 +234,11 @@ the view, the inner function is the view itself:</p>
 <li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Redirects</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-configuration-in-urls-py">Discussion: configuration in urls.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#additional-keyword-parameters">Additional keyword parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mass-produced-views-view-factories">Mass-produced views — “view factories”</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>

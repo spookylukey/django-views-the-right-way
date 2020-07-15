@@ -52,15 +52,15 @@
 <p>To continue <a class="reference internal" href="url-parameters.html"><span class="doc">our example</span></a>, we want to display individual
 product pages, looking them up from a product slug that will be part of the URL.</p>
 <p>This requires knowing how to use <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>, and in particular the
-<a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.get">QuerySet.get</a>
-method. Assuming we have a <code class="docutils literal notranslate"><span class="pre">Product</span></code> model with a <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/models/fields/#slugfield">SlugField</a> named
+<a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/models/querysets/#django.db.models.query.QuerySet.get">QuerySet.get</a>
+method. Assuming we have a <code class="docutils literal notranslate"><span class="pre">Product</span></code> model with a <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/models/fields/#slugfield">SlugField</a> named
 <code class="docutils literal notranslate"><span class="pre">slug</span></code>, the code looks like:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="s1">&#39;some-product-slug&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>However, this could throw a <code class="docutils literal notranslate"><span class="pre">Product.DoesNotExist</span></code> exception, which we need to
 catch. Instead of crashing, we should instead show a 404 page to the user. We
-can do this easily using Django’s <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/views/#django.http.Http404">Http404</a>
+can do this easily using Django’s <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/views/#django.http.Http404">Http404</a>
 exception.</p>
 <p>The combined code would look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
@@ -71,7 +71,7 @@ exception.</p>
 </div>
 <p>This is perfectly adequate code that you should not feel in any way embarrassed
 about. However, this pattern comes up so often in Django apps that there is a
-shortcut for it — <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/#get-object-or-404">get_object_or_404</a>.
+shortcut for it — <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#get-object-or-404">get_object_or_404</a>.
 This combines the above logic for, so that you can just write:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># imports</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
@@ -91,7 +91,7 @@ template, the final, concise version of our view will look like this:</p>
 <p>That’s it! Next up: <a class="reference internal" href="list-view.html"><span class="doc">Displaying a list of objects</span></a></p>
 <div class="section" id="discussion-layering-violations-shortcuts-vs-mixins">
 <span id="shortcuts-vs-mixins"></span><h2>Discussion: Layering violations — shortcuts vs mixins<a class="headerlink" href="#discussion-layering-violations-shortcuts-vs-mixins" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code> is an example of a “shortcut” function. <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/">Django’s docs for
+<p><code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code> is an example of a “shortcut” function. <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/shortcuts/">Django’s docs for
 shortcut functions</a> defines them
 like this:</p>
 <blockquote>
@@ -99,7 +99,7 @@ like this:</p>
 “span” multiple levels of MVC. In other words, these functions/classes
 introduce controlled coupling for convenience’s sake.</p>
 </div></blockquote>
-<p>And the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial03/#a-shortcut-get-object-or-404">tutorial</a>
+<p>And the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/#a-shortcut-get-object-or-404">tutorial</a>
 has a helpful comment about them:</p>
 <blockquote>
 <div><p><strong>Philosophy</strong></p>
@@ -149,7 +149,7 @@ is just a class-based equivalent to the view function.</p>
 <p>Perhaps a better way is to think about it is the “the single responsibility
 principle” for class design. Through that lens, this class doesn’t look very
 good at all. It has far too many different directions you might want to take it.</p>
-<p>But the most convincing to me is too look what happens when you carry on this
+<p>But the most convincing to me is to look what happens when you carry on this
 pattern.</p>
 <p>I recently came across a family of views that had the following methods and
 class attributes (including all the base classes):</p>
@@ -208,17 +208,17 @@ database. As you can guess, the implementation was significantly complicated by
 the hybrid nature of this class. Methods like <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> are trying to cope
 with the lack of a sensible <code class="docutils literal notranslate"><span class="pre">__init__</span></code> that the developer was in control of.</p>
 <p>It furthered suffered from the fact that all the methods had access to <code class="docutils literal notranslate"><span class="pre">self</span></code>,
-and via <code class="docutils literal notranslate"><span class="pre">self.request</span></code> they had access to the HTTP request object. This meant
-there was no clear separation of request processing from anything else — the
-layers had all merged. This happens very easily with classes like this, because
-you never have to explicitly pass the <code class="docutils literal notranslate"><span class="pre">request</span></code> parameter around to make it
-available, it’s implicitly available via <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+and therefore to the HTTP request object via <code class="docutils literal notranslate"><span class="pre">self.request</span></code>. This meant there was
+no clear separation of request processing from anything else — the layers had
+all merged. This happens very easily with classes like this, because you never
+have to explicitly pass the <code class="docutils literal notranslate"><span class="pre">request</span></code> parameter around to make it available,
+it’s implicitly available via <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 <p>This kind of code is painful to work with even for the job it is doing. But when
 new requirements come along — like you need to generate XLS reports offline,
 outside of a web context — then you really are in a mess.</p>
 <p>What is needed is a separate set of classes that handle just XLS generation,
-which should then be used by our view functions (or classes). These will also
-have the advantage of being able to test some aspect of the XLS generation
+which should then be used by our view functions (or classes). This will also
+have the advantage of being able to test any aspect of the XLS generation
 without having to set up a web request, or even necessarily getting data from
 the database.</p>
 <p>So where did the design go wrong? Look back at the views provided by Django, and
@@ -234,7 +234,7 @@ opinion his analysis is spot on.</p>
 </div>
 <div class="section" id="discussion-comparison-to-detailview">
 <span id="detailview-comparison"></span><h2>Discussion: Comparison to DetailView<a class="headerlink" href="#discussion-comparison-to-detailview" title="Permalink to this headline">¶</a></h2>
-<p>If instead of my FBV above we had used <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview">DetailView</a>,
+<p>If instead of my FBV above we had used <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview">DetailView</a>,
 what would the code look like? This is what I would write:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProductDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;shop/product_detail.html&#39;</span>
@@ -269,7 +269,7 @@ lived in was called <code class="docutils literal notranslate"><span class="pre"
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
 it’s pretty much directly against the “Zen of Python” maxim “Explicit is better
 than implicit”.</p>
-<p>But it does appear in some parts of Django, and the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview">docs for DetailView</a>
+<p>But it does appear in some parts of Django, and the <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview">docs for DetailView</a>
 encourage this particular shortcut. This is unfortunate, in my opinion, because
 in this case convention over configuration seems great when you are writing the
 code, and can be a nightmare when it comes to maintenance.</p>
@@ -383,14 +383,14 @@ enough, compared to how often you need the dynamic version.</p>
 <div class="section" id="discussion-generic-code-and-variable-names">
 <h2>Discussion: Generic code and variable names<a class="headerlink" href="#discussion-generic-code-and-variable-names" title="Permalink to this headline">¶</a></h2>
 <p>A third way to shorten the CBV is to omit <code class="docutils literal notranslate"><span class="pre">context_object_name</span></code>. In that case,
-instead of having our <code class="docutils literal notranslate"><span class="pre">Product</span></code> object having the name <code class="docutils literal notranslate"><span class="pre">product</span></code> in the
-template, it would have the name <code class="docutils literal notranslate"><span class="pre">object</span></code>. Don’t do that! <code class="docutils literal notranslate"><span class="pre">object</span></code> is a very
-bad choice of name for something unless you really have no idea what type it is,
-and is going to hurt maintenance in various ways.</p>
-<p>It’s good that <code class="docutils literal notranslate"><span class="pre">context_object_name</span></code> exists, but unfortunate that it is
-optional. For the instance variable on the view, however, things are worse — it
-is always <code class="docutils literal notranslate"><span class="pre">self.object</span></code>. This is probably a good thing when you are writing
-CBVs, but a bad thing when doing maintenance.</p>
+instead of our <code class="docutils literal notranslate"><span class="pre">Product</span></code> object having the name <code class="docutils literal notranslate"><span class="pre">product</span></code> in the template,
+it would have the name <code class="docutils literal notranslate"><span class="pre">object</span></code>. Don’t do that! <code class="docutils literal notranslate"><span class="pre">object</span></code> is a very bad
+choice of name for something unless you really have no idea what type it is, and
+it will hurt maintenance in various ways.</p>
+<p>It’s good that the <code class="docutils literal notranslate"><span class="pre">context_object_name</span></code> configuration switch exists, but
+unfortunate that it is optional. For the instance variable on the view, however,
+things are worse — it is always <code class="docutils literal notranslate"><span class="pre">self.object</span></code>. This is probably a good thing
+when you are writing CBVs, but a bad thing when doing maintenance.</p>
 <p>The issue here is again the problem of generic code. For the view code, it’s an
 unusually tricky problem — you are inheriting from generic code that doesn’t
 know a better name than <code class="docutils literal notranslate"><span class="pre">object</span></code>. However, <strong>your</strong> code is not generic, and
@@ -428,7 +428,19 @@ be sure that it is worth it.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>

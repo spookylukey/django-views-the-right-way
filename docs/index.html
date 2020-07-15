@@ -45,22 +45,23 @@
   <div class="section" id="django-views-the-right-way">
 <h1>Django Views — The Right Way<a class="headerlink" href="#django-views-the-right-way" title="Permalink to this headline">¶</a></h1>
 <p>Welcome to my opinionated guide on how to write views in Django!</p>
-<p><strong>WORK IN PROGRESS</strong> - this is an early draft, you should probably come back
-later…</p>
+<p><strong>WORK IN PROGRESS</strong> — this guide is not finished (and perhaps never will be…),
+but hopefully is in a useful state now.</p>
 <p>This guide is the result of mistakes made and lessons learned in a range of
-Django and Python projects for well over a decade.</p>
+Django and Python projects for nearly 15 years.</p>
 <p>It has also been prompted by the fact that “Class Based Views” (CBVs from now
-on) seem to have become the default way to teach and learn Django views, to the
-point that some are even scared to write “Function Based Views” (FBVs).</p>
-<p>Perhaps worst of all, some official Django documentation has <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/">well-intentioned
+on) seem to have become the default way to teach and learn Django views in some
+circles, to the point that some are even scared to write “Function Based Views”
+(FBVs).</p>
+<p>Perhaps worst of all, some official Django documentation has <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/">well-intentioned
 advise that will help to continue the torture of mixins</a>, but
 without actually killing you and putting you out of your misery. (After a bit of
 “git blaming” it turns out that I’m <a class="reference external" href="https://github.com/django/django/commit/c4c7fbcc0d9264beb931b45969fc0d8d655c4f83">credited</a>
-in the commit log. I hate it when that happens…)</p>
+in the commit log for that page. I hate it when that happens…)</p>
 <p>So, in view of all this, here I am to save the day, and show you The Right Way
 :-)</p>
 <p>The essential part of this guide is very short, because FBVs are very easy and
-simple. In fact, the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial03/">Django tutorial for views</a> already has all you
+simple. In fact, the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/">Django tutorial for views</a> already has all you
 need to know. Just read that, and skip the bits about CBVs, and you’ll be fine.</p>
 <p>But if you want a different take on the same things, this guide might be for
 you. I’ve also added extra bits for common tasks and patterns in FBVs for which
@@ -79,8 +80,9 @@ transferable knowledge:</p>
 </ul>
 </li>
 </ul>
-<p>Each page is composed of <strong>two parts</strong>, which have two slightly different
-audiences.</p>
+<p>And there are some other goodies along the way, like how to type-check all the
+URL parameters to your view functions.</p>
+<p>Each page is composed of <strong>two parts</strong>, which have <strong>two different audiences</strong>.</p>
 <p>First, the business — the <strong>what and how</strong>: a short, definitive guide to The
 Right Way. As a less experienced developer, either in general or in terms of
 knowledge of Django, this part is all you need. Since this guide is not intended
@@ -98,8 +100,8 @@ they apply in Python and Django.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="the-pattern.html#the-pattern">The Pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#the-explanation">The explanation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#discussion-keep-the-view-visible">Discussion — keep the view visible!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#the-explanation">The Explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the-pattern.html#discussion-keep-the-view-viewable">Discussion — keep the view viewable!</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a><ul>
@@ -117,6 +119,7 @@ they apply in Python and Django.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="url-parameters.html">URL parameters in views</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="url-parameters.html#discussion-generic-code-and-function-signatures">Discussion: Generic code and function signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url-parameters.html#discussion-type-checked-parameters">Discussion: Type-checked parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a><ul>
@@ -144,7 +147,11 @@ they apply in Python and Django.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="redirects.html#discussion-configuration-in-urls-py">Discussion: configuration in urls.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="redirects.html#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="redirects.html#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="redirects.html#additional-keyword-parameters">Additional keyword parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redirects.html#mass-produced-views-view-factories">Mass-produced views — “view factories”</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a><ul>
@@ -199,7 +206,19 @@ things I’m expressing now.</p></li>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>

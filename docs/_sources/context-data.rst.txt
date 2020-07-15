@@ -35,7 +35,7 @@ As we said, the answer to how do anything in a view is “Just do it”:
    <https://github.com/spookylukey/django-views-the-right-way/tree/master/code>`_.
 
 The template will decide how to format the date (most likely using the `date
-filter <https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#date>`_),
+filter <https://docs.djangoproject.com/en/stable/ref/templates/builtins/#date>`_),
 so we used a ``date`` object rather than a string. Our pattern already had an
 empty context dictionary sitting there, waiting to be filled up, so we just put
 the value right in. Done!
@@ -108,7 +108,7 @@ template tags to solve this problem — something he was very embarrassed about.
 But he shouldn't be embarrassed — for a newbie, you would have to be a pretty
 capable developer to actually successfully pull off all the parts needed for a
 `custom template tag
-<https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/>`_.
+<https://docs.djangoproject.com/en/stable/howto/custom-template-tags/>`_.
 
 Rather, he struggled for so long because of a bad :ref:`starting point
 <starting-point>` that was making a simple thing hard. If we as the Django

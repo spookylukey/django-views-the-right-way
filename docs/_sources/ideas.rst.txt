@@ -12,7 +12,7 @@ Customising the start - pre-conditions
   - Discussion: codeless views? or “look ma, no code!”
 
 
-  - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#django.views.generic.base.RedirectView
+  - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/stable/ref/class-based-views/base/#django.views.generic.base.RedirectView
 
 Original::
     from django.shortcuts import get_object_or_404

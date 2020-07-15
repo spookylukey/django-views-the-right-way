@@ -49,7 +49,7 @@
             
   <div class="section" id="url-parameters-in-views">
 <h1>URL parameters in views<a class="headerlink" href="#url-parameters-in-views" title="Permalink to this headline">¶</a></h1>
-<p>As described in the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/intro/tutorial03/">Django tutorial for views</a> and the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#how-django-processes-a-request">request
+<p>As described in the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/">Django tutorial for views</a> and the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#how-django-processes-a-request">request
 handling docs</a>,
 if you want to capture part of a URL to be used in a view function, you can do
 it by configuring your URLs.</p>
@@ -86,7 +86,7 @@ that your function doesn’t accept, which is an error in Python.</p>
 CBV, you don’t have to modify the function signature — because there isn’t one
 to modify. But with the CBV you have to write more code to get hold of that
 parameter.</p>
-<p>Be sure to check the Django docs about <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters">path converters</a> for
+<p>Be sure to check the Django docs about <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters">path converters</a> for
 the different kind of things you might add into your URLs. If you are into type
 hints, also see below for tips on how you can enhance this pattern.</p>
 <p>Otherwise, onto <a class="reference internal" href="detail-view.html"><span class="doc">Displaying a single database object</span></a>, where we will actually use the <code class="docutils literal notranslate"><span class="pre">slug</span></code>
@@ -96,7 +96,7 @@ parameter.</p>
 <p>Django’s URL-to-function dispatching mechanism is very elegant and powerful,
 converting parts of the URL into a function parameter that’s just ready and
 waiting to be used.</p>
-<p>With the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters">path converters</a>
+<p>With the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters">path converters</a>
 functionality added in 2.0 it got a whole lot better, because it will
 automatically convert things to the correct type for you, reducing the amount of
 type conversion you have to do in your function.</p>
@@ -111,11 +111,12 @@ type conversion you have to do in your function.</p>
 </div>
 <p>Now, you now longer have to check the URLconf to be sure of the type of the
 argument, it’s right there in your function.</p>
-<blockquote class="pull-quote">
-<div><p><em>Of course, wouldn’t it be even cooler if we could automatically ensure that
-the URL configuration matched the view function, both in terms of names and
-types of arguments?</em></p>
-</div></blockquote>
+</div>
+<div class="section" id="discussion-type-checked-parameters">
+<span id="type-checked-parameters"></span><h2>Discussion: Type-checked parameters<a class="headerlink" href="#discussion-type-checked-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Of course, wouldn’t it be even cooler if we could automatically ensure that the
+URL configuration matched the view function, both in terms of names and types of
+arguments?</p>
 <p><a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/url_checker.py">OK, you’ve persuaded me, go on then!</a>
 (This code is pretty functional as it is already, and I’ve enjoyed using it in
 my projects. But needs a fair amount of work to be a proper package. If anyone
@@ -173,7 +174,19 @@ But make sure you know what you are missing!</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
@@ -182,6 +195,7 @@ But make sure you know what you are missing!</p>
 <li class="toctree-l1"><a class="reference internal" href="common-context-data.html">Common context data</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">URL parameters in views</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-generic-code-and-function-signatures">Discussion: Generic code and function signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-type-checked-parameters">Discussion: Type-checked parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="detail-view.html">Displaying a single database object</a></li>

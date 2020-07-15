@@ -50,7 +50,7 @@
   <div class="section" id="forms">
 <h1>Forms<a class="headerlink" href="#forms" title="Permalink to this headline">¶</a></h1>
 <p>The fundamental pattern for a view that handles a form is covered fully in the
-<a class="reference external" href="https://docs.djangoproject.com/en/2.2/topics/forms/#the-view">Django form docs</a>, so I don’t
+<a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/forms/#the-view">Django form docs</a>, so I don’t
 have much to add, except a few notes:</p>
 <ul>
 <li><p>You don’t need to use <code class="docutils literal notranslate"><span class="pre">FormView</span></code>, and I recommend you don’t.</p></li>
@@ -58,8 +58,8 @@ have much to add, except a few notes:</p>
 helpful set of behaviours (validation etc.), but it’s entirely possible to
 build forms in Django without it. You need to know how forms work at the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Learn/Forms">HTML
 level</a>, and you need
-to process <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpRequest.GET">request.GET</a>
-or <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpRequest.POST">request.POST</a>
+to process <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest.GET">request.GET</a>
+or <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest.POST">request.POST</a>
 yourself to get the submitted data and do something with it.</p>
 <p>Normally, this would be very tedious compared to using <code class="docutils literal notranslate"><span class="pre">Form</span></code>, but in some
 cases it will be better. For example, if you have a page with dynamically
@@ -109,7 +109,19 @@ if you are trying to fit it into <code class="docutils literal notranslate"><spa
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>

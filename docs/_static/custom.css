@@ -1,6 +1,12 @@
-div.document {
-    width: 1040px;
-}
 pre {
+    /* Fit more code in */
     padding: 7px 12px;
+}
+.sphinxsidebarwrapper .toctree-l1 {
+    text-indent: -1em;
+    margin-left: 1em;
+}
+
+.sphinxsidebarwrapper .toctree-l2 {
+    text-indent: initial;
 }

@@ -54,7 +54,7 @@ context data. How should we handle that?</p>
 <p>There are a few different answers:</p>
 <ol class="arabic">
 <li><p>Is the data going to be needed by pretty much every page in your site, the
-answer is <a class="reference external" href="https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext">context processors</a>.</p></li>
+answer is <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/templates/api/#django.template.RequestContext">context processors</a>.</p></li>
 <li><p>Is the data going to be needed in a large fraction of your site, but not
 everywhere and is expensive to evaluate? I’d recommend using <a class="reference external" href="https://stackoverflow.com/a/28146359/182604">lazy evaluation
 in your context processor</a>.</p></li>
@@ -62,7 +62,7 @@ in your context processor</a>.</p></li>
 in a base template or is included in several templates?</p>
 <p>For example, it might be data needed for common navigation elements that
 appear in a header on lots of pages.</p>
-<p>In general this can be done most easily by using a <a class="reference external" href="https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/#inclusion-tags/">custom inclusion template
+<p>In general this can be done most easily by using a <a class="reference external" href="https://docs.djangoproject.com/en/stable/howto/custom-template-tags/#inclusion-tags/">custom inclusion template
 tag</a>
 which can load its own data — that way you don’t have to worry about changing
 view functions every time you include this component.</p>
@@ -183,7 +183,19 @@ which also mentions mixins.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Views — The Right Way</a></h1>
+
+
+
+<p class="blurb">An opionated guide</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
