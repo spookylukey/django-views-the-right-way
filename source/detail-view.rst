@@ -133,7 +133,7 @@ Perhaps a better way is to think about it is the “the single responsibility
 principle” for class design. Through that lens, this class doesn't look very
 good at all. It has far too many different directions you might want to take it.
 
-But the most convincing to me is too look what happens when you carry on this
+But the most convincing to me is to look what happens when you carry on this
 pattern.
 
 I recently came across a family of views that had the following methods and
@@ -194,19 +194,19 @@ the hybrid nature of this class. Methods like ``pre_init`` are trying to cope
 with the lack of a sensible ``__init__`` that the developer was in control of.
 
 It furthered suffered from the fact that all the methods had access to ``self``,
-and via ``self.request`` they had access to the HTTP request object. This meant
-there was no clear separation of request processing from anything else — the
-layers had all merged. This happens very easily with classes like this, because
-you never have to explicitly pass the ``request`` parameter around to make it
-available, it's implicitly available via ``self``.
+and therefore to the HTTP request object via ``self.request``. This meant there was
+no clear separation of request processing from anything else — the layers had
+all merged. This happens very easily with classes like this, because you never
+have to explicitly pass the ``request`` parameter around to make it available,
+it's implicitly available via ``self``.
 
 This kind of code is painful to work with even for the job it is doing. But when
 new requirements come along — like you need to generate XLS reports offline,
 outside of a web context — then you really are in a mess.
 
 What is needed is a separate set of classes that handle just XLS generation,
-which should then be used by our view functions (or classes). These will also
-have the advantage of being able to test some aspect of the XLS generation
+which should then be used by our view functions (or classes). This will also
+have the advantage of being able to test any aspect of the XLS generation
 without having to set up a web request, or even necessarily getting data from
 the database.
 
@@ -413,15 +413,15 @@ Discussion: Generic code and variable names
 -------------------------------------------
 
 A third way to shorten the CBV is to omit ``context_object_name``. In that case,
-instead of having our ``Product`` object having the name ``product`` in the
-template, it would have the name ``object``. Don't do that! ``object`` is a very
-bad choice of name for something unless you really have no idea what type it is,
-and is going to hurt maintenance in various ways.
+instead of our ``Product`` object having the name ``product`` in the template,
+it would have the name ``object``. Don't do that! ``object`` is a very bad
+choice of name for something unless you really have no idea what type it is, and
+it will hurt maintenance in various ways.
 
-It's good that ``context_object_name`` exists, but unfortunate that it is
-optional. For the instance variable on the view, however, things are worse — it
-is always ``self.object``. This is probably a good thing when you are writing
-CBVs, but a bad thing when doing maintenance.
+It's good that the ``context_object_name`` configuration switch exists, but
+unfortunate that it is optional. For the instance variable on the view, however,
+things are worse — it is always ``self.object``. This is probably a good thing
+when you are writing CBVs, but a bad thing when doing maintenance.
 
 The issue here is again the problem of generic code. For the view code, it's an
 unusually tricky problem — you are inheriting from generic code that doesn't

@@ -3,7 +3,8 @@ Django Views — The Right Way
 
 Welcome to my opinionated guide on how to write views in Django!
 
-**WORK IN PROGRESS** - this guide is not finished (and perhaps never will be…)
+**WORK IN PROGRESS** — this guide is not finished (and perhaps never will be…),
+but hopefully is in a useful state now.
 
 
 This guide is the result of mistakes made and lessons learned in a range of
@@ -16,11 +17,11 @@ circles, to the point that some are even scared to write “Function Based Views
 
 Perhaps worst of all, some official Django documentation has `well-intentioned
 advise that will help to continue the torture of mixins
-<https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/>`_, but
+<https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/>`_, but
 without actually killing you and putting you out of your misery. (After a bit of
 “git blaming” it turns out that I'm `credited
 <https://github.com/django/django/commit/c4c7fbcc0d9264beb931b45969fc0d8d655c4f83>`_
-in the commit log. I hate it when that happens…)
+in the commit log for that page. I hate it when that happens…)
 
 So, in view of all this, here I am to save the day, and show you The Right Way
 :-)
@@ -45,6 +46,9 @@ CBVs are often suggested as the solution. If you read all of it:
   * General OOP/multi-paradigm programming principles
   * General Python techniques
 
+And there are some other goodies along the way, like how to type-check all the
+URL parameters to your view functions.
+
 Each page is composed of **two parts**, which have **two different audiences**.
 
 First, the business — the **what and how**: a short, definitive guide to The
@@ -64,7 +68,7 @@ they apply in Python and Django.
 So let's go!
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    the-pattern

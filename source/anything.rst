@@ -24,7 +24,7 @@ want you to remember is:
   more concise if you find yourself writing the same things over and over. Don't
   be afraid to make some mistakes along the way.
 
-Next up - :doc:`context-data`.
+Next up — :doc:`context-data`.
 
 
 .. _starting-point:
@@ -57,5 +57,6 @@ Some people will say we should use a CBV for the really simple cases, and then
 switch to an FBV later as needed. But in reality that doesn't happen. Most
 developers are much more likely to stick with the existing structure of the
 code, because that is a safe option, and usually involves less work. Plus, once
-you have started down the CBV route, you quickly gain various mixins etc. that
-make plain functions appear less attractive.
+you have started down the CBV route, you quickly gain various mixins etc. and
+the principle of One Way To Do It and consistency means that plain functions
+will appear less attractive.

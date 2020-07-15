@@ -231,7 +231,7 @@ Discussion: Multiple mixins?
 
 When doing both a single object lookup and a list of objects, contrast the
 simplicity of the above FBV code with `trying to wrangle CBVs into doing this
-<https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview>`_.
+<https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview>`_.
 
 These Django docs do come up with a solution for this case, but it is a house of
 cards that requires lots of extremely careful thinking and knowing the

@@ -85,11 +85,15 @@ You can additionally make use of this by adding type hints:
 Now, you now longer have to check the URLconf to be sure of the type of the
 argument, it's right there in your function.
 
-.. pull-quote::
 
-   *Of course, wouldn't it be even cooler if we could automatically ensure that
-   the URL configuration matched the view function, both in terms of names and
-   types of arguments?*
+.. _type-checked-parameters:
+
+Discussion: Type-checked parameters
+-----------------------------------
+
+Of course, wouldn't it be even cooler if we could automatically ensure that the
+URL configuration matched the view function, both in terms of names and types of
+arguments?
 
 `OK, you've persuaded me, go on then!
 <https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/url_checker.py>`_

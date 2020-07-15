@@ -58,7 +58,7 @@ That's it!
 But, you need a slightly deeper understanding if you're going to write good
 Django views, so this page is quite a bit longer than most, for an explanation.
 
-The explanation
+The Explanation
 ---------------
 
 First, it's vital to know what a view **is**. As the `Django docs state
@@ -90,7 +90,7 @@ case, we sent just the text ``Hello world!``. This request-response cycle is the
 heart of the Django web framework.
 
 In order to get Django to actually call our view function, we have to hook it
-into a ``urlconf`` somewhere. This is covered in the `Django tutorial part 1
+into a “URLconf” somewhere. This is covered in the `Django tutorial part 1
 <https://docs.djangoproject.com/en/stable/intro/tutorial01/#write-your-first-view>`_,
 so I won't cover all the app layout stuff in detail — in brief, we'll have this
 in our urls.py:
@@ -180,7 +180,7 @@ however, it is useful to have functions return a value that does remember what
 it's “made of” — something that stores the template it is from, and the context.
 This can be really useful in testing, but also if we want to something outside
 of our view function (such as decorators or middleware) to check or even change
-whats in the response before it finally gets 'rendered' and sent to the user.
+what’s in the response before it finally gets ‘rendered’ and sent to the user.
 We'll cover use cases of this later in the guide.
 
 For now, you can just accept that ``TemplateResponse`` is a more useful return
@@ -211,12 +211,12 @@ Print out their documentation, put in a shed — or rather, a warehouse `given h
 much there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and
 `don't look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
 
-Next up - :doc:`anything`.
+Next up — :doc:`anything`.
 
 .. _visibility:
 
-Discussion — keep the view visible!
------------------------------------
+Discussion — keep the view viewable!
+------------------------------------
 
 The most important thing about the pattern I'm recommending is that the view
 itself is visible. The fundamental nature of a view is that it is a function (or
@@ -239,7 +239,8 @@ Using CBVs we could rewrite the code as:
         template_name = "example.html"
 
 
-But now **all 3 essential elements of the view have disappeared**. To have any
+But now **all 3 essential elements of the view have disappeared**. Where is the
+function or callable? Where is the request? Where is the response? To have any
 idea that this matches the description of what a view is you have to know what
 the base classes do, and the fundamental simplicity of what you are doing has
 been obscured.
