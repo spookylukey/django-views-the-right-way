@@ -83,6 +83,7 @@ So let's go!
    redirects
    forms
    preconditions
+   thin-views
 
 Caveats and disclaimers etc.
 ============================
