@@ -91,8 +91,11 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
+    'description': 'An opionated guide',
     'show_related': True,
     'show_relbars': True,
+    'page_width': '1100px',  # Wide enough for typical 80 char code samples
+    'sidebar_width': '280px',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -107,6 +110,7 @@ html_static_path = ['_static']
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
     '**': [
+        'about.html',
         'navigation.html',
         'searchbox.html',
         'relations.html',  # needs 'show_related': True theme option to display
