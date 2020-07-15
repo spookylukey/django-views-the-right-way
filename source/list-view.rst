@@ -13,7 +13,7 @@ listing page. Our first version of the code is just this:
 
 A typical product listing page has some more requirements, typically including
 at least pagination. Django comes with a helpful `Paginator
-<https://docs.djangoproject.com/en/3.0/topics/pagination/#using-paginator-in-a-view-function>`_
+<https://docs.djangoproject.com/en/stable/topics/pagination/#using-paginator-in-a-view-function>`_
 class, with helpful docs showing you how to use it. With that added, you have
 something like:
 
@@ -70,7 +70,7 @@ separately testable, with a well-defined interface that means its very unlikely
 to interact badly with the different contexts you might use it in.
 
 The `ListView alternative
-<https://docs.djangoproject.com/en/3.0/topics/pagination/#paginating-a-listview>`_
+<https://docs.djangoproject.com/en/stable/topics/pagination/#paginating-a-listview>`_
 for this code is tempting, but it is a short-sighted laziness. Any real world
 view will quickly develop enough logic that you lose even in terms of code
 length, and much more so in terms of code complexity.

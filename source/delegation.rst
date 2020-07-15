@@ -114,7 +114,7 @@ from our two entry-point view functions.
      so we use ``None`` in the signature and change to ``{}`` later.
 
 At the template level, we'll probably do a similar refactoring, using `include
-<https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#include>`_ to
+<https://docs.djangoproject.com/en/stable/ref/templates/builtins/#include>`_ to
 factor out duplication.
 
 That's it! See below for some more discussion about how this delegation pattern

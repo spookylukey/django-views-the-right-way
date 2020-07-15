@@ -8,7 +8,7 @@ There are a few different answers:
 
 1. Is the data going to be needed by pretty much every page in your site, the
    answer is `context processors
-   <https://docs.djangoproject.com/en/3.0/ref/templates/api/#django.template.RequestContext>`_.
+   <https://docs.djangoproject.com/en/stable/ref/templates/api/#django.template.RequestContext>`_.
 
 2. Is the data going to be needed in a large fraction of your site, but not
    everywhere and is expensive to evaluate? I'd recommend using `lazy evaluation
@@ -23,7 +23,7 @@ There are a few different answers:
 
    In general this can be done most easily by using a `custom inclusion template
    tag
-   <https://docs.djangoproject.com/en/3.0/howto/custom-template-tags/#inclusion-tags/>`_
+   <https://docs.djangoproject.com/en/stable/howto/custom-template-tags/#inclusion-tags/>`_
    which can load its own data — that way you don't have to worry about changing
    view functions every time you include this component.
 

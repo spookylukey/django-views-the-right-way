@@ -3,16 +3,16 @@ Django Views — The Right Way
 
 Welcome to my opinionated guide on how to write views in Django!
 
-**WORK IN PROGRESS** - this is an early draft, you should probably come back
-later...
+**WORK IN PROGRESS** - this guide is not finished (and perhaps never will be…)
 
 
 This guide is the result of mistakes made and lessons learned in a range of
-Django and Python projects for well over a decade.
+Django and Python projects for nearly 15 years.
 
 It has also been prompted by the fact that “Class Based Views” (CBVs from now
-on) seem to have become the default way to teach and learn Django views, to the
-point that some are even scared to write “Function Based Views” (FBVs).
+on) seem to have become the default way to teach and learn Django views in some
+circles, to the point that some are even scared to write “Function Based Views”
+(FBVs).
 
 Perhaps worst of all, some official Django documentation has `well-intentioned
 advise that will help to continue the torture of mixins
@@ -27,7 +27,7 @@ So, in view of all this, here I am to save the day, and show you The Right Way
 
 The essential part of this guide is very short, because FBVs are very easy and
 simple. In fact, the `Django tutorial for views
-<https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_ already has all you
+<https://docs.djangoproject.com/en/stable/intro/tutorial03/>`_ already has all you
 need to know. Just read that, and skip the bits about CBVs, and you'll be fine.
 
 But if you want a different take on the same things, this guide might be for
@@ -45,8 +45,7 @@ CBVs are often suggested as the solution. If you read all of it:
   * General OOP/multi-paradigm programming principles
   * General Python techniques
 
-Each page is composed of **two parts**, which have two slightly different
-audiences.
+Each page is composed of **two parts**, which have **two different audiences**.
 
 First, the business — the **what and how**: a short, definitive guide to The
 Right Way. As a less experienced developer, either in general or in terms of

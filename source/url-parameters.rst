@@ -2,9 +2,9 @@ URL parameters in views
 =======================
 
 As described in the `Django tutorial for views
-<https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_ and the `request
+<https://docs.djangoproject.com/en/stable/intro/tutorial03/>`_ and the `request
 handling docs
-<https://docs.djangoproject.com/en/3.0/topics/http/urls/#how-django-processes-a-request>`_,
+<https://docs.djangoproject.com/en/stable/topics/http/urls/#how-django-processes-a-request>`_,
 if you want to capture part of a URL to be used in a view function, you can do
 it by configuring your URLs.
 
@@ -50,7 +50,7 @@ to modify. But with the CBV you have to write more code to get hold of that
 parameter.
 
 Be sure to check the Django docs about `path converters
-<https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters>`_ for
+<https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters>`_ for
 the different kind of things you might add into your URLs. If you are into type
 hints, also see below for tips on how you can enhance this pattern.
 
@@ -66,7 +66,7 @@ converting parts of the URL into a function parameter that's just ready and
 waiting to be used.
 
 With the `path converters
-<https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters>`_
+<https://docs.djangoproject.com/en/stable/topics/http/urls/#path-converters>`_
 functionality added in 2.0 it got a whole lot better, because it will
 automatically convert things to the correct type for you, reducing the amount of
 type conversion you have to do in your function.

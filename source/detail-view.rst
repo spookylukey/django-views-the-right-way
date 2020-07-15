@@ -6,9 +6,9 @@ product pages, looking them up from a product slug that will be part of the URL.
 
 This requires knowing how to use ``QuerySet``, and in particular the
 `QuerySet.get
-<https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.get>`_
+<https://docs.djangoproject.com/en/stable/ref/models/querysets/#django.db.models.query.QuerySet.get>`_
 method. Assuming we have a ``Product`` model with a `SlugField
-<https://docs.djangoproject.com/en/3.0/ref/models/fields/#slugfield>`_ named
+<https://docs.djangoproject.com/en/stable/ref/models/fields/#slugfield>`_ named
 ``slug``, the code looks like:
 
 .. code-block:: python
@@ -18,7 +18,7 @@ method. Assuming we have a ``Product`` model with a `SlugField
 However, this could throw a ``Product.DoesNotExist`` exception, which we need to
 catch. Instead of crashing, we should instead show a 404 page to the user. We
 can do this easily using Django's `Http404
-<https://docs.djangoproject.com/en/3.0/topics/http/views/#django.http.Http404>`_
+<https://docs.djangoproject.com/en/stable/topics/http/views/#django.http.Http404>`_
 exception.
 
 The combined code would look like this:
@@ -34,7 +34,7 @@ The combined code would look like this:
 This is perfectly adequate code that you should not feel in any way embarrassed
 about. However, this pattern comes up so often in Django apps that there is a
 shortcut for it — `get_object_or_404
-<https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/#get-object-or-404>`_.
+<https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#get-object-or-404>`_.
 This combines the above logic for, so that you can just write:
 
 
@@ -66,7 +66,7 @@ Discussion: Layering violations — shortcuts vs mixins
 
 ``get_object_or_404`` is an example of a “shortcut” function. `Django's docs for
 shortcut functions
-<https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/>`_ defines them
+<https://docs.djangoproject.com/en/stable/topics/http/shortcuts/>`_ defines them
 like this:
 
     The package django.shortcuts collects helper functions and classes that
@@ -74,7 +74,7 @@ like this:
     introduce controlled coupling for convenience’s sake.
 
 And the `tutorial
-<https://docs.djangoproject.com/en/3.0/intro/tutorial03/#a-shortcut-get-object-or-404>`_
+<https://docs.djangoproject.com/en/stable/intro/tutorial03/#a-shortcut-get-object-or-404>`_
 has a helpful comment about them:
 
     **Philosophy**
@@ -230,7 +230,7 @@ Discussion: Comparison to DetailView
 ------------------------------------
 
 If instead of my FBV above we had used `DetailView
-<https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview>`_,
+<https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview>`_,
 what would the code look like? This is what I would write:
 
 .. code-block:: python
@@ -275,7 +275,7 @@ it's pretty much directly against the “Zen of Python” maxim “Explicit is b
 than implicit”.
 
 But it does appear in some parts of Django, and the `docs for DetailView
-<https://docs.djangoproject.com/en/3.0/ref/class-based-views/generic-display/#detailview>`_
+<https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview>`_
 encourage this particular shortcut. This is unfortunate, in my opinion, because
 in this case convention over configuration seems great when you are writing the
 code, and can be a nightmare when it comes to maintenance.

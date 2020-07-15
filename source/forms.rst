@@ -3,7 +3,7 @@ Forms
 
 The fundamental pattern for a view that handles a form is covered fully in the
 `Django form docs
-<https://docs.djangoproject.com/en/2.2/topics/forms/#the-view>`_, so I don't
+<https://docs.djangoproject.com/en/stable/topics/forms/#the-view>`_, so I don't
 have much to add, except a few notes:
 
 * You don't need to use ``FormView``, and I recommend you don't.
@@ -13,9 +13,9 @@ have much to add, except a few notes:
   build forms in Django without it. You need to know how forms work at the `HTML
   level <https://developer.mozilla.org/en-US/docs/Learn/Forms>`_, and you need
   to process `request.GET
-  <https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpRequest.GET>`_
+  <https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest.GET>`_
   or `request.POST
-  <https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpRequest.POST>`_
+  <https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpRequest.POST>`_
   yourself to get the submitted data and do something with it.
 
   Normally, this would be very tedious compared to using ``Form``, but in some

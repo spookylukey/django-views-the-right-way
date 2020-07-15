@@ -14,7 +14,7 @@ make sure you use the right one.
 
 That is 95% of what you need to know at the HTTP level. In Django, the most
 common functionality has been wrapped up for you in `HttpResponseRedirect
-<https://docs.djangoproject.com/en/3.0/ref/request-response/#django.http.HttpResponseRedirect>`_.
+<https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponseRedirect>`_.
 
 So this view, for example, does an unconditional, temporary redirect:
 
@@ -26,12 +26,12 @@ So this view, for example, does an unconditional, temporary redirect:
 In addition, Django provides some shortcuts:
 
 * `redirect
-  <https://docs.djangoproject.com/en/3.0/topics/http/shortcuts/#redirect>`_, a
+  <https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#redirect>`_, a
   utility that returns an HTTP response object and has built-in logic for
   redirecting to named views, and other things.
 
 * `RedirectView
-  <https://docs.djangoproject.com/en/3.0/ref/class-based-views/base/#redirectview>`_
+  <https://docs.djangoproject.com/en/stable/ref/class-based-views/base/#redirectview>`_
   — a class that provides an entire view that does redirection, and has a few
   neat features like being able to look up view by name, including arguments
   from a path, and also copy the query string. I recommend using this if the
@@ -100,7 +100,7 @@ Here are two methods for doing this:
 
 * Extra keyword arguments in urls.py — see the docs for `passing extra options
   to view functions
-  <https://docs.djangoproject.com/en/2.2/topics/http/urls/#views-extra-options>`_.
+  <https://docs.djangoproject.com/en/stable/topics/http/urls/#views-extra-options>`_.
 
   So, for example, if we want to reproduce the functionality of
   ``RedirectView``, complete with ”configure it within urls.py”, we could have a

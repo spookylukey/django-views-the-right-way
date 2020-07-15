@@ -35,9 +35,9 @@ Which bits do you change?
 * ``example.html`` should be the path to the template you are using. I'm not
   going to cover how to write templates anywhere in this guide. Please see the
   `Django tutorial on views and templates
-  <https://docs.djangoproject.com/en/3.0/intro/tutorial03/>`_, and the `Django
+  <https://docs.djangoproject.com/en/stable/intro/tutorial03/>`_, and the `Django
   template language topic
-  <https://docs.djangoproject.com/en/3.0/ref/templates/language/>`_.
+  <https://docs.djangoproject.com/en/stable/ref/templates/language/>`_.
 * ``{}``, the third argument to ``TemplateResponse``, is the context data you
   want available in your template.
 * ``arg`` is a placeholder for any number of optional URL parameters — parts of
@@ -51,7 +51,7 @@ Which bits do you change?
   * your view function defined above,
   * and an optional name that needs to be unique across your project, e.g.
     ``home`` or ``myapp_articles_list``, to enable `URL reversing
-    <https://docs.djangoproject.com/en/3.0/topics/http/urls/#reverse-resolution-of-urls>`_.
+    <https://docs.djangoproject.com/en/stable/topics/http/urls/#reverse-resolution-of-urls>`_.
 
 That's it!
 
@@ -91,7 +91,7 @@ heart of the Django web framework.
 
 In order to get Django to actually call our view function, we have to hook it
 into a ``urlconf`` somewhere. This is covered in the `Django tutorial part 1
-<https://docs.djangoproject.com/en/3.0/intro/tutorial01/#write-your-first-view>`_,
+<https://docs.djangoproject.com/en/stable/intro/tutorial01/#write-your-first-view>`_,
 so I won't cover all the app layout stuff in detail — in brief, we'll have this
 in our urls.py:
 
@@ -172,7 +172,7 @@ The third parameter here is the empty context dictionary.
 
 This is a great pattern for writing views. Django has one more trick up its
 sleeve, however — `TemplateResponse
-<https://docs.djangoproject.com/en/3.0/ref/template-response/#templateresponse-objects>`_.
+<https://docs.djangoproject.com/en/stable/ref/template-response/#templateresponse-objects>`_.
 
 The issue with just using ``render`` is that you get a plain ``HttpResponse``
 object back that has no memory that it ever came from a template. Sometimes,
