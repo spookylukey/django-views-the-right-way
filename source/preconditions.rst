@@ -276,7 +276,7 @@ But if we implemented our base mixins some other way (like only overriding
 ``dispatch()``, and using ``super()`` correctly), they **should** compose.
 
 (See the `preconditions discussion_views.py
-<https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/dependency_injection/discussion_views.py>`_
+<https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/preconditions/discussion_views.py>`_
 file for a full example of both)
 
 This issue is noted in the docs for ``UserPassesTestMixin`` — you cannot stack
