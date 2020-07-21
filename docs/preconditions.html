@@ -202,16 +202,18 @@ things):</p>
     <span class="k">return</span> <span class="n">wrapper</span>
 </pre></div>
 </div>
-<p>Then, what will the following code print, and when?</p>
+<p>Then, what will the following code blocks print?</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@decorator_1</span>
 <span class="gp">... </span><span class="nd">@decorator_2</span>
 <span class="gp">... </span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In my_view&quot;</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="s2">&quot;I am a response&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">my_view</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>First make your guess, then try the code from a Python prompt. If you got it
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">my_view</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First make your guesses, then try the code from a Python prompt. If you get it
 wrong, have another look until you understand exactly what is going on.</p>
 <p>Hints:</p>
 <ul class="simple">
@@ -241,7 +243,7 @@ and <a class="reference external" href="https://docs.djangoproject.com/en/stable
 <h2>Discussion: Mixins do not compose<a class="headerlink" href="#discussion-mixins-do-not-compose" title="Permalink to this headline">¶</a></h2>
 <p>Django also provides mixins for applying preconditions, like <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#the-loginrequired-mixin">LoginRequired</a>
 etc., which work by overriding the <code class="docutils literal notranslate"><span class="pre">dispatch()</span></code> method.</p>
-<p>Now, suppose I were to go the CBV route, and have a <code class="docutils literal notranslate"><span class="pre">PremiumRequired</span></code> mixin
+<p>Now, suppose we were to go the CBV route, and have a <code class="docutils literal notranslate"><span class="pre">PremiumRequired</span></code> mixin
 instead of <code class="docutils literal notranslate"><span class="pre">&#64;premium_required</span></code>. Let’s also add another similar check —
 <code class="docutils literal notranslate"><span class="pre">GoodReputationRequired</span></code> which does some kind of reputation check (perhaps
 this is a social site with moderation in place). To require a user to have both,
