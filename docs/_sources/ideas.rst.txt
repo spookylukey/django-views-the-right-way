@@ -7,78 +7,11 @@ Customising the start - pre-conditions
 
 - Forms
 
-- Redirects
-  - HTTP level
-  - Discussion: codeless views? or “look ma, no code!”
-
-
-  - RedirectView - rewrite example in docs - https://docs.djangoproject.com/en/stable/ref/class-based-views/base/#django.views.generic.base.RedirectView
-
-Original::
-    from django.shortcuts import get_object_or_404
-    from django.views.generic.base import RedirectView
-
-    from articles.models import Article
-
-    class ArticleCounterRedirectView(RedirectView):
-
-        permanent = False
-        query_string = True
-        pattern_name = 'article-detail'
-
-        def get_redirect_url(self, *args, **kwargs):
-            article = get_object_or_404(Article, pk=kwargs['pk'])
-            article.update_counter()
-            return super().get_redirect_url(*args, **kwargs)
-
-Function::
-
-    from django.http import HttpResponseRedirect
-    from django.urls import reverse
-    from django.shortcuts import get_object_or_404
-
-    from articles.models import Article
-
-    def article_counter_redirect_view(request, pk):
-        article = get_object_or_404(Article, pk=pk)
-        article.update_counter()
-        query_string = request.META.get('QUERY_STRING', '')
-        return HttpResponseRedirect(reverse('article-detail', kwargs={'pk': pk})
-                                    + ('?' + query_string) if query_string else '')
-
-Function wrapper of CBV::
-
-    from django.shortcuts import get_object_or_404
-    from django.views.generic.base import RedirectView
-
-    from articles.models import Article
-
-    def article_counter_redirect_view(request, pk):
-        article = get_object_or_404(Article, pk=kwargs['pk'])
-        article.update_counter()
-        return RedirectView.as_view(
-            pattern_name='article-detail'
-            query_string=True,
-            permanent=False,
-        )(request, pk=pk)
-
-
-URL conf
-
-RedirectView vs make_redirect
-
-Discussion - views in the URLconf
-
------
 
 Customising the end
 
 
-
-
 Thin views, fat models
-
-
 
 
 ---
@@ -129,15 +62,6 @@ everything I need::
 
 Which would you rather? And this is a very simple example, real CBVs often gain
 far more base classes and complexity.
-
-
-
-View factory / mass produced views
-
-- Redirect views for a whole family of views, each needing same kwargs passed on.
-
-  - Will do the same custom logic each time.
-
 
 
 --------------------

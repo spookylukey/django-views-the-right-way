@@ -43,67 +43,7 @@
 <ul class="simple">
 <li><p>Decorators</p></li>
 <li><p>Forms</p></li>
-<li><p>Redirects
-- HTTP level
-- Discussion: codeless views? or “look ma, no code!”</p>
-<ul>
-<li><p>RedirectView - rewrite example in docs - <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/class-based-views/base/#django.views.generic.base.RedirectView">https://docs.djangoproject.com/en/stable/ref/class-based-views/base/#django.views.generic.base.RedirectView</a></p></li>
 </ul>
-</li>
-</ul>
-<dl>
-<dt>Original::</dt><dd><p>from django.shortcuts import get_object_or_404
-from django.views.generic.base import RedirectView</p>
-<p>from articles.models import Article</p>
-<p>class ArticleCounterRedirectView(RedirectView):</p>
-<blockquote>
-<div><p>permanent = False
-query_string = True
-pattern_name = ‘article-detail’</p>
-<dl class="simple">
-<dt>def get_redirect_url(self, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs):</dt><dd><p>article = get_object_or_404(Article, pk=kwargs[‘pk’])
-article.update_counter()
-return super().get_redirect_url(<a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)</p>
-</dd>
-</dl>
-</div></blockquote>
-</dd>
-</dl>
-<p>Function:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
-
-<span class="kn">from</span> <span class="nn">articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
-
-<span class="k">def</span> <span class="nf">article_counter_redirect_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
-    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-    <span class="n">article</span><span class="o">.</span><span class="n">update_counter</span><span class="p">()</span>
-    <span class="n">query_string</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;QUERY_STRING&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;article-detail&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pk&#39;</span><span class="p">:</span> <span class="n">pk</span><span class="p">})</span>
-                                <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">query_string</span><span class="p">)</span> <span class="k">if</span> <span class="n">query_string</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Function wrapper of CBV:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
-<span class="kn">from</span> <span class="nn">django.views.generic.base</span> <span class="kn">import</span> <span class="n">RedirectView</span>
-
-<span class="kn">from</span> <span class="nn">articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
-
-<span class="k">def</span> <span class="nf">article_counter_redirect_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
-    <span class="n">article</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pk&#39;</span><span class="p">])</span>
-    <span class="n">article</span><span class="o">.</span><span class="n">update_counter</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">RedirectView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span>
-        <span class="n">pattern_name</span><span class="o">=</span><span class="s1">&#39;article-detail&#39;</span>
-        <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>URL conf</p>
-<p>RedirectView vs make_redirect</p>
-<p>Discussion - views in the URLconf</p>
-<hr class="docutils" />
 <p>Customising the end</p>
 <p>Thin views, fat models</p>
 <p>—</p>
@@ -145,14 +85,6 @@ everything I need:</p>
 </div>
 <p>Which would you rather? And this is a very simple example, real CBVs often gain
 far more base classes and complexity.</p>
-<p>View factory / mass produced views</p>
-<ul class="simple">
-<li><p>Redirect views for a whole family of views, each needing same kwargs passed on.</p>
-<ul>
-<li><p>Will do the same custom logic each time.</p></li>
-</ul>
-</li>
-</ul>
 <hr class="docutils" />
 <p>MRO problem:</p>
 <p>Before:</p>
