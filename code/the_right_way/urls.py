@@ -25,4 +25,6 @@ urlpatterns = [
     path('delegation-discussion/', include('the_right_way.delegation.discussion_urls')),
     path('dependency-injection/', include('the_right_way.dependency_injection.urls')),
     path('dependency-injection-discussion/', include('the_right_way.dependency_injection.discussion_urls')),
+    path('preconditions/', include('the_right_way.preconditions.urls')),
+    path('preconditions-discussion/', include('the_right_way.preconditions.discussion_urls')),
 ]

@@ -123,5 +123,22 @@
 
   <p><a href="{% url "view_source" namespace="dependency_injection_discussion" %}">[source]</a></p>
 
+
+  <h2>Preconditions</h2>
+  <ul>
+    <li><a href="{% url "preconditions:my_premium_page" %}">premium page</a></li>
+  </ul>
+
+  <p><a href="{% url "view_source" namespace="preconditions" %}">[source]</a></p>
+
+  <h3>Discussion</h2>
+  <ul>
+    <li><a href="{% url "preconditions_discussion:special_1" %}">special_1</a></li>
+    <li><a href="{% url "preconditions_discussion:special_2" %}">special_2</a></li>
+  </ul>
+
+  <p><a href="{% url "view_source" namespace="preconditions_discussion" %}">[source]</a></p>
+
+
   
 {% endblock %}

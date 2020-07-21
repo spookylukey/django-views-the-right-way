@@ -3,7 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    is_premium = models.BooleanField(default=False)
+    good_reputation = models.BooleanField(default=False)
 
 
 class Address(models.Model):

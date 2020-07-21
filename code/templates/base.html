@@ -5,8 +5,25 @@
     <title>Django Views — The Right Way — {% block "title" %}{% endblock %}</title>
     <link rel="stylesheet" href="https://classless.de/classless.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+     .messages {
+         background-color: #ffd;
+         padding: 0.5em 1em;
+     }
+    </style>
   </head>
   <body>
+    <header>
+      {% block "messages" %}
+        {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+              <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endblock %}
+    </header>
     <main>
       {% block "content" %}
       {% endblock %}

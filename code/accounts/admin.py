@@ -4,6 +4,12 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Address, User
 
 
+class MyUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Extra', {'fields': ('is_premium', 'good_reputation')}),
+    )
+
+
 class AddressAdmin(admin.ModelAdmin):
     list_display = [
         'user',
@@ -14,5 +20,5 @@ class AddressAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(User, MyUserAdmin)
 admin.site.register(Address, AddressAdmin)

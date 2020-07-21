@@ -111,3 +111,5 @@ SILENCED_SYSTEM_CHECKS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_URL = 'admin:index'
