@@ -129,7 +129,7 @@ parameter, you pass around functions too. That is the heart of the technique
 here.</p>
 <p>But what about the <code class="docutils literal notranslate"><span class="pre">special_offer_detail</span></code> view? If we pass
 <code class="docutils literal notranslate"><span class="pre">searcher=special_product_search</span></code>, inside <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code>
-we’ll have a problem. Our passed in function gets called as:</p>
+we’ll have a problem. Our passed in function gets called like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">searcher</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -190,8 +190,8 @@ that are built-in to many IDEs which can point out undefined names and so on.</p
 useful in a wide variety of programming situations. If you found the above
 confusing, have a look at this <a class="reference external" href="https://www.programiz.com/python-programming/closure">Python closures primer</a> and then come back to
 the more complex example here.</p>
-<p>In our theme of re-using logic, I next want to cover <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>, but
-before that we’re going to go back to some basics, the first of which is
+<p>In our theme of re-using logic, I want to cover <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>, but before
+that we’re going to go back to some basics, the first of which is
 <a class="reference internal" href="redirects.html"><span class="doc">Redirects</span></a> and then <a class="reference internal" href="forms.html"><span class="doc">Forms</span></a>.</p>
 <div class="section" id="note-terminology">
 <h2>Note — terminology<a class="headerlink" href="#note-terminology" title="Permalink to this headline">¶</a></h2>

@@ -286,11 +286,12 @@ This issue is noted in the docs for ``UserPassesTestMixin`` — you cannot stack
 multiple uses of it.
 
 However, docs or not, this is a great example of how, in general, **mixins do
-not compose**. You can have two mixins that work perfectly apart, but fail
-together. To be sure that they do compose, you have to **know the
-implementation**. Further, it's entirely possible that when you first put them
-together there is no issue, but a later change means they fail start failing in
-the worst possible way — **silently**.
+not compose**. I've said it :ref:`before <multiple-mixins>` but it is worth
+repeating. You can have two mixins that work perfectly apart, but fail together.
+To be sure that they do compose, you have to **know the implementation**.
+Further, it's entirely possible that when you first put them together there is
+no issue, but a later change means they fail start failing in the worst possible
+way — **silently**.
 
 This is a horrible way to write software! As much as possible, we should choose
 techniques where you can simply depend on the interface of some code to know

@@ -235,7 +235,7 @@ simplicity of the above FBV code with `trying to wrangle CBVs into doing this
 
 These Django docs do come up with a solution for this case, but it is a house of
 cards that requires lots of extremely careful thinking and knowing the
-implementation as well as interface of all the mixins involved.
+implementation as well as the interface of all the mixins involved.
 
 But, after scratching your head and debugging for an hour, at least you have
 less typing with the CBV, right? Unfortunately, the opposite is true:
