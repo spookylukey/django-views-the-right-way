@@ -97,7 +97,7 @@ here.
 
 But what about the ``special_offer_detail`` view? If we pass
 ``searcher=special_product_search``, inside ``display_product_list``
-we'll have a problem. Our passed in function gets called as::
+we'll have a problem. Our passed in function gets called like this::
 
   searcher(filters, page=page)
 
@@ -171,8 +171,8 @@ confusing, have a look at this `Python closures primer
 <https://www.programiz.com/python-programming/closure>`_ and then come back to
 the more complex example here.
 
-In our theme of re-using logic, I next want to cover :doc:`preconditions`, but
-before that we're going to go back to some basics, the first of which is
+In our theme of re-using logic, I want to cover :doc:`preconditions`, but before
+that we're going to go back to some basics, the first of which is
 :doc:`redirects` and then :doc:`forms`.
 
 
