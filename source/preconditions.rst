@@ -195,7 +195,7 @@ things):
 
        return wrapper
 
-Then, what will the following code print, and when?
+Then, what will the following code blocks print?
 
 
 .. code-block:: python
@@ -205,9 +205,12 @@ Then, what will the following code print, and when?
    ... def my_view(request):
    ...     print("In my_view")
    ...     return "I am a response"
+
+.. code-block:: python
+
    >>> response = my_view(None)
 
-First make your guess, then try the code from a Python prompt. If you got it
+First make your guesses, then try the code from a Python prompt. If you get it
 wrong, have another look until you understand exactly what is going on.
 
 Hints:
@@ -250,7 +253,7 @@ Django also provides mixins for applying preconditions, like `LoginRequired
 <https://docs.djangoproject.com/en/stable/topics/auth/default/#the-loginrequired-mixin>`_
 etc., which work by overriding the ``dispatch()`` method.
 
-Now, suppose I were to go the CBV route, and have a ``PremiumRequired`` mixin
+Now, suppose we were to go the CBV route, and have a ``PremiumRequired`` mixin
 instead of ``@premium_required``. Let's also add another similar check —
 ``GoodReputationRequired`` which does some kind of reputation check (perhaps
 this is a social site with moderation in place). To require a user to have both,
