@@ -259,7 +259,7 @@ only one of the checks will run. If this was a feature critical for security,
 that could be rather bad!</p>
 <p>But if we implemented our base mixins some other way (like only overriding
 <code class="docutils literal notranslate"><span class="pre">dispatch()</span></code>, and using <code class="docutils literal notranslate"><span class="pre">super()</span></code> correctly), they <strong>should</strong> compose.</p>
-<p>(See the <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/dependency_injection/discussion_views.py">preconditions discussion_views.py</a>
+<p>(See the <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/preconditions/discussion_views.py">preconditions discussion_views.py</a>
 file for a full example of both)</p>
 <p>This issue is noted in the docs for <code class="docutils literal notranslate"><span class="pre">UserPassesTestMixin</span></code> — you cannot stack
 multiple uses of it.</p>
