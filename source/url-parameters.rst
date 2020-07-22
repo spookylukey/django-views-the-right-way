@@ -85,15 +85,22 @@ You can additionally make use of this by adding type hints:
 Now, you now longer have to check the URLconf to be sure of the type of the
 argument, it's right there in your function.
 
+The elegance of URL parameters as part of the function signature contrasts with
+CBVs, where you have to do extra work get to hold of the parameter:
+
+  .. code-block:: python
+
+     name = self.kwargs['name']
+
 
 .. _type-checked-parameters:
 
 Discussion: Type-checked parameters
 -----------------------------------
 
-Of course, wouldn't it be even cooler if we could automatically ensure that the
-URL configuration matched the view function, both in terms of names and types of
-arguments?
+Of course, if we add type hints, wouldn't it be even cooler if we could
+automatically ensure that the URL configuration matched the view function, both
+in terms of names and types of arguments?
 
 `OK, you've persuaded me, go on then!
 <https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/url_checker.py>`_
@@ -104,33 +111,15 @@ You can play around with it by checking out the `example code
 <https://github.com/spookylukey/django-views-the-right-way/tree/master/code>`_
 that accompanies this guide).
 
-Unfortunately, you lose a number of these advantages if you are using CBVs:
-
-* The code to get hold of the parameter is bulkier:
-
-  .. code-block:: python
-
-     name = self.kwargs['name']
-
-* It can be easy to make a typo here, without it being immediately obvious, especially
-  if for some reason you write it like this:
-
-  .. code-block:: python
-
-     name = self.kwargs.get('name', None)
-
-  If you use functions, you will almost always get an immediate error if your
-  URL doesn't match your function signature.
-
-* You don't have a signature that you can decorate with type hints. The
-  signature that is externally visible for your view is ``view(request, *args,
-  **kwargs)``, so it is impossible for the above code to type check, or check
-  that you are attempting to get the right thing out of ``kwargs``.
+Unfortunately, you lose out here if you are using CBVs, because you don't have a
+signature that you can decorate with type hints. The signature that is
+externally visible for your view is ``view(request, *args, **kwargs)``, so it is
+impossible for the above type-checking code to work.
 
 The fundamental issue here is **generic code**. Generic code is useful precisely
 because of its breadth — it can be used in a wide range of situations. However,
 the downside of generic code is that it must cater for every situation, instead
-of just yours. So it has to have a dictionary ``kwargs``, which isn't really
+of just yours. So CBVs have to have a ``kwargs`` dictionary, which isn't really
 what you wanted. Generic code by definition lacks the personal touch.
 
 Of course, there can be times when the advantages outweigh the disadvantages.

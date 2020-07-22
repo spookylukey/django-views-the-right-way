@@ -6,14 +6,13 @@ context data. How should we handle that?
 
 There are a few different answers:
 
-1. Is the data going to be needed by pretty much every page in your site, the
+1. Is the data going to be needed by pretty much every page in your site? The
    answer is `context processors
    <https://docs.djangoproject.com/en/stable/ref/templates/api/#django.template.RequestContext>`_.
 
 2. Is the data going to be needed in a large fraction of your site, but not
    everywhere and is expensive to evaluate? I'd recommend using `lazy evaluation
    in your context processor <https://stackoverflow.com/a/28146359/182604>`_.
-
 
 3. Is the data needed for a ”component” that exists really at the template level, perhaps
    in a base template or is included in several templates?
