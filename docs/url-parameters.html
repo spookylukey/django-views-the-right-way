@@ -111,42 +111,33 @@ type conversion you have to do in your function.</p>
 </div>
 <p>Now, you now longer have to check the URLconf to be sure of the type of the
 argument, it’s right there in your function.</p>
+<p>The elegance of URL parameters as part of the function signature contrasts with
+CBVs, where you have to do extra work get to hold of the parameter:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="discussion-type-checked-parameters">
 <span id="type-checked-parameters"></span><h2>Discussion: Type-checked parameters<a class="headerlink" href="#discussion-type-checked-parameters" title="Permalink to this headline">¶</a></h2>
-<p>Of course, wouldn’t it be even cooler if we could automatically ensure that the
-URL configuration matched the view function, both in terms of names and types of
-arguments?</p>
+<p>Of course, if we add type hints, wouldn’t it be even cooler if we could
+automatically ensure that the URL configuration matched the view function, both
+in terms of names and types of arguments?</p>
 <p><a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/url_checker.py">OK, you’ve persuaded me, go on then!</a>
 (This code is pretty functional as it is already, and I’ve enjoyed using it in
 my projects. But needs a fair amount of work to be a proper package. If anyone
 would like to take that on as a project, please go ahead, and I’ll link it here!
 You can play around with it by checking out the <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/tree/master/code">example code</a>
 that accompanies this guide).</p>
-<p>Unfortunately, you lose a number of these advantages if you are using CBVs:</p>
-<ul>
-<li><p>The code to get hold of the parameter is bulkier:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</li>
-<li><p>It can be easy to make a typo here, without it being immediately obvious, especially
-if for some reason you write it like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>If you use functions, you will almost always get an immediate error if your
-URL doesn’t match your function signature.</p>
-</li>
-<li><p>You don’t have a signature that you can decorate with type hints. The
-signature that is externally visible for your view is <code class="docutils literal notranslate"><span class="pre">view(request,</span> <span class="pre">*args,</span>
-<span class="pre">**kwargs)</span></code>, so it is impossible for the above code to type check, or check
-that you are attempting to get the right thing out of <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p></li>
-</ul>
+<p>Unfortunately, you lose out here if you are using CBVs, because you don’t have a
+signature that you can decorate with type hints. The signature that is
+externally visible for your view is <code class="docutils literal notranslate"><span class="pre">view(request,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code>, so it is
+impossible for the above type-checking code to work.</p>
 <p>The fundamental issue here is <strong>generic code</strong>. Generic code is useful precisely
 because of its breadth — it can be used in a wide range of situations. However,
 the downside of generic code is that it must cater for every situation, instead
-of just yours. So it has to have a dictionary <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>, which isn’t really
+of just yours. So CBVs have to have a <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> dictionary, which isn’t really
 what you wanted. Generic code by definition lacks the personal touch.</p>
 <p>Of course, there can be times when the advantages outweigh the disadvantages.
 But make sure you know what you are missing!</p>
