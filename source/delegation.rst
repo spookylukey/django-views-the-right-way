@@ -194,8 +194,9 @@ hierarchy looks like it was introduced in order to avoid a single duplicate
 line. `But that shouldn't be our primary aim
 <https://verraes.net/2014/08/dry-is-about-knowledge/>`_.
 
-There are plenty of things worse than copy-paste programming, and unhelpful
-abstractions are among them.
+There are plenty of things worse than copy-paste programming, and `the wrong
+abstraction <https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction>`_ is
+one of them.
 
 I recently wrote several implementations of Mozilla's `Fluent
 <https://projectfluent.org/>`_ localisation language, all of them in Python. One
