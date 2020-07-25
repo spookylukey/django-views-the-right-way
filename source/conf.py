@@ -46,7 +46,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Django Views — The Right Way'
+# NB on-breaking spaces in 'The Right Way' for better display in contents panel
+project = 'Django Views — The Right Way'
 html_title = ''
 copyright = '2020, Luke Plant'
 author = 'Luke Plant'
