@@ -1,14 +1,11 @@
 Django Views — The Right Way
 ============================
 
-Welcome to my opinionated guide on how to write views in Django!
+Welcome to my opinionated guide on how to write views in Django! 
 
-**WORK IN PROGRESS** — this guide is not finished (and perhaps never will be…),
-but hopefully is in a useful state now.
-
-
-This guide is the result of mistakes made and lessons learned in a range of
+It is the result of mistakes made and lessons learned in a range of
 Django and Python projects for nearly 15 years.
+
 
 It has also been prompted by the fact that “Class Based Views” (CBVs from now
 on) seem to have become the default way to teach and learn Django views in some
@@ -25,6 +22,7 @@ in the commit log for that page. I hate it when that happens…)
 
 So, in view of all this, here I am to save the day, and show you The Right Way
 :-)
+
 
 The essential part of this guide is very short, because FBVs are very easy and
 simple. In fact, the `Django tutorial for views
@@ -84,6 +82,12 @@ So let's go!
    forms
    preconditions
    thin-views
+
+
+Something missing? This guide is a **work in progress**, and no matter how much
+I add it probably always will be! If you have requests for things to include,
+you could file an issue on `GitHub
+<https://github.com/spookylukey/django-views-the-right-way>`_.
 
 Caveats and disclaimers etc.
 ============================
