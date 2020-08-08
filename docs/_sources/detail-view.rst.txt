@@ -95,6 +95,10 @@ some typing, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn't hurt your code base, this is vital.
 
+(Some people think that the kind of coupling in ``get_object_or_404`` is always
+unacceptable, but I think that's due to different expectations regarding
+:ref:`service layers <service-layers>`.)
+
 In a Django project, tell-tale signs of inappropriately coupled code would
 include things like passing the ``request`` object around everywhere, especially
 into the model layer, or code outside the view layer that returns HTTP responses

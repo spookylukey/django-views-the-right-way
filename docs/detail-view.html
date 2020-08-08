@@ -4,7 +4,6 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Displaying a single database object</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -117,6 +116,9 @@ local effects on your code. For example, when we introduced
 some typing, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn’t hurt your code base, this is vital.</p>
+<p>(Some people think that the kind of coupling in <code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code> is always
+unacceptable, but I think that’s due to different expectations regarding
+<a class="reference internal" href="thin-views.html#service-layers"><span class="std std-ref">service layers</span></a>.)</p>
 <p>In a Django project, tell-tale signs of inappropriately coupled code would
 include things like passing the <code class="docutils literal notranslate"><span class="pre">request</span></code> object around everywhere, especially
 into the model layer, or code outside the view layer that returns HTTP responses
@@ -493,7 +495,7 @@ be sure that it is worth it.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,7 +4,6 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django Views — The Right Way</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -46,9 +45,7 @@
   <div class="section" id="django-views-the-right-way">
 <h1>Django Views — The Right Way<a class="headerlink" href="#django-views-the-right-way" title="Permalink to this headline">¶</a></h1>
 <p>Welcome to my opinionated guide on how to write views in Django!</p>
-<p><strong>WORK IN PROGRESS</strong> — this guide is not finished (and perhaps never will be…),
-but hopefully is in a useful state now.</p>
-<p>This guide is the result of mistakes made and lessons learned in a range of
+<p>It is the result of mistakes made and lessons learned in a range of
 Django and Python projects for nearly 15 years.</p>
 <p>It has also been prompted by the fact that “Class Based Views” (CBVs from now
 on) seem to have become the default way to teach and learn Django views in some
@@ -170,9 +167,22 @@ they apply in Python and Django.</p>
 <li class="toctree-l2"><a class="reference internal" href="preconditions.html#discussion-mixins-do-not-compose">Discussion: Mixins do not compose</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="thin-views.html">Thin views</a></li>
+<li class="toctree-l1"><a class="reference internal" href="thin-views.html">Thin views</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="thin-views.html#example-push-actions-to-the-model-layer">Example: push actions to the model layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thin-views.html#example-push-filtering-to-the-model-layer">Example: push filtering to the model layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="thin-views.html#chainable-custom-queryset-methods">Chainable custom QuerySet methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="thin-views.html#where-to-put-this-code">Where to put this code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="thin-views.html#discussion-service-layer">Discussion: service layer?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thin-views.html#discussion-pragmatism-and-purity">Discussion: pragmatism and purity</a></li>
+</ul>
+</li>
 </ul>
 </div>
+<p>Something missing? This guide is a <strong>work in progress</strong>, and no matter how much
+I add it probably always will be! If you have requests for things to include,
+you could file an issue on <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way">GitHub</a>.</p>
 </div>
 <div class="section" id="caveats-and-disclaimers-etc">
 <h1>Caveats and disclaimers etc.<a class="headerlink" href="#caveats-and-disclaimers-etc" title="Permalink to this headline">¶</a></h1>
@@ -274,7 +284,7 @@ things I’m expressing now.</p></li>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

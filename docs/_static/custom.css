@@ -10,3 +10,10 @@ pre {
 .sphinxsidebarwrapper .toctree-l2 {
     text-indent: initial;
 }
+
+
+@media screen and (max-width: 1100px) {
+  ul {
+      margin-left: 30px;
+  }
+}
