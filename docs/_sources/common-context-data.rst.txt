@@ -59,9 +59,6 @@ helpers if they have any significant logic in them.
 
 Next up: :doc:`url-parameters`
 
-(You may be interested in a more fancy technique, based on TemplateResponse and
-decorators - TODO - but it really isn't necessary).
-
 .. _helpers-vs-mixins:
 
 Discussion: Helpers vs mixins

@@ -169,12 +169,48 @@ As FBVs they will probably be better for you than your own custom CBVs:
   have several parameters related to filtering a list, perhaps you actually need
   to invent a ``Filterer`` class?
 
+Discussion: Going further with generics
+---------------------------------------
 
-TODO - going further - higher level - DRF/Django admin
+If you have a large number of views that are very repetitive, you may continue
+this pattern even further. Examples of projects that have done this are:
+
+* `The Django admin <https://docs.djangoproject.com/en/3.1/ref/contrib/admin/>`_
+* `Django Rest Framework <https://www.django-rest-framework.org/>`_
+
+Both of these have their own forms of “Class Based Views”, but actually provide
+higher level functionality in terms of **sets of views** rather than just
+individual views.
+
+I've had good experiences with both, and here are my ideas about why they have
+succeeded, where CBVs haven't:
+
+* They both provide a fairly narrow set of views. Both are essentially CRUD
+  based, and this means that the views are quite constrained in what they do.
+
+  This is in contrast to a classic web app where a single view can do a very
+  wide range of things, and could easily combine multiple different things.
+
+* Due to this constraint, they can provide abstractions that are higher level
+  than a single view (for example, the ``ModelAdmin`` and the ``ViewSet``
+  classes). You can get a very large amount of functionality out of these
+  classes “for free” — with just a small amount of declarative customisation.
+  So when you need to go further and write some code, you are still way ahead
+  of where you would have been without them.
+
+* They provide a lot of their functionality in terms of **composing** behaviour
+  defined in other objects and classes, rather than by **inheriting** from
+  mixins. For example, the Django admin has behaviour defined in other things
+  like ``Form`` and ``ListFilter`` that are referenced from your ``ModelAdmin``;
+  DRF has separate classes for serializers, permissions and filtering that are
+  referenced from your ``ViewSet``.
 
 
 Discussion: Copy-Paste Bad, Re-use Good?
 ----------------------------------------
+
+I've claimed above that your own generic views would be better than the generic
+CBVs that Django provides, which leads to a question:
 
 Where do Django's generic CBVs come from? Why didn't we stop with function based
 generic views? The problem was that there was an endless list of requests to
@@ -191,8 +227,8 @@ developers if we can't.
 
 You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
-line. `But that shouldn't be our primary aim
-<https://verraes.net/2014/08/dry-is-about-knowledge/>`_.
+line. But `it is knowledge and not lines of code that we should be trying not to
+duplicate <https://verraes.net/2014/08/dry-is-about-knowledge/>`_.
 
 There are plenty of things worse than copy-paste programming, and `the wrong
 abstraction <https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction>`_ is

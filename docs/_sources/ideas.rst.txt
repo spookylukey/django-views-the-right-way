@@ -1,20 +1,3 @@
-TODO
-====
-
-Customising the start - pre-conditions
-
-- Decorators
-
-- Forms
-
-
-Customising the end
-
-
-Thin views, fat models
-
-
----
 
 
 Security:
