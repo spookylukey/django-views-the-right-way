@@ -4,8 +4,7 @@ Django Views — The Right Way
 Welcome to my opinionated guide on how to write views in Django! 
 
 It is the result of mistakes made and lessons learned in a range of
-Django and Python projects for nearly 15 years.
-
+Django and Python projects over 15+ years.
 
 It has also been prompted by the fact that “Class Based Views” (CBVs from now
 on) seem to have become the default way to teach and learn Django views in some

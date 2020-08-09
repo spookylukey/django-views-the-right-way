@@ -13,7 +13,7 @@ individual pages. We want ``/product/`` to be the prefix for all these pages,
 and the next part to be the “slug” for the product — a URL-friendly version of
 the name (e.g ``white-t-shirt`` instead of "White T-Shirt").
 
-We can do that as follow:
+We can do that as follows:
 
 .. code-block:: python
 
