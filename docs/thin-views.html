@@ -210,13 +210,13 @@ everything that I would want to say on the topic, so I’m not going to repeat
 that. The long and short is — using custom <code class="docutils literal notranslate"><span class="pre">Model</span></code> methods and custom
 <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods (as above) as your “service layer” is an approach that will
 work really well for a lot of projects.</p>
-<p>Those who believe that a service layer is essential — for example using a
+<p>If you believe that a service layer is essential — for example, using a
 repository pattern that doesn’t use <code class="docutils literal notranslate"><span class="pre">QuerySets</span></code> — then you will probably not
 agree with some of the patterns I’ve suggested. For example, the
 <a class="reference internal" href="detail-view.html#shortcuts-vs-mixins"><span class="std std-ref">get_object_or_404 shortcut</span></a> might strike you as a
 weird or terrible idea. However, if you are sold on using the <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> API
 (with custom methods) as your interface, then this is just a useful shortcut
-that adapts the <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> API for a common case in HTTP interfaces.</p>
+that adapts the <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> API for a common case in HTTP applications.</p>
 </div>
 <div class="section" id="discussion-pragmatism-and-purity">
 <h2>Discussion: pragmatism and purity<a class="headerlink" href="#discussion-pragmatism-and-purity" title="Permalink to this headline">¶</a></h2>

@@ -214,13 +214,13 @@ that. The long and short is — using custom ``Model`` methods and custom
 ``QuerySet`` methods (as above) as your “service layer” is an approach that will
 work really well for a lot of projects.
 
-Those who believe that a service layer is essential — for example using a
+If you believe that a service layer is essential — for example, using a
 repository pattern that doesn't use ``QuerySets`` — then you will probably not
 agree with some of the patterns I've suggested. For example, the
 :ref:`get_object_or_404 shortcut <shortcuts-vs-mixins>` might strike you as a
 weird or terrible idea. However, if you are sold on using the ``QuerySet`` API
 (with custom methods) as your interface, then this is just a useful shortcut
-that adapts the ``QuerySet`` API for a common case in HTTP interfaces.
+that adapts the ``QuerySet`` API for a common case in HTTP applications.
 
 
 Discussion: pragmatism and purity
