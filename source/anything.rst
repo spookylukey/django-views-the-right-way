@@ -46,8 +46,9 @@ you pain:
 
 * You've got to know which methods or attributes to define, which involves
   knowing a massive API.
-* You could easily get it wrong in a way which introduces serious bugs. (TODO
-  link)
+* You could easily get it wrong in a way which introduces serious bugs (such as
+  `perhaps the worst security bug I've witnessed in Django itself
+  <https://groups.google.com/d/msg/django-developers/HUZySAw43uE/RD4ifBLPBgAJ>`_)
 * You've got to add the method, which is extra boilerplate.
 * You may need to switch the base class, and understand what that will do.
 
