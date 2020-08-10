@@ -71,8 +71,9 @@ to interact badly with the different contexts you might use it in.
 
 The `ListView alternative
 <https://docs.djangoproject.com/en/stable/topics/pagination/#paginating-a-listview>`_
-for this code is tempting, but it is a short-sighted laziness. Any real world
-view will quickly develop enough logic that you lose even in terms of code
+for this code is tempting, but it is short-sighted laziness (as opposed to
+long-sighted laziness that is an essential quality of every developer). Any real
+world view will quickly develop enough logic that you lose even in terms of code
 length, and much more so in terms of code complexity.
 
 As well as ``paged_object_list_context``, we should also mention ``Paginator``,
