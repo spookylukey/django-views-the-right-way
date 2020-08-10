@@ -23,10 +23,35 @@ have much to add, except a few notes:
   generated controls (e.g. lots of buttons or input boxes) it can be easiest to
   build them up and process them without using ``Form``.
 
-* If you need multiple buttons on the same form, that do slightly different,
-  you need to understand what this produces. The button that is pressed becomes
-  successful control.
+* If you need multiple buttons on the same form, that do different things, you
+  need to understand how this works at the HTML level. The button that is
+  pressed becomes a “successful” control, which means the ``request.POST`` (or
+  ``request.GET``) dictionary will get an entry with that control's ``name``
+  attribute.
 
+  So it looks like this:
+
+  Template:
+
+  .. code-block:: html+django
+
+     <form action="" method="POST">
+         {% csrf_token %}
+         {{ form }}
+         <input type="submit" name="save" value="Save">
+         <input type="submit" name="preview" value="Preview">
+     </form>
+
+  View:
+
+  .. code-block:: python
+
+     def my_view(request):
+         if request.method == 'POST':
+             if 'preview' in request.POST:
+                 # Do preview thing...
+
+  You may have to do something similar for multiple forms on one page.
 
 That's it! Next up: :doc:`preconditions`.
 
@@ -48,7 +73,11 @@ For example, if you find you have a page that has two forms on it (perhaps
 alternative flows that the user can choose between), ``FormView`` will cause you
 lots of pain.
 
+Or if you have form handling as well as something else (such as a list of
+items), you will be in confusion if you are trying to use ``FormView``, even
+more so if you've forgotten how to use the ``Form`` API directly.
+
 Another example is when you need multiple different submit buttons, which do
 something different. This is an easy thing in HTML/HTTP, and easy if you are
-using ``Form`` directly and in charge of the control flow yourself, but horrible
-if you are trying to fit it into ``FormView``.
+using ``Form`` directly and in charge of the control flow yourself, as outlined
+above, but horrible if you are trying to fit it into ``FormView``.

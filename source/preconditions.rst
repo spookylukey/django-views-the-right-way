@@ -13,9 +13,9 @@ Python “decorators” are a perfect match for these kind of things.
 If you haven't used decorators at all before, I'd recommend this `Primer on
 Python Decorators <https://realpython.com/primer-on-python-decorators/>`_. If
 you just want to apply an existing decorator to a view, that's very easy, but a
-good understanding of what is going on is really necessary if you want to be
-able to implement them. Plus, you'll get a huge amount of benefit in other ways
-from this very general Python technique.
+good understanding of what is going on is necessary if you want to be able to
+implement them. Plus, you'll get a huge amount of benefit in other ways from
+this very general Python technique.
 
 First let's look at our starting point. We have a page that should only be
 accessible to 'premium' users. If, somehow, a non-premium user gets the link to
@@ -80,11 +80,11 @@ So the implementation of ``premium_required`` will look like this:
        return wrapper
 
 
-The ``@functools.wraps(view_func)`` line is not strictly necessary. But it makes
-our wrapper function view behave more nicely — for example, it copies the name
-and docstring of the original view over, along with other attributes. These make
-debugging nicer, and sometimes it can be important for functionality too (for
-instance, if you are wrapping something that has been wrapped in
+The ``@functools.wraps(view_func)`` line may not be strictly necessary. But it
+makes our wrapper function view behave more nicely — for example, it copies the
+name and docstring of the original view over, along with other attributes. These
+make debugging nicer, and sometimes it can be important for functionality too
+(for instance, if you are wrapping something that has been wrapped in
 ``csrf_exempt``) — so you should always add it.
 
 So far, the views we're using it on only take a single ``request``, so making
