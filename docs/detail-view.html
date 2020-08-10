@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Displaying a single database object</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -66,13 +67,13 @@ exception.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">product</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">Product</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="n">Http404</span>
+    <span class="k">raise</span> <span class="n">Http404</span><span class="p">(</span><span class="s2">&quot;Product not found.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This is perfectly adequate code that you should not feel in any way embarrassed
 about. However, this pattern comes up so often in Django apps that there is a
 shortcut for it — <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#get-object-or-404">get_object_or_404</a>.
-This combines the above logic for, so that you can just write:</p>
+This combines the above logic, so that you can just write:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># imports</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 
@@ -81,7 +82,7 @@ This combines the above logic for, so that you can just write:</p>
 </pre></div>
 </div>
 <p>If the only thing we are going to do with the product object is render it in a
-template, the final, concise version of our view will look like this:</p>
+template, then the final, concise version of our view will look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_detail.html&#39;</span><span class="p">,</span> <span class="p">{</span>
         <span class="s1">&#39;product&#39;</span><span class="p">:</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">),</span>
@@ -113,7 +114,7 @@ controlled coupling is introduced in the <code class="docutils literal notransla
 <p>An important property of well designed shortcut functions is that they only have
 local effects on your code. For example, when we introduced
 <code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code>, we replaced 4 lines in the original function and saved
-some typing, but there were no effects on the external behaviour of that view
+some noise, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn’t hurt your code base, this is vital.</p>
 <p>(Some people think that the kind of coupling in <code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code> is always
@@ -152,7 +153,7 @@ is just a class-based equivalent to the view function.</p>
 <p>Perhaps a better way is to think about it is the “the single responsibility
 principle” for class design. Through that lens, this class doesn’t look very
 good at all. It has far too many different directions you might want to take it.</p>
-<p>But the most convincing to me is to look what happens when you carry on this
+<p>But the most convincing to me is to look at what happens when you carry on this
 pattern.</p>
 <p>I recently came across a family of views that had the following methods and
 class attributes (including all the base classes):</p>
@@ -232,8 +233,8 @@ code, while mixins set up a pattern for your code which determines its structure
 — and not in a good way. The coupling becomes totally out of control.</p>
 <p>Brandon Rhodes has <a class="reference external" href="https://youtu.be/S0No2zSJmks?t=3095">an excellent discussion on mixins in his talk on Python
 anti-patterns</a>. He also specifically
-calls out Django CBV mixins (though manages to avoid saying ‘Django’), and in my
-opinion his analysis is spot on.</p>
+calls out Django CBV mixins (though he manages to avoid saying ‘Django’), and in
+my opinion his analysis is spot on.</p>
 </div>
 <div class="section" id="discussion-comparison-to-detailview">
 <span id="detailview-comparison"></span><h2>Discussion: Comparison to DetailView<a class="headerlink" href="#discussion-comparison-to-detailview" title="Permalink to this headline">¶</a></h2>
@@ -258,8 +259,8 @@ my FBV:</p>
 </div>
 <p>For a mixin plus two lines of configuration, I don’t think you are getting much
 value for money.</p>
-<p>You could make it more concise, but not in good ways. Each alternative way to
-write this brings up some issues that I’ll discuss in turn.</p>
+<p>You could make the CBV version more concise, but not in good ways. Each
+alternative way to write this brings up some issues that I’ll discuss in turn.</p>
 </div>
 <div class="section" id="discussion-convention-vs-configuration">
 <h2>Discussion: Convention vs configuration<a class="headerlink" href="#discussion-convention-vs-configuration" title="Permalink to this headline">¶</a></h2>
@@ -270,8 +271,8 @@ model name and the type of view, which in this case would result in
 lived in was called <code class="docutils literal notranslate"><span class="pre">shop</span></code>.</p>
 <p>This kind of behaviour is called “convention over configuration”. It’s popular
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
-it’s pretty much directly against the “Zen of Python” maxim “Explicit is better
-than implicit”.</p>
+it’s pretty much directly against the <a class="reference external" href="https://www.python.org/dev/peps/pep-0020/">Zen of Python</a> maxim “Explicit is better than
+implicit”.</p>
 <p>But it does appear in some parts of Django, and the <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview">docs for DetailView</a>
 encourage this particular shortcut. This is unfortunate, in my opinion, because
 in this case convention over configuration seems great when you are writing the
@@ -330,13 +331,13 @@ table names, which is going to make their job possible.</p></li>
 consistency — the path of least resistance is that you use the convention. This
 matters to the extent that consistency matters. For things that can “leak” and
 eventually become difficult to change (e.g. names used in schemas) this can be a
-crucial advantages.</p>
+crucial advantage.</p>
 <p>To sum up: proponents of Ruby-on-Rail-style “convention over configuration” will
 point to some super-verbose Java framework as an example of all the boilerplate
 you can save. But this is a false dichotomy. With dynamic languages, very often
-we can choose exactly how much configuration we want to avoid. We should make
-sure we restrain ourselves if we are going to make code less maintainable for
-the sake of saving a tiny bit of typing.</p>
+<strong>we can choose exactly how much configuration we want to avoid</strong>. We should
+make sure we restrain ourselves if we are going to make code less maintainable
+for the sake of saving a tiny bit of typing.</p>
 </div>
 <div class="section" id="discussion-static-vs-dynamic">
 <h2>Discussion: Static vs dynamic<a class="headerlink" href="#discussion-static-vs-dynamic" title="Permalink to this headline">¶</a></h2>
@@ -355,10 +356,11 @@ because it will hurt the maintenance programmer — if the requirements change
 <code class="docutils literal notranslate"><span class="pre">get_object_or_404(Product.objects.all(),</span> <span class="pre">…)</span></code> instead of
 <code class="docutils literal notranslate"><span class="pre">get_object_or_404(Product,</span> <span class="pre">…)</span></code> which is also supported by the shortcut
 function.</p>
-<p>If, however, the queryset needed depends on the <code class="docutils literal notranslate"><span class="pre">request</span></code> object, the
-programmer will have to instead define <code class="docutils literal notranslate"><span class="pre">get_queryset()</span></code> to get access to the
-request data and dynamically respond to it, rather than have a static definition
-on the class, and they will need to know this API exists, or look up the docs.</p>
+<p>If, however, the queryset needed depends on the <code class="docutils literal notranslate"><span class="pre">request</span></code> object, instead of a
+static <code class="docutils literal notranslate"><span class="pre">queryset</span></code> attribute the programmer will have to define the
+<code class="docutils literal notranslate"><span class="pre">get_queryset()</span></code> method to get access to the request data and dynamically
+respond to it. This is a different way of doing the same thing that they will
+need to know about.</p>
 <p>There is also a subtlety with querysets: suppose your
 <code class="docutils literal notranslate"><span class="pre">ProductQuerySet.visible()</span></code> method goes from being a simple filter on a field
 to gaining some additional time based logic e.g.:</p>
@@ -379,7 +381,8 @@ which FBVs are constructed.</p>
 addition to being more concise and declarative. For example, the Django admin
 classes has attributes like <code class="docutils literal notranslate"><span class="pre">fieldsets</span></code> for the static case, with
 <code class="docutils literal notranslate"><span class="pre">get_fieldsets()</span></code> for the dynamic case. If you use the attribute, the Django
-checks framework is able to check it for you before you even access the admin.</p>
+<a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/checks/">checks framework</a> is
+able to check it for you before you even access the admin.</p>
 <p>Some of the trade-offs here also depend on how often the static attribute is
 enough, compared to how often you need the dynamic version.</p>
 </div>
@@ -495,7 +498,7 @@ be sure that it is worth it.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

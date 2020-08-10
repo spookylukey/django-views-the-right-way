@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preconditions</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -58,9 +59,9 @@ message (perhaps using the <a class="reference external" href="https://docs.djan
 <p>If you haven’t used decorators at all before, I’d recommend this <a class="reference external" href="https://realpython.com/primer-on-python-decorators/">Primer on
 Python Decorators</a>. If
 you just want to apply an existing decorator to a view, that’s very easy, but a
-good understanding of what is going on is really necessary if you want to be
-able to implement them. Plus, you’ll get a huge amount of benefit in other ways
-from this very general Python technique.</p>
+good understanding of what is going on is necessary if you want to be able to
+implement them. Plus, you’ll get a huge amount of benefit in other ways from
+this very general Python technique.</p>
 <p>First let’s look at our starting point. We have a page that should only be
 accessible to ‘premium’ users. If, somehow, a non-premium user gets the link to
 the page, they should be redirected to their account page, and also shown a
@@ -110,11 +111,11 @@ its own response.</p>
     <span class="k">return</span> <span class="n">wrapper</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">&#64;functools.wraps(view_func)</span></code> line is not strictly necessary. But it makes
-our wrapper function view behave more nicely — for example, it copies the name
-and docstring of the original view over, along with other attributes. These make
-debugging nicer, and sometimes it can be important for functionality too (for
-instance, if you are wrapping something that has been wrapped in
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;functools.wraps(view_func)</span></code> line may not be strictly necessary. But it
+makes our wrapper function view behave more nicely — for example, it copies the
+name and docstring of the original view over, along with other attributes. These
+make debugging nicer, and sometimes it can be important for functionality too
+(for instance, if you are wrapping something that has been wrapped in
 <code class="docutils literal notranslate"><span class="pre">csrf_exempt</span></code>) — so you should always add it.</p>
 <p>So far, the views we’re using it on only take a single <code class="docutils literal notranslate"><span class="pre">request</span></code>, so making
 our wrapper take <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> might not seem necessary. But we
@@ -254,7 +255,7 @@ like this?</p>
 </pre></div>
 </div>
 <p>The answer is: <strong>it depends</strong>.</p>
-<p>Let’s suppose we used the <a class="reference external" href="https://docs.djangoproject.com/en/3.0/topics/auth/default/#django.contrib.auth.mixins.UserPassesTestMixin">UserPassesTestMixin</a>
+<p>Let’s suppose we used the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#django.contrib.auth.mixins.UserPassesTestMixin">UserPassesTestMixin</a>
 that Django provides, which will make our mixins quite short and simple. In this
 case, our mixins will <strong>not</strong> compose as required, but will <strong>silently fail</strong> —
 only one of the checks will run. If this was a feature critical for security,
@@ -369,7 +370,7 @@ decorators wrap existing functionality depending only its interface.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

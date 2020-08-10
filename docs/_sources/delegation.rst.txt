@@ -51,12 +51,12 @@ But now we want to change this view to re-use the logic in our normal
 it has built up by now (which I'll represent using the function
 ``apply_product_filtering()`` below). How should we do that?
 
-One way would be to do what we did in :doc:`common-context-data` — wrap the body
-of the existing ``product_list`` view into a function that takes some parameters
-and returns the data to be added to the context. However, in some cases that
+One way would be to do what we did in :doc:`common-context-data` — move part of
+the existing ``product_list`` view into a function that takes some parameters
+and returns the data to be added to the context. However, sometimes that
 interface won't work. For instance, if the view decides that in some cases it
 will return a completely different kind of response — perhaps a redirection, for
-example — then it won't fit into that mould.
+example — then the common logic won't fit into that mould.
 
 Instead we'll use what I'm going to call **delegation** — our entry-point view
 will delegate the rest of the work to another function.
@@ -65,9 +65,9 @@ To create this function, look at our old ``product_list`` view and apply
 `parameterisation
 <https://www.toptal.com/python/python-parameterized-design-patterns>`_. The
 extra parameters we need to pass are: the product list ``QuerySet``; the name of
-the template to use; and something to pass in some extra context. With those in
+the template to use; and any extra context data. With those in
 place we can easily pull out a ``display_product_list`` function, and call it
-from our two entry-point view functions.
+from our two entry-point view functions:
 
 
 .. code-block:: python
@@ -104,8 +104,8 @@ from our two entry-point view functions.
 
    For those unfamiliar with the signature on ``display_product_list``:
 
-   * the arguments after ``*`` are “`keyword only arguments
-     <https://lukeplant.me.uk/blog/posts/keyword-only-arguments-in-python/>`_”.
+   * the arguments after ``*`` are `keyword only arguments
+     <https://lukeplant.me.uk/blog/posts/keyword-only-arguments-in-python/>`_.
    * ``queryset`` and ``template_name`` lack defaults (because we don't have any
      good defaults) which forces calling code to supply the arguments.
    * for ``context`` we do have a sensible default, but also need to avoid the
@@ -175,7 +175,7 @@ Discussion: Going further with generics
 If you have a large number of views that are very repetitive, you may continue
 this pattern even further. Examples of projects that have done this are:
 
-* `The Django admin <https://docs.djangoproject.com/en/3.1/ref/contrib/admin/>`_
+* `The Django admin <https://docs.djangoproject.com/en/stable/ref/contrib/admin/>`_
 * `Django Rest Framework <https://www.django-rest-framework.org/>`_
 
 Both of these have their own forms of “Class Based Views”, but actually provide
@@ -183,7 +183,7 @@ higher level functionality in terms of **sets of views** rather than just
 individual views.
 
 I've had good experiences with both, and here are my ideas about why they have
-succeeded, where CBVs haven't:
+succeeded:
 
 * They both provide a fairly narrow set of views. Both are essentially CRUD
   based, and this means that the views are quite constrained in what they do.
@@ -213,32 +213,33 @@ I've claimed above that your own generic views would be better than the generic
 CBVs that Django provides, which leads to a question:
 
 Where do Django's generic CBVs come from? Why didn't we stop with function based
-generic views? The problem was that there was an endless list of requests to
-extend generic views to do one more thing, and we wanted to provide something
-more customisable.
+generic views?
 
-Our answer to this problem ought to have been this: if these generic views don't
-do what you want, write your own. You can easily copy-paste the functionality
-you need and start from there. So why didn't we just say that? I think we
-somehow had the idea that copy-paste is the ultimate disaster in software
-development. If there is some functionality written, we should always make it
-re-usable rather than re-implement, and we've somehow failed as software
-developers if we can't.
+The problem was that there was an endless list of requests to extend generic
+views to do one more thing, and we wanted to provide something more
+customisable.
+
+Our answer to this problem ought to have been: if these generic views don't do
+what you want, write your own. You can easily copy-paste the functionality you
+need and start from there. So why didn't we just say that? I think we somehow
+had the idea that copy-paste is the ultimate disaster in software development.
+If there is some functionality written, we should always make it re-usable
+rather than re-implement, and we've somehow failed as software developers if we
+can't.
 
 You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
 line. But `it is knowledge and not lines of code that we should be trying not to
-duplicate <https://verraes.net/2014/08/dry-is-about-knowledge/>`_.
-
-There are plenty of things worse than copy-paste programming, and `the wrong
-abstraction <https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction>`_ is
-one of them.
+duplicate <https://verraes.net/2014/08/dry-is-about-knowledge/>`_. There are
+plenty of things worse than copy-paste programming, and `the wrong abstraction
+<https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction>`_ is one of them.
 
 I recently wrote several implementations of Mozilla's `Fluent
-<https://projectfluent.org/>`_ localisation language, all of them in Python. One
-of them was a Fluent-to-Python compiler, another was a Fluent-to-Elm compiler.
-These two projects are clearly very similar in nature. So when I started the
-second, I did so with `one big copy-paste job of 2500 lines of code
+<https://projectfluent.org/>`_ localisation language, all of them in Python.
+First I wrote an interpreter, then a Fluent-to-Python compiler, then a
+Fluent-to-Elm compiler. These last two projects are clearly very similar in
+nature. So when I started the second of them, I did so with `one big copy-paste
+job of 2500 lines of code
 <https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee>`_.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
@@ -247,12 +248,12 @@ still have significant chunks of identical code. But the code bases have also
 diverged at many, many points, both in small details and in more fundamental
 ways.
 
-The decision to copy-paste was overwhelming the right decision. Attempting to
-avoid duplicating anything while I was developing the second would have been an
-absolute killer in terms of complexity, and may have failed completely. Once or
-twice I copied fixes or changes directly from one to the other, but most times
-when I had “equivalent” changes to do, they looked significantly different in
-the two projects. Having to do them twice from scratch cost far, far less than
+The decision to copy-paste was overwhelmingly the right decision. Attempting to
+avoid duplication while I was developing the second would have been an absolute
+killer in terms of complexity, and may have failed completely. Once or twice I
+copied fixes or changes directly from one to the other, but most times when I
+had “equivalent” changes to do, they looked significantly different in the two
+projects. Having to do them twice from scratch cost far, far less than
 attempting to write the two projects with a common abstraction layer.
 
 Before you can abstract commonality, you actually need at least two examples,
@@ -266,7 +267,7 @@ avoiding all duplication at any cost is not the aim we should have.
 Discussion: Multiple mixins?
 ----------------------------
 
-When doing both a single object lookup and a list of objects, contrast the
+When doing a combined single object lookup with a list of objects, contrast the
 simplicity of the above FBV code with `trying to wrangle CBVs into doing this
 <https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview>`_.
 

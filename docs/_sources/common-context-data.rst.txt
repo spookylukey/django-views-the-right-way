@@ -14,11 +14,10 @@ There are a few different answers:
    everywhere and is expensive to evaluate? I'd recommend using `lazy evaluation
    in your context processor <https://stackoverflow.com/a/28146359/182604>`_.
 
-3. Is the data needed for a ”component” that exists really at the template level, perhaps
-   in a base template or is included in several templates?
-
-   For example, it might be data needed for common navigation elements that
-   appear in a header on lots of pages.
+3. Is the data needed for a “component” that exists really at the template
+   level, perhaps in a base template or is included in several templates? For
+   example, it might be data needed for common elements that appear
+   in a header or footer on lots of pages.
 
    In general this can be done most easily by using a `custom inclusion template
    tag
@@ -104,11 +103,10 @@ Second, the mixin has several significant disadvantages:
   first parameter is ``self``, you'll quickly see how complicated its interface
   is.
 
-* Over time, mixins defined like this quickly becomes tangled, due to that
+* Over time, mixins defined like this quickly become tangled, due to that
   problematic ``self`` parameter, which can have all kinds of things attached to
-  it. Very quickly you can end up with a mixin that works in one context, but
-  not in another, due to different expectations about what is attached to
-  ``self``.
+  it. You can easily end up with a mixin that works in one context, but not in
+  another, due to different expectations about what is attached to ``self``.
 
   In contrast, all the parameters to functions are usually well defined, and you
   can usually have a very high level of confidence that they will work in all

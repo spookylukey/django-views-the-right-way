@@ -28,14 +28,14 @@ The combined code would look like this:
    try:
        product = Product.objects.get(slug=slug)
    except Product.DoesNotExist:
-       raise Http404
+       raise Http404("Product not found.")
 
 
 This is perfectly adequate code that you should not feel in any way embarrassed
 about. However, this pattern comes up so often in Django apps that there is a
 shortcut for it — `get_object_or_404
 <https://docs.djangoproject.com/en/stable/topics/http/shortcuts/#get-object-or-404>`_.
-This combines the above logic for, so that you can just write:
+This combines the above logic, so that you can just write:
 
 
 .. code-block:: python
@@ -47,7 +47,7 @@ This combines the above logic for, so that you can just write:
    product = get_object_or_404(Product.objects.all(), slug=slug)
 
 If the only thing we are going to do with the product object is render it in a
-template, the final, concise version of our view will look like this:
+template, then the final, concise version of our view will look like this:
 
 .. code-block:: python
 
@@ -91,7 +91,7 @@ has a helpful comment about them:
 An important property of well designed shortcut functions is that they only have
 local effects on your code. For example, when we introduced
 ``get_object_or_404``, we replaced 4 lines in the original function and saved
-some typing, but there were no effects on the external behaviour of that view
+some noise, but there were no effects on the external behaviour of that view
 function, or on the interface of any function or method. If you want
 “controlled” coupling that doesn't hurt your code base, this is vital.
 
@@ -137,7 +137,7 @@ Perhaps a better way is to think about it is the “the single responsibility
 principle” for class design. Through that lens, this class doesn't look very
 good at all. It has far too many different directions you might want to take it.
 
-But the most convincing to me is to look what happens when you carry on this
+But the most convincing to me is to look at what happens when you carry on this
 pattern.
 
 I recently came across a family of views that had the following methods and
@@ -224,8 +224,8 @@ code, while mixins set up a pattern for your code which determines its structure
 
 Brandon Rhodes has `an excellent discussion on mixins in his talk on Python
 anti-patterns <https://youtu.be/S0No2zSJmks?t=3095>`_. He also specifically
-calls out Django CBV mixins (though manages to avoid saying ‘Django’), and in my
-opinion his analysis is spot on.
+calls out Django CBV mixins (though he manages to avoid saying ‘Django’), and in
+my opinion his analysis is spot on.
 
 
 .. _DetailView comparison:
@@ -260,8 +260,8 @@ my FBV::
 For a mixin plus two lines of configuration, I don't think you are getting much
 value for money.
 
-You could make it more concise, but not in good ways. Each alternative way to
-write this brings up some issues that I'll discuss in turn.
+You could make the CBV version more concise, but not in good ways. Each
+alternative way to write this brings up some issues that I'll discuss in turn.
 
 
 Discussion: Convention vs configuration
@@ -275,8 +275,9 @@ lived in was called ``shop``.
 
 This kind of behaviour is called “convention over configuration”. It's popular
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
-it's pretty much directly against the “Zen of Python” maxim “Explicit is better
-than implicit”.
+it's pretty much directly against the `Zen of Python
+<https://www.python.org/dev/peps/pep-0020/>`_ maxim “Explicit is better than
+implicit”.
 
 But it does appear in some parts of Django, and the `docs for DetailView
 <https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview>`_
@@ -348,14 +349,14 @@ Also, convention over configuration clearly has the upper hand in enforcing
 consistency — the path of least resistance is that you use the convention. This
 matters to the extent that consistency matters. For things that can “leak” and
 eventually become difficult to change (e.g. names used in schemas) this can be a
-crucial advantages.
+crucial advantage.
 
 To sum up: proponents of Ruby-on-Rail-style “convention over configuration” will
 point to some super-verbose Java framework as an example of all the boilerplate
 you can save. But this is a false dichotomy. With dynamic languages, very often
-we can choose exactly how much configuration we want to avoid. We should make
-sure we restrain ourselves if we are going to make code less maintainable for
-the sake of saving a tiny bit of typing.
+**we can choose exactly how much configuration we want to avoid**. We should
+make sure we restrain ourselves if we are going to make code less maintainable
+for the sake of saving a tiny bit of typing.
 
 Discussion: Static vs dynamic
 -----------------------------
@@ -377,10 +378,11 @@ For the same reason, in my FBV above I wrote
 ``get_object_or_404(Product, …)`` which is also supported by the shortcut
 function.
 
-If, however, the queryset needed depends on the ``request`` object, the
-programmer will have to instead define ``get_queryset()`` to get access to the
-request data and dynamically respond to it, rather than have a static definition
-on the class, and they will need to know this API exists, or look up the docs.
+If, however, the queryset needed depends on the ``request`` object, instead of a
+static ``queryset`` attribute the programmer will have to define the
+``get_queryset()`` method to get access to the request data and dynamically
+respond to it. This is a different way of doing the same thing that they will
+need to know about.
 
 There is also a subtlety with querysets: suppose your
 ``ProductQuerySet.visible()`` method goes from being a simple filter on a field
@@ -407,7 +409,8 @@ There are some benefits with the statically defined class attributes, in
 addition to being more concise and declarative. For example, the Django admin
 classes has attributes like ``fieldsets`` for the static case, with
 ``get_fieldsets()`` for the dynamic case. If you use the attribute, the Django
-checks framework is able to check it for you before you even access the admin.
+`checks framework <https://docs.djangoproject.com/en/stable/topics/checks/>`_ is
+able to check it for you before you even access the admin.
 
 Some of the trade-offs here also depend on how often the static attribute is
 enough, compared to how often you need the dynamic version.

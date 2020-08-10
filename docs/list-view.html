@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Displaying a list of objects</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -57,10 +58,10 @@ listing page. Our first version of the code is just this:</p>
     <span class="p">})</span>
 </pre></div>
 </div>
-<p>A typical product listing page has some more requirements, often including at
-least pagination. Django comes with a helpful <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/pagination/#using-paginator-in-a-view-function">Paginator</a>
+<p>A typical product listing page normally would have some more requirements, often
+including at least pagination. Django comes with a helpful <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/pagination/#using-paginator-in-a-view-function">Paginator</a>
 class, with helpful docs showing you how to use it. With that added, you have
-something like:</p>
+something like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
 
 <span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
@@ -104,8 +105,9 @@ extremely easy to debug or further customise. You also have a utility that is
 separately testable, with a well-defined interface that means its very unlikely
 to interact badly with the different contexts you might use it in.</p>
 <p>The <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/pagination/#paginating-a-listview">ListView alternative</a>
-for this code is tempting, but it is a short-sighted laziness. Any real world
-view will quickly develop enough logic that you lose even in terms of code
+for this code is tempting, but it is short-sighted laziness (as opposed to
+long-sighted laziness that is an essential quality of every developer). Any real
+world view will quickly develop enough logic that you lose even in terms of code
 length, and much more so in terms of code complexity.</p>
 <p>As well as <code class="docutils literal notranslate"><span class="pre">paged_object_list_context</span></code>, we should also mention <code class="docutils literal notranslate"><span class="pre">Paginator</span></code>,
 which is a great example of the kind of re-usable functionality that you should
@@ -208,7 +210,7 @@ on <a class="reference external" href="https://python-patterns.guide/gang-of-fou
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

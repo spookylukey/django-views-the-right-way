@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thin views</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -101,6 +102,9 @@ handle the <code class="docutils literal notranslate"><span class="pre">shelved<
 <p>This is a very simple example, and it might not look much different. But if you
 get into the habit of moving this kind of logic out of the view layer, it will
 help a lot.</p>
+<p>Note that we did <strong>not</strong> move the <code class="docutils literal notranslate"><span class="pre">messages.info()</span></code> call into the model layer.
+It is concerned with putting a message into a web page, and so stays in the view
+layer where it belongs.</p>
 </div>
 <div class="section" id="example-push-filtering-to-the-model-layer">
 <h2>Example: push filtering to the model layer<a class="headerlink" href="#example-push-filtering-to-the-model-layer" title="Permalink to this headline">¶</a></h2>
@@ -131,8 +135,8 @@ one, as in the code above. But I always try to interpret comments like that as
 “code smells”. They are hints telling me that my code isn’t clear by itself.</p></li>
 </ul>
 <p>I agree with Jamie Matthews that <a class="reference external" href="https://www.dabapps.com/blog/higher-level-query-api-django-orm/">using filter directly in view code is a
-usually an anti-pattern</a>. Instead,
-let’s listen to those hints, and change our code like this:</p>
+usually an anti-pattern</a>. So, let’s
+listen to those hints, and change our code so we no longer need the comments:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Booking</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">in_basket</span><span class="p">()</span>
 
 <span class="n">Booking</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">on_shelf</span><span class="p">()</span>
@@ -140,14 +144,29 @@ let’s listen to those hints, and change our code like this:</p>
 <span class="n">Booking</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">confirmed</span><span class="p">()</span><span class="o">.</span><span class="n">for_year</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>We also want to be able to use the same functionality from a user object, for
+example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+<span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;basket_bookings&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">bookings</span><span class="o">.</span><span class="n">in_basket</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1"># etc.</span>
+</pre></div>
+</div>
+<p>If there is a user involved, I usually prefer code that looks like this. By
+getting into the habit of starting all user-related queries with <code class="docutils literal notranslate"><span class="pre">user</span></code>,
+whether I’m displaying a list or a retrieving a single item, it’s harder to
+forget to add access controls, so I will be less prone to <a class="reference external" href="https://portswigger.net/web-security/access-control/idor">insecure direct
+object reference</a>
+security issues.</p>
 <p>The question now is, how do we create an interface like that?</p>
 <div class="section" id="chainable-custom-queryset-methods">
 <h3>Chainable custom QuerySet methods<a class="headerlink" href="#chainable-custom-queryset-methods" title="Permalink to this headline">¶</a></h3>
-<p>The answer is we define <code class="docutils literal notranslate"><span class="pre">in_basket</span></code>, <code class="docutils literal notranslate"><span class="pre">on_shelf</span></code>, <code class="docutils literal notranslate"><span class="pre">confirmed</span></code>, <code class="docutils literal notranslate"><span class="pre">for_year</span></code>
-etc. as custom <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods. By making them <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods, rather
-than just <code class="docutils literal notranslate"><span class="pre">Manager</span></code> methods, we can make them chainable as above, so that we
-can use <code class="docutils literal notranslate"><span class="pre">for_year()</span></code> after <code class="docutils literal notranslate"><span class="pre">confirmed()</span></code>, for example, or after other
-methods.</p>
+<p>The answer is we define <code class="docutils literal notranslate"><span class="pre">in_basket()</span></code>, <code class="docutils literal notranslate"><span class="pre">on_shelf()</span></code>, <code class="docutils literal notranslate"><span class="pre">confirmed()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">for_year()</span></code> etc. as custom <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods. By making them <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>
+methods, rather than just <code class="docutils literal notranslate"><span class="pre">Manager</span></code> methods, we can make them chainable as
+above, so that we can use <code class="docutils literal notranslate"><span class="pre">for_year()</span></code> after <code class="docutils literal notranslate"><span class="pre">confirmed()</span></code>, for example, or
+after other methods.</p>
 <p>The <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/db/managers/">Django docs for QuerySets and Managers</a> will show you
 how to do it, but due to the <code class="docutils literal notranslate"><span class="pre">Manager</span></code>/<code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> split, it can get a bit
 overwhelming. So here is the basic pattern:</p>
@@ -194,21 +213,29 @@ create massive files!</p></li>
 <li><p>Model layer code doesn’t have to refer to “database models”. We are really talking about
 “domain models” here, which can often be backed directly by a Django database
 model, but it could be other classes or functions.</p></li>
-<li><p>You don’t have to put all logic relating to a Django <code class="docutils literal notranslate"><span class="pre">models.Model</span></code> into
-methods of that class. You should “listen to the code”, and also listen to the
-business level requirements, and discover the concepts and divisions that make
-sense for your project.</p></li>
+<li><p>You don’t have to put all logic relating to a Django <code class="docutils literal notranslate"><span class="pre">Model</span></code> into methods of
+that class. You should “listen to the code”, and also listen to the business
+level requirements, and discover the concepts and divisions that make sense
+for your project.</p></li>
 </ul>
+</div>
+<div class="section" id="the-end">
+<h3>The end<a class="headerlink" href="#the-end" title="Permalink to this headline">¶</a></h3>
+<p>That’s the end of the guide! (Apart from discussion sections below, as always). I
+hope it has been helpful. If there are some common things I haven’t covered,
+feel free to <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way">open an issue on GitHub</a>.</p>
 </div>
 </div>
 <div class="section" id="discussion-service-layer">
 <span id="service-layers"></span><h2>Discussion: service layer?<a class="headerlink" href="#discussion-service-layer" title="Permalink to this headline">¶</a></h2>
 <p>A service layer goes further than the above, and creates an interface for
-accessing the data in the database that doesn’t expose ORM methods at all.</p>
+accessing the data in the database that doesn’t expose ORM methods at all. In
+such an arrangement you would also normally separate your “domain model” classes
+from your Django <code class="docutils literal notranslate"><span class="pre">Model</span></code>.</p>
 <p>James Bennett has an excellent post <a class="reference external" href="https://www.b-list.org/weblog/2020/mar/16/no-service/">Against service layers in Django</a> that summarises
 everything that I would want to say on the topic, so I’m not going to repeat
 that. The long and short is — using custom <code class="docutils literal notranslate"><span class="pre">Model</span></code> methods and custom
-<code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods (as above) as your “service layer” is an approach that will
+<code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods as your “service layer”, as above, is an approach that will
 work really well for a lot of projects.</p>
 <p>If you believe that a service layer is essential — for example, using a
 repository pattern that doesn’t use <code class="docutils literal notranslate"><span class="pre">QuerySets</span></code> — then you will probably not
@@ -239,7 +266,7 @@ needed there, but sometimes I feel it isn’t worth it.</p>
 <p>It is not the end of the world if you fail to 100% insulate your schema from the
 rest of the app. You can get benefits from doing it partially, and if you have
 some integration tests that exercise the queries constructed by your view code,
-you will have a mechanism for finding those places where you schema has leaked
+you will have a mechanism for finding those places where your schema has leaked
 out.</p>
 </div>
 </div>
@@ -293,6 +320,7 @@ out.</p>
 <li class="toctree-l2"><a class="reference internal" href="#example-push-filtering-to-the-model-layer">Example: push filtering to the model layer</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#chainable-custom-queryset-methods">Chainable custom QuerySet methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#where-to-put-this-code">Where to put this code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-end">The end</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-service-layer">Discussion: service layer?</a></li>
@@ -327,7 +355,7 @@ out.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

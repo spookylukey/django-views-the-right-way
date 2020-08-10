@@ -9,7 +9,7 @@ returns a response like this, the browser will immediately make another request,
 to the specified URL.
 
 The `different 3XX codes have different meanings
-<https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection>`_ -
+<https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection>`_ —
 make sure you use the right one.
 
 That is 95% of what you need to know at the HTTP level. In Django, the most
@@ -38,8 +38,8 @@ In addition, Django provides some shortcuts:
   only thing that your view does is a redirect, otherwise just use
   ``HttpResponse`` objects directly.
 
-  For example, if you have an old URL at ``old-path/<number>/`` and want to
-  permanently redirect it to ``new-path/<number>/``, you can use do it from
+  For example, if you have an old URL at ``/old-path/<number>/`` and want to
+  permanently redirect it to ``/new-path/<number>/``, you can use do it from
   ``urls.py`` like this:
 
    .. code-block:: python
@@ -57,8 +57,8 @@ In addition, Django provides some shortcuts:
 That's it! On to :doc:`forms`.
 
 
-Discussion: configuration in urls.py
-------------------------------------
+Discussion: CBV configuration in urls.py
+----------------------------------------
 
 If you can reduce a set of common functionality down to something that can be
 configured directly in ``urls.py``, I think this is quite a nice pattern for
@@ -70,7 +70,7 @@ will serve you better, or perhaps a function that **delegates** to
 ``RedirectView``, rather than subclassing it.
 
 Delegating to ``RedirectView`` is not perhaps the most obvious thing, due to how
-``as_view`` works. It looks like this:
+``as_view()`` works. It looks like this:
 
 .. code-block:: python
 
@@ -105,7 +105,7 @@ See the docs for `passing extra options to view functions
 <https://docs.djangoproject.com/en/stable/topics/http/urls/#views-extra-options>`_.
 
 So, for example, if we want to reproduce the functionality of
-``RedirectView``, complete with ”configure it within urls.py”, we could have a
+``RedirectView``, complete with “configure it within urls.py”, we could have a
 view function like this:
 
 .. code-block:: python
@@ -132,7 +132,7 @@ Mass-produced views — “view factories”
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One of the issues with the above is you have a possibility of a clash between
-the contents of the captured ``**kwargs`` and the other keyword arguments the
+the contents of the configured ``kwargs`` and the other keyword arguments the
 view accepts. We can solve this using a function that returns a view function
 (in the same way that ``RedirectView.as_view()`` returns a view function). I call
 this a “view factory”. The outer function has keyword arguments for configuring

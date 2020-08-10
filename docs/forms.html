@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forms</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -66,8 +67,32 @@ cases it will be better. For example, if you have a page with dynamically
 generated controls (e.g. lots of buttons or input boxes) it can be easiest to
 build them up and process them without using <code class="docutils literal notranslate"><span class="pre">Form</span></code>.</p>
 </li>
+<li><p>If you need multiple buttons on the same form, that do different things, you
+need to understand how this works at the HTML level. The button that is
+pressed becomes a “successful” control, which means the <code class="docutils literal notranslate"><span class="pre">request.POST</span></code> (or
+<code class="docutils literal notranslate"><span class="pre">request.GET</span></code>) dictionary will get an entry with that control’s <code class="docutils literal notranslate"><span class="pre">name</span></code>
+attribute.</p>
+<p>So it looks like this:</p>
+<p>Template:</p>
+<div class="highlight-html+django notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">form</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;save&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Save&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;preview&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Preview&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>View:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;preview&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">:</span>
+            <span class="c1"># Do preview thing...</span>
+</pre></div>
+</div>
+<p>You may have to do something similar for multiple forms on one page.</p>
+</li>
 </ul>
-<p>That’s it! Next up - <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>.</p>
+<p>That’s it! Next up: <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>.</p>
 <div class="section" id="discussion-complex-form-cases">
 <h2>Discussion: Complex form cases<a class="headerlink" href="#discussion-complex-form-cases" title="Permalink to this headline">¶</a></h2>
 <p>Why not <code class="docutils literal notranslate"><span class="pre">FormView</span></code>? Of all the CBVs, it is perhaps the most tempting, due to
@@ -81,10 +106,13 @@ very bad starting point for most customisations.</p>
 <p>For example, if you find you have a page that has two forms on it (perhaps
 alternative flows that the user can choose between), <code class="docutils literal notranslate"><span class="pre">FormView</span></code> will cause you
 lots of pain.</p>
+<p>Or if you have form handling as well as something else (such as a list of
+items), you will be in confusion if you are trying to use <code class="docutils literal notranslate"><span class="pre">FormView</span></code>, even
+more so if you’ve forgotten how to use the <code class="docutils literal notranslate"><span class="pre">Form</span></code> API directly.</p>
 <p>Another example is when you need multiple different submit buttons, which do
 something different. This is an easy thing in HTML/HTTP, and easy if you are
-using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly and in charge of the control flow yourself, but horrible
-if you are trying to fit it into <code class="docutils literal notranslate"><span class="pre">FormView</span></code>.</p>
+using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly and in charge of the control flow yourself, as outlined
+above, but horrible if you are trying to fit it into <code class="docutils literal notranslate"><span class="pre">FormView</span></code>.</p>
 </div>
 </div>
 
@@ -169,7 +197,7 @@ if you are trying to fit it into <code class="docutils literal notranslate"><spa
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

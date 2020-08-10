@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Right Way</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -185,8 +186,7 @@ however, it is useful to have functions return a value that does remember what
 it’s “made of” — something that stores the template it is from, and the context.
 This can be really useful in testing, but also if we want to something outside
 of our view function (such as decorators or middleware) to check or even change
-what’s in the response before it finally gets ‘rendered’ and sent to the user.
-We’ll cover use cases of this later in the guide.</p>
+what’s in the response before it finally gets ‘rendered’ and sent to the user.</p>
 <p>For now, you can just accept that <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code> is a more useful return
 value than a plain <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code>. (If you are already using <code class="docutils literal notranslate"><span class="pre">render</span></code>
 everywhere, there is absolutely no need to go and change it though, and almost
@@ -209,7 +209,7 @@ inheritance trees or method flowcharts. They will only make your life harder.
 Print out their documentation, put in a shed — or rather, a warehouse <a class="reference external" href="https://ccbv.co.uk/">given how
 much there is</a> — fill the warehouse with dynamite and
 <a class="reference external" href="https://www.youtube.com/watch?v=Sqz5dbs5zmo">don’t look back</a>.</p>
-<p>Next up — <a class="reference internal" href="anything.html"><span class="doc">How to do anything in a view</span></a>.</p>
+<p>Next up: <a class="reference internal" href="anything.html"><span class="doc">How to do anything in a view</span></a>.</p>
 </div>
 <div class="section" id="discussion-keep-the-view-viewable">
 <span id="visibility"></span><h2>Discussion — keep the view viewable!<a class="headerlink" href="#discussion-keep-the-view-viewable" title="Permalink to this headline">¶</a></h2>
@@ -325,7 +325,7 @@ this advantage disappears, and we’ll find we have <a class="reference internal
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
