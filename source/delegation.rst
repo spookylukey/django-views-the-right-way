@@ -175,7 +175,7 @@ Discussion: Going further with generics
 If you have a large number of views that are very repetitive, you may continue
 this pattern even further. Examples of projects that have done this are:
 
-* `The Django admin <https://docs.djangoproject.com/en/3.1/ref/contrib/admin/>`_
+* `The Django admin <https://docs.djangoproject.com/en/stable/ref/contrib/admin/>`_
 * `Django Rest Framework <https://www.django-rest-framework.org/>`_
 
 Both of these have their own forms of “Class Based Views”, but actually provide

@@ -269,7 +269,7 @@ like this?
 The answer is: **it depends**.
 
 Let's suppose we used the `UserPassesTestMixin
-<https://docs.djangoproject.com/en/3.0/topics/auth/default/#django.contrib.auth.mixins.UserPassesTestMixin>`_
+<https://docs.djangoproject.com/en/stable/topics/auth/default/#django.contrib.auth.mixins.UserPassesTestMixin>`_
 that Django provides, which will make our mixins quite short and simple. In this
 case, our mixins will **not** compose as required, but will **silently fail** —
 only one of the checks will run. If this was a feature critical for security,

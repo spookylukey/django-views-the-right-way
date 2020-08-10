@@ -11,11 +11,11 @@ listing page. Our first version of the code is just this:
            'products': Product.objects.all(),
        })
 
-A typical product listing page has some more requirements, often including at
-least pagination. Django comes with a helpful `Paginator
+A typical product listing page normally would have some more requirements, often
+including at least pagination. Django comes with a helpful `Paginator
 <https://docs.djangoproject.com/en/stable/topics/pagination/#using-paginator-in-a-view-function>`_
 class, with helpful docs showing you how to use it. With that added, you have
-something like:
+something like this:
 
 .. code-block:: python
 

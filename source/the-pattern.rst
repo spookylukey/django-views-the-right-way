@@ -181,7 +181,6 @@ it's “made of” — something that stores the template it is from, and the co
 This can be really useful in testing, but also if we want to something outside
 of our view function (such as decorators or middleware) to check or even change
 what’s in the response before it finally gets ‘rendered’ and sent to the user.
-We'll cover use cases of this later in the guide.
 
 For now, you can just accept that ``TemplateResponse`` is a more useful return
 value than a plain ``HttpResponse``. (If you are already using ``render``

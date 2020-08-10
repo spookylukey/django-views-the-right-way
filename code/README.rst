@@ -26,6 +26,6 @@ Browse at http://localhost:8000/ and http://localhost:8000/admin/
 Other info
 ----------
 
-An SQLite DB is included, with some minimal data in it.
+A SQLite DB is included, with some minimal data in it.
 
 There is a superuser with username ``admin`` and password ``admin``.

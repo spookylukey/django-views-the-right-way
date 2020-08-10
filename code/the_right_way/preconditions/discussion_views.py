@@ -1,11 +1,14 @@
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.views.generic import TemplateView
 
+# Two ways to implement 'premium required' and 'good reputation required' using
+# mixins:
 
+
+# Method 1 - .dispatch() based implementation
 class PremiumRequired1:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_premium:
@@ -25,6 +28,7 @@ class SpecialView1(PremiumRequired1, GoodReputationRequired1, TemplateView):
     template_name = "special.html"
 
 
+# Method 2 - inherit from UserPassesTestMixin:
 class PremiumRequired2(UserPassesTestMixin):
     login_url = 'preconditions:account'
 
