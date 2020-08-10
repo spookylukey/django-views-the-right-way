@@ -24,7 +24,7 @@ have much to add, except a few notes:
   build them up and process them without using ``Form``.
 
 
-That's it! Next up - :doc:`preconditions`.
+That's it! Next up: :doc:`preconditions`.
 
 Discussion: Complex form cases
 ------------------------------

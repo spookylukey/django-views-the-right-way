@@ -210,7 +210,7 @@ Print out their documentation, put in a shed — or rather, a warehouse `given h
 much there is <https://ccbv.co.uk/>`_ — fill the warehouse with dynamite and
 `don't look back <https://www.youtube.com/watch?v=Sqz5dbs5zmo>`_.
 
-Next up — :doc:`anything`.
+Next up: :doc:`anything`.
 
 .. _visibility:
 

@@ -1,6 +1,6 @@
-alabaster==0.7.12
+-e git+git@github.com:spookylukey/alabaster.git@3cbfd7b6626f8b88c8a7ce0fa56e3b31fc2c2146#egg=alabaster
 appdirs==1.4.4
-asgiref==3.2.7
+asgiref==3.2.10
 astroid==2.4.1
 attrs==19.3.0
 Babel==2.8.0
@@ -10,7 +10,7 @@ certifi==2020.4.5.1
 chardet==3.0.4
 click==7.1.2
 decorator==4.4.2
-Django==3.0.7
+Django==3.1
 django-colorfield==0.3.2
 docutils==0.16
 flake8==3.8.1
