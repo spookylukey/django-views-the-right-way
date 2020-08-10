@@ -23,6 +23,10 @@ have much to add, except a few notes:
   generated controls (e.g. lots of buttons or input boxes) it can be easiest to
   build them up and process them without using ``Form``.
 
+* If you need multiple buttons on the same form, that do slightly different,
+  you need to understand what this produces. The button that is pressed becomes
+  successful control.
+
 
 That's it! Next up: :doc:`preconditions`.
 
