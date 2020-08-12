@@ -248,7 +248,7 @@ There may be reasons for doing this, of course, but let's be aware of this
 problem and weigh up the advantages and disadvantages.
 
 You might think “this is shorter than the FBV” is one of the advantages. It is,
-slightly, but as soon as the add the need for :doc:`context data <context-data>`
+slightly, but as soon as you add the need for :doc:`context data <context-data>`
 this advantage disappears, and we'll find we have :ref:`more boilerplate
 <boilerplate>`, not less, with CBVs.
 
