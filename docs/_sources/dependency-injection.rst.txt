@@ -184,7 +184,7 @@ need to take.
 
 In Python, functions are “first class objects“ i.e. objects that you can pass
 around just like every other type of value. So we can just use “functions” where
-we need “the strategy pattern”, particular if our strategy has only one part to
+we need “the strategy pattern”, particularly if our strategy has only one part to
 it. If you have more than one entry point that you need to bundle together, a
 class can be helpful.
 
