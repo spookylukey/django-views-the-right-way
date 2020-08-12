@@ -1,7 +1,7 @@
 Django Views — The Right Way
 ============================
 
-Welcome to my opinionated guide on how to write views in Django! 
+Welcome to my opinionated guide on how to write views in Django!
 
 It is the result of mistakes made and lessons learned in a range of
 Django and Python projects over 15+ years.
@@ -107,7 +107,8 @@ Caveats and disclaimers etc.
 4. Although I'm a Django core dev, I'm not speaking for all the Django
    developers. I was actually around when CBVs were first being added to Django,
    and even involved in the design of them a bit, and at the time didn't see the
-   things I'm expressing now.
+   things I'm expressing now. So please understand my criticisms as a form of
+   “learning process debate”, rather than as attacks!
 
 
 Indices and tables
