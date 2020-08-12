@@ -30,13 +30,14 @@ need to know. Just read that, and skip the bits about CBVs, and you'll be fine.
 
 But if you want a different take on the same things, this guide might be for
 you. I've also added extra bits for common tasks and patterns in FBVs for which
-CBVs are often suggested as the solution. If you read all of it:
+CBVs are often suggested as the solution. I have a few aims:
 
-* You'll learn how to make your views usually shorter and definitely much
-  simpler than if you used CBVs.
-* You'll be freed from learning a whole stack of additional APIs that were only
-  making your life harder (and teaching you bad patterns).
-* Instead of learning a bunch of Django specific APIs, we'll cover much more
+* I want to show how simple and easy views can be.
+
+* I want you to be freed from learning a whole stack of additional APIs that
+  were only making your life harder (and teaching you bad patterns).
+
+* Instead of learning a bunch of Django specific APIs, I want to cover much more
   transferable knowledge:
 
   * HTTP principles

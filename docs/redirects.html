@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirects</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -54,7 +55,7 @@
 and a <code class="docutils literal notranslate"><span class="pre">Location</span></code> header that tells a browser which URL to go to. If your view
 returns a response like this, the browser will immediately make another request,
 to the specified URL.</p>
-<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection">different 3XX codes have different meanings</a> -
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection">different 3XX codes have different meanings</a> —
 make sure you use the right one.</p>
 <p>That is 95% of what you need to know at the HTTP level. In Django, the most
 common functionality has been wrapped up for you in <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/request-response/#django.http.HttpResponseRedirect">HttpResponseRedirect</a>.</p>
@@ -74,8 +75,8 @@ neat features like being able to look up view by name, including arguments
 from a path, and also copy the query string. I recommend using this if the
 only thing that your view does is a redirect, otherwise just use
 <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code> objects directly.</p>
-<p>For example, if you have an old URL at <code class="docutils literal notranslate"><span class="pre">old-path/&lt;number&gt;/</span></code> and want to
-permanently redirect it to <code class="docutils literal notranslate"><span class="pre">new-path/&lt;number&gt;/</span></code>, you can use do it from
+<p>For example, if you have an old URL at <code class="docutils literal notranslate"><span class="pre">/old-path/&lt;number&gt;/</span></code> and want to
+permanently redirect it to <code class="docutils literal notranslate"><span class="pre">/new-path/&lt;number&gt;/</span></code>, you can use do it from
 <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> like this:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
@@ -92,8 +93,8 @@ permanently redirect it to <code class="docutils literal notranslate"><span clas
 </li>
 </ul>
 <p>That’s it! On to <a class="reference internal" href="forms.html"><span class="doc">Forms</span></a>.</p>
-<div class="section" id="discussion-configuration-in-urls-py">
-<h2>Discussion: configuration in urls.py<a class="headerlink" href="#discussion-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="discussion-cbv-configuration-in-urls-py">
+<h2>Discussion: CBV configuration in urls.py<a class="headerlink" href="#discussion-cbv-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
 <p>If you can reduce a set of common functionality down to something that can be
 configured directly in <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>, I think this is quite a nice pattern for
 making very simple views.</p>
@@ -102,7 +103,7 @@ complicated and need other logic, a function that uses <code class="docutils lit
 will serve you better, or perhaps a function that <strong>delegates</strong> to
 <code class="docutils literal notranslate"><span class="pre">RedirectView</span></code>, rather than subclassing it.</p>
 <p>Delegating to <code class="docutils literal notranslate"><span class="pre">RedirectView</span></code> is not perhaps the most obvious thing, due to how
-<code class="docutils literal notranslate"><span class="pre">as_view</span></code> works. It looks like this:</p>
+<code class="docutils literal notranslate"><span class="pre">as_view()</span></code> works. It looks like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># urls.py</span>
    <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span>
        <span class="n">path</span><span class="p">(</span><span class="s1">&#39;old-path/&lt;int:pk&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">my_old_view</span><span class="p">)</span>
@@ -128,7 +129,7 @@ can be achieved just as well using functions as with <code class="docutils liter
 <h3>Additional keyword parameters<a class="headerlink" href="#additional-keyword-parameters" title="Permalink to this headline">¶</a></h3>
 <p>See the docs for <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#views-extra-options">passing extra options to view functions</a>.</p>
 <p>So, for example, if we want to reproduce the functionality of
-<code class="docutils literal notranslate"><span class="pre">RedirectView</span></code>, complete with ”configure it within urls.py”, we could have a
+<code class="docutils literal notranslate"><span class="pre">RedirectView</span></code>, complete with “configure it within urls.py”, we could have a
 view function like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_redirect</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">pattern_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">permanent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
    <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="n">pattern_name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
@@ -152,7 +153,7 @@ view function like this:</p>
 <div class="section" id="mass-produced-views-view-factories">
 <h3>Mass-produced views — “view factories”<a class="headerlink" href="#mass-produced-views-view-factories" title="Permalink to this headline">¶</a></h3>
 <p>One of the issues with the above is you have a possibility of a clash between
-the contents of the captured <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> and the other keyword arguments the
+the contents of the configured <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> and the other keyword arguments the
 view accepts. We can solve this using a function that returns a view function
 (in the same way that <code class="docutils literal notranslate"><span class="pre">RedirectView.as_view()</span></code> returns a view function). I call
 this a “view factory”. The outer function has keyword arguments for configuring
@@ -233,7 +234,7 @@ to be, so this will play well with <a class="reference internal" href="url-param
 <li class="toctree-l1"><a class="reference internal" href="delegation.html">Custom logic at the start — delegation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dependency-injection.html">Custom logic in the middle — dependency injection</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Redirects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#discussion-configuration-in-urls-py">Discussion: configuration in urls.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discussion-cbv-configuration-in-urls-py">Discussion: CBV configuration in urls.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#additional-keyword-parameters">Additional keyword parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mass-produced-views-view-factories">Mass-produced views — “view factories”</a></li>
@@ -273,7 +274,7 @@ to be, so this will play well with <a class="reference internal" href="url-param
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom logic at the start — delegation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -92,20 +93,20 @@ might be different.</p>
 <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view, whether it is filtering/sorting/paging or anything else
 it has built up by now (which I’ll represent using the function
 <code class="docutils literal notranslate"><span class="pre">apply_product_filtering()</span></code> below). How should we do that?</p>
-<p>One way would be to do what we did in <a class="reference internal" href="common-context-data.html"><span class="doc">Common context data</span></a> — wrap the body
-of the existing <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view into a function that takes some parameters
-and returns the data to be added to the context. However, in some cases that
+<p>One way would be to do what we did in <a class="reference internal" href="common-context-data.html"><span class="doc">Common context data</span></a> — move part of
+the existing <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view into a function that takes some parameters
+and returns the data to be added to the context. However, sometimes that
 interface won’t work. For instance, if the view decides that in some cases it
 will return a completely different kind of response — perhaps a redirection, for
-example — then it won’t fit into that mould.</p>
+example — then the common logic won’t fit into that mould.</p>
 <p>Instead we’ll use what I’m going to call <strong>delegation</strong> — our entry-point view
 will delegate the rest of the work to another function.</p>
 <p>To create this function, look at our old <code class="docutils literal notranslate"><span class="pre">product_list</span></code> view and apply
 <a class="reference external" href="https://www.toptal.com/python/python-parameterized-design-patterns">parameterisation</a>. The
 extra parameters we need to pass are: the product list <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>; the name of
-the template to use; and something to pass in some extra context. With those in
+the template to use; and any extra context data. With those in
 place we can easily pull out a <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> function, and call it
-from our two entry-point view functions.</p>
+from our two entry-point view functions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">display_product_list</span><span class="p">(</span>
         <span class="n">request</span><span class="p">,</span>
@@ -138,7 +139,7 @@ from our two entry-point view functions.</p>
 <p class="admonition-title">Note</p>
 <p>For those unfamiliar with the signature on <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code>:</p>
 <ul class="simple">
-<li><p>the arguments after <code class="docutils literal notranslate"><span class="pre">*</span></code> are “<a class="reference external" href="https://lukeplant.me.uk/blog/posts/keyword-only-arguments-in-python/">keyword only arguments</a>”.</p></li>
+<li><p>the arguments after <code class="docutils literal notranslate"><span class="pre">*</span></code> are <a class="reference external" href="https://lukeplant.me.uk/blog/posts/keyword-only-arguments-in-python/">keyword only arguments</a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">queryset</span></code> and <code class="docutils literal notranslate"><span class="pre">template_name</span></code> lack defaults (because we don’t have any
 good defaults) which forces calling code to supply the arguments.</p></li>
 <li><p>for <code class="docutils literal notranslate"><span class="pre">context</span></code> we do have a sensible default, but also need to avoid the
@@ -195,14 +196,14 @@ to invent a <code class="docutils literal notranslate"><span class="pre">Filtere
 <p>If you have a large number of views that are very repetitive, you may continue
 this pattern even further. Examples of projects that have done this are:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://docs.djangoproject.com/en/3.1/ref/contrib/admin/">The Django admin</a></p></li>
+<li><p><a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/contrib/admin/">The Django admin</a></p></li>
 <li><p><a class="reference external" href="https://www.django-rest-framework.org/">Django Rest Framework</a></p></li>
 </ul>
 <p>Both of these have their own forms of “Class Based Views”, but actually provide
 higher level functionality in terms of <strong>sets of views</strong> rather than just
 individual views.</p>
 <p>I’ve had good experiences with both, and here are my ideas about why they have
-succeeded, where CBVs haven’t:</p>
+succeeded:</p>
 <ul>
 <li><p>They both provide a fairly narrow set of views. Both are essentially CRUD
 based, and this means that the views are quite constrained in what they do.</p>
@@ -228,39 +229,39 @@ referenced from your <code class="docutils literal notranslate"><span class="pre
 <p>I’ve claimed above that your own generic views would be better than the generic
 CBVs that Django provides, which leads to a question:</p>
 <p>Where do Django’s generic CBVs come from? Why didn’t we stop with function based
-generic views? The problem was that there was an endless list of requests to
-extend generic views to do one more thing, and we wanted to provide something
-more customisable.</p>
-<p>Our answer to this problem ought to have been this: if these generic views don’t
-do what you want, write your own. You can easily copy-paste the functionality
-you need and start from there. So why didn’t we just say that? I think we
-somehow had the idea that copy-paste is the ultimate disaster in software
-development. If there is some functionality written, we should always make it
-re-usable rather than re-implement, and we’ve somehow failed as software
-developers if we can’t.</p>
+generic views?</p>
+<p>The problem was that there was an endless list of requests to extend generic
+views to do one more thing, and we wanted to provide something more
+customisable.</p>
+<p>Our answer to this problem ought to have been: if these generic views don’t do
+what you want, write your own. You can easily copy-paste the functionality you
+need and start from there. So why didn’t we just say that? I think we somehow
+had the idea that copy-paste is the ultimate disaster in software development.
+If there is some functionality written, we should always make it re-usable
+rather than re-implement, and we’ve somehow failed as software developers if we
+can’t.</p>
 <p>You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
 line. But <a class="reference external" href="https://verraes.net/2014/08/dry-is-about-knowledge/">it is knowledge and not lines of code that we should be trying not to
-duplicate</a>.</p>
-<p>There are plenty of things worse than copy-paste programming, and <a class="reference external" href="https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction">the wrong
-abstraction</a> is
-one of them.</p>
-<p>I recently wrote several implementations of Mozilla’s <a class="reference external" href="https://projectfluent.org/">Fluent</a> localisation language, all of them in Python. One
-of them was a Fluent-to-Python compiler, another was a Fluent-to-Elm compiler.
-These two projects are clearly very similar in nature. So when I started the
-second, I did so with <a class="reference external" href="https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee">one big copy-paste job of 2500 lines of code</a>.
+duplicate</a>. There are
+plenty of things worse than copy-paste programming, and <a class="reference external" href="https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction">the wrong abstraction</a> is one of them.</p>
+<p>I recently wrote several implementations of Mozilla’s <a class="reference external" href="https://projectfluent.org/">Fluent</a> localisation language, all of them in Python.
+First I wrote an interpreter, then a Fluent-to-Python compiler, then a
+Fluent-to-Elm compiler. These last two projects are clearly very similar in
+nature. So when I started the second of them, I did so with <a class="reference external" href="https://github.com/elm-fluent/elm-fluent/commit/a100de2021dcc4fa413769342b1cba0240ba63ee">one big copy-paste
+job of 2500 lines of code</a>.
 I knew that although there were many, many similarities between the two
 projects, there would also be many, many differences. I was right — the two code
 bases still share a huge amount in terms of structure. In a few places they even
 still have significant chunks of identical code. But the code bases have also
 diverged at many, many points, both in small details and in more fundamental
 ways.</p>
-<p>The decision to copy-paste was overwhelming the right decision. Attempting to
-avoid duplicating anything while I was developing the second would have been an
-absolute killer in terms of complexity, and may have failed completely. Once or
-twice I copied fixes or changes directly from one to the other, but most times
-when I had “equivalent” changes to do, they looked significantly different in
-the two projects. Having to do them twice from scratch cost far, far less than
+<p>The decision to copy-paste was overwhelmingly the right decision. Attempting to
+avoid duplication while I was developing the second would have been an absolute
+killer in terms of complexity, and may have failed completely. Once or twice I
+copied fixes or changes directly from one to the other, but most times when I
+had “equivalent” changes to do, they looked significantly different in the two
+projects. Having to do them twice from scratch cost far, far less than
 attempting to write the two projects with a common abstraction layer.</p>
 <p>Before you can abstract commonality, you actually need at least two examples,
 preferably three, and abstracting before then is premature. The commonalities
@@ -270,7 +271,7 @@ avoiding all duplication at any cost is not the aim we should have.</p>
 </div>
 <div class="section" id="discussion-multiple-mixins">
 <span id="multiple-mixins"></span><h2>Discussion: Multiple mixins?<a class="headerlink" href="#discussion-multiple-mixins" title="Permalink to this headline">¶</a></h2>
-<p>When doing both a single object lookup and a list of objects, contrast the
+<p>When doing a combined single object lookup with a list of objects, contrast the
 simplicity of the above FBV code with <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview">trying to wrangle CBVs into doing this</a>.</p>
 <p>These Django docs do come up with a solution for this case, but it is a house of
 cards that requires lots of extremely careful thinking and knowing the
@@ -424,7 +425,7 @@ doing for you. Again we find the CBV is a bad <a class="reference internal" href
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -8,7 +8,7 @@ We are getting into more advanced territory now, so this page is heavier than
 the ones that have come before, but the techniques here are also very powerful
 and widely applicable.
 
-Continuing of our :doc:`example of two different views both featuring lists of
+Continuing our :doc:`example of two different views both featuring lists of
 products <delegation>`, let's add a new requirement, imitating the kind of
 complexity you will likely encounter in real projects.
 
@@ -93,7 +93,8 @@ To explain a little: here we passed the ``product_search`` function into
 ``display_product_list`` as the parameter ``searcher``. This feature is called
 “first class functions” — just like you can pass around any other data as a
 parameter, you pass around functions too. That is the heart of the technique
-here.
+here, allowing us to insert our custom logic into the middle of the common
+logic.
 
 But what about the ``special_offer_detail`` view? If we pass
 ``searcher=special_product_search``, inside ``display_product_list``
@@ -101,7 +102,7 @@ we'll have a problem. Our passed in function gets called like this::
 
   searcher(filters, page=page)
 
-But that doesn't match the signature of ``special_product_search`` which has an
+But that doesn't match the signature of ``special_product_search``, which has an
 extra parameter. How can we get that parameter passed?
 
 You might be tempted to make ``display_product_list`` accept the additional
@@ -144,6 +145,7 @@ There are some important things to note about this:
 
 * We defined our wrapper function ``special_product_search_wrapper`` inside the
   body of the main view. This is important for the functionality that follows.
+  (There are other ways to do it but this is the simplest.)
 
 * We made its signature match the one expected by ``display_product_list``.
 
@@ -155,9 +157,6 @@ There are some important things to note about this:
   Functions that behave in this way are called “closures” — they capture
   variables from their enclosing scope.
 
-
-Working this way, we can successfully insert our custom logic into the middle of
-the common logic.
 
 This powerful technique has lots of great advantages. For one,
 ``display_product_list`` never needs to be concerned with all of this. We don't
@@ -179,28 +178,28 @@ that we're going to go back to some basics, the first of which is
 Note — terminology
 ------------------
 
-In OO languages, the standard solution to this question is the “strategy
+In OO languages, the standard solution to this problem is the “strategy
 pattern”. That involves creating an object which can encapsulate the action you
 need to take.
 
 In Python, functions are “first class objects“ i.e. objects that you can pass
 around just like every other type of value. So we can just use “functions” where
-we need “the strategy pattern” (particular if our strategy has only one part to
+we need “the strategy pattern”, particularly if our strategy has only one part to
 it. If you have more than one entry point that you need to bundle together, a
-class can be helpful).
+class can be helpful.
 
 A slightly more general concept is “dependency injection”. If you have some code
 that needs to do something, i.e. it has a dependency on some other code, instead
 of depending directly, the dependency gets injected from the outside. If our
-dependency is a just a single function call, we can simple accept a function as
+dependency is a just a single function call, we can simply accept a function as
 a parameter. If our dependency is a set of related function calls, we might want
 an object with methods as the parameter.
 
-Often you will hear the term “dependency injection” being used for something
-that goes one step further, and injects dependencies **automatically** in some
-way. I call these “dependency injection frameworks/containers”. Outside of
-`pytest's fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I have
-not yet found a need or desire for these in Python.
+Often you will hear the term “dependency injection” being used for things that
+go one step further, and inject dependencies **automatically** in some way. I
+call these “dependency injection frameworks/containers”. Outside of `pytest's
+fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I have not yet found
+a need or desire for these in Python.
 
 So, we can call this pattern “first class functions”, or “callbacks”, “strategy
 pattern” or “dependency injection”. But dependency injection is clearly the
@@ -215,8 +214,8 @@ In contrast to the pattern I'm suggesting here (dependency injection / strategy
 of customisation, resulting in the need for class attributes and method
 overrides.
 
-Inheritance brings with it the problems we've also discussed under :ref:`helpers
-vs mixins <helpers-vs-mixins>`.
+Inheritance brings with it the problems we've discussed under :ref:`helpers vs
+mixins <helpers-vs-mixins>`.
 
 To make it more concrete, suppose we had solved the above
 custom-logic-in-the-middle problem by using inheritance and the template method
@@ -243,8 +242,11 @@ method. The base class might look something like this:
 
 Now, how do we implement ``product_search`` for our “special offer“ subclass? To
 call ``special_product_search``, we need access to the ``special_offer`` object
-that we already looked up in a different method. We could solve this by saving
-the object onto ``self``, something like this:
+that we already looked up in a different method. Note that we've got the same
+problem as before — in both cases we need some way to adapt our common code to
+call functions with two different signatures.
+
+We could solve this by saving the object onto ``self``, something like this:
 
 .. code-block:: python
 
@@ -266,13 +268,14 @@ the object onto ``self``, something like this:
            context['special_offer'] = self.special_offer
            return context
 
-Here we have separate methods that are forced to communicate with each other by
-setting data on ``self``. This is hacky and difficult to follow or reason about.
-Your ``product_search`` method now has some hidden inputs that could easily be
-missing. To be sure of correctness, you need to know what order your different
-methods are going to get called in. When you are forced to use ``self`` like
-this, it's worth reflecting on the `objects are a poor man's closures koan
-<https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent>`_.
+
+In this solution, we have separate methods that are forced to communicate with
+each other by setting data on ``self``. This is hacky and difficult to follow or
+reason about. Your ``product_search`` method now has some hidden inputs that
+could easily be missing. To be sure of correctness, you need to know what order
+your different methods are going to get called in. When you are forced to use
+``self`` like this, it's worth reflecting on the `objects are a poor man's
+closures koan <https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent>`_.
 
 This kind of code is not uncommon with CBVs. For example, a lot of code that
 uses ``DetailView`` will need to use the fact that ``get_object`` method stores
@@ -317,13 +320,15 @@ and make it possible to automatically verify even more things. On the other
 hand, if your CBV ``self`` object is a rag-bag of stuff as above it will be very
 hard for even the most advanced tools to help you.
 
-pylint gets further than flake8 in trying to detect typos in instance variables,
-and does a reasonable job. However it cannot detect the ordering issue
-mentioned, and it also complains about us setting instance variables outside of
-``__init__`` — a complaint which has some solid reasons, and is essentially
-recommending that we don't structure our code like this.
+`pylint <https://pylint.pycqa.org/en/latest/>`_ gets further than flake8 in
+trying to detect typos in instance variables, and does a pretty good job.
+However it cannot detect the ordering issue mentioned, and it also complains
+about us setting instance variables outside of ``__init__`` (W0201
+``attribute-defined-outside-init``) — a complaint which has some solid reasons,
+and is essentially recommending that we don't structure our code like this. If
+you follow its recommendations you'll (eventually) get yourself to the FBV.
 
-When I had completed this refactoring, which in the end completely removed my
+When I had finished this refactoring, which in the end completely removed my
 custom CBV base class, I confess I had a little twinge of sadness — my final
 code seemed just a little bit… *plain*. I now had just a bunch of simple
 functions and a few closures, and fewer OOP hierarchies and clever tricks to

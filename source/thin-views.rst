@@ -75,6 +75,10 @@ This is a very simple example, and it might not look much different. But if you
 get into the habit of moving this kind of logic out of the view layer, it will
 help a lot.
 
+Note that we did **not** move the ``messages.info()`` call into the model layer.
+It is concerned with putting a message into a web page, and so stays in the view
+layer where it belongs.
+
 Example: push filtering to the model layer
 ------------------------------------------
 
@@ -112,8 +116,8 @@ in the view. This has some bad effects:
 
 I agree with Jamie Matthews that `using filter directly in view code is a
 usually an anti-pattern
-<https://www.dabapps.com/blog/higher-level-query-api-django-orm/>`_. Instead,
-let's listen to those hints, and change our code like this:
+<https://www.dabapps.com/blog/higher-level-query-api-django-orm/>`_. So, let's
+listen to those hints, and change our code so we no longer need the comments:
 
 .. code-block:: python
 
@@ -124,17 +128,35 @@ let's listen to those hints, and change our code like this:
    Booking.objects.confirmed().for_year(date.today().year)
 
 
+We also want to be able to use the same functionality from a user object, for
+example:
+
+.. code-block:: python
+
+   user = request.user
+   context = {
+       'basket_bookings': user.bookings.in_basket()
+   }
+   # etc.
+
+If there is a user involved, I usually prefer code that looks like this. By
+getting into the habit of starting all user-related queries with ``user``,
+whether I'm displaying a list or a retrieving a single item, it's harder to
+forget to add access controls, so I will be less prone to `insecure direct
+object reference <https://portswigger.net/web-security/access-control/idor>`_
+security issues.
+
 The question now is, how do we create an interface like that?
 
 
 Chainable custom QuerySet methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The answer is we define ``in_basket``, ``on_shelf``, ``confirmed``, ``for_year``
-etc. as custom ``QuerySet`` methods. By making them ``QuerySet`` methods, rather
-than just ``Manager`` methods, we can make them chainable as above, so that we
-can use ``for_year()`` after ``confirmed()``, for example, or after other
-methods.
+The answer is we define ``in_basket()``, ``on_shelf()``, ``confirmed()``,
+``for_year()`` etc. as custom ``QuerySet`` methods. By making them ``QuerySet``
+methods, rather than just ``Manager`` methods, we can make them chainable as
+above, so that we can use ``for_year()`` after ``confirmed()``, for example, or
+after other methods.
 
 The `Django docs for QuerySets and Managers
 <https://docs.djangoproject.com/en/stable/topics/db/managers/>`_ will show you
@@ -194,10 +216,19 @@ But you should note:
 * Model layer code doesn't have to refer to "database models". We are really talking about
   "domain models" here, which can often be backed directly by a Django database
   model, but it could be other classes or functions.
-* You don't have to put all logic relating to a Django ``models.Model`` into
-  methods of that class. You should “listen to the code”, and also listen to the
-  business level requirements, and discover the concepts and divisions that make
-  sense for your project.
+* You don't have to put all logic relating to a Django ``Model`` into methods of
+  that class. You should “listen to the code”, and also listen to the business
+  level requirements, and discover the concepts and divisions that make sense
+  for your project.
+
+
+The end
+~~~~~~~
+
+That's the end of the guide! (Apart from discussion sections below, as always). I
+hope it has been helpful. If there are some common things I haven't covered,
+feel free to `open an issue on GitHub
+<https://github.com/spookylukey/django-views-the-right-way>`_.
 
 .. _service-layers:
 
@@ -205,13 +236,15 @@ Discussion: service layer?
 --------------------------
 
 A service layer goes further than the above, and creates an interface for
-accessing the data in the database that doesn't expose ORM methods at all.
+accessing the data in the database that doesn't expose ORM methods at all. In
+such an arrangement you would also normally separate your “domain model” classes
+from your Django ``Model``.
 
 James Bennett has an excellent post `Against service layers in Django
 <https://www.b-list.org/weblog/2020/mar/16/no-service/>`_ that summarises
 everything that I would want to say on the topic, so I'm not going to repeat
 that. The long and short is — using custom ``Model`` methods and custom
-``QuerySet`` methods (as above) as your “service layer” is an approach that will
+``QuerySet`` methods as your “service layer”, as above, is an approach that will
 work really well for a lot of projects.
 
 If you believe that a service layer is essential — for example, using a
@@ -251,6 +284,6 @@ needed there, but sometimes I feel it isn't worth it.
 It is not the end of the world if you fail to 100% insulate your schema from the
 rest of the app. You can get benefits from doing it partially, and if you have
 some integration tests that exercise the queries constructed by your view code,
-you will have a mechanism for finding those places where you schema has leaked
+you will have a mechanism for finding those places where your schema has leaked
 out.
 

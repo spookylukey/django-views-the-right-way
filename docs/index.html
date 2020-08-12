@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Django Views — The Right Way</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -63,13 +64,12 @@ simple. In fact, the <a class="reference external" href="https://docs.djangoproj
 need to know. Just read that, and skip the bits about CBVs, and you’ll be fine.</p>
 <p>But if you want a different take on the same things, this guide might be for
 you. I’ve also added extra bits for common tasks and patterns in FBVs for which
-CBVs are often suggested as the solution. If you read all of it:</p>
+CBVs are often suggested as the solution. I have a few aims:</p>
 <ul class="simple">
-<li><p>You’ll learn how to make your views usually shorter and definitely much
-simpler than if you used CBVs.</p></li>
-<li><p>You’ll be freed from learning a whole stack of additional APIs that were only
-making your life harder (and teaching you bad patterns).</p></li>
-<li><p>Instead of learning a bunch of Django specific APIs, we’ll cover much more
+<li><p>I want to show how simple and easy views can be.</p></li>
+<li><p>I want you to be freed from learning a whole stack of additional APIs that
+were only making your life harder (and teaching you bad patterns).</p></li>
+<li><p>Instead of learning a bunch of Django specific APIs, I want to cover much more
 transferable knowledge:</p>
 <ul>
 <li><p>HTTP principles</p></li>
@@ -145,7 +145,7 @@ they apply in Python and Django.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="redirects.html#discussion-configuration-in-urls-py">Discussion: configuration in urls.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="redirects.html#discussion-cbv-configuration-in-urls-py">Discussion: CBV configuration in urls.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="redirects.html#discussion-fbv-configuration-in-urls-py">Discussion: FBV configuration in urls.py</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="redirects.html#additional-keyword-parameters">Additional keyword parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="redirects.html#mass-produced-views-view-factories">Mass-produced views — “view factories”</a></li>
@@ -173,6 +173,7 @@ they apply in Python and Django.</p>
 <li class="toctree-l2"><a class="reference internal" href="thin-views.html#example-push-filtering-to-the-model-layer">Example: push filtering to the model layer</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="thin-views.html#chainable-custom-queryset-methods">Chainable custom QuerySet methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="thin-views.html#where-to-put-this-code">Where to put this code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="thin-views.html#the-end">The end</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="thin-views.html#discussion-service-layer">Discussion: service layer?</a></li>
@@ -285,7 +286,7 @@ things I’m expressing now.</p></li>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

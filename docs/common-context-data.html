@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Common context data</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -58,10 +59,10 @@ answer is <a class="reference external" href="https://docs.djangoproject.com/en/
 <li><p>Is the data going to be needed in a large fraction of your site, but not
 everywhere and is expensive to evaluate? I’d recommend using <a class="reference external" href="https://stackoverflow.com/a/28146359/182604">lazy evaluation
 in your context processor</a>.</p></li>
-<li><p>Is the data needed for a ”component” that exists really at the template level, perhaps
-in a base template or is included in several templates?</p>
-<p>For example, it might be data needed for common navigation elements that
-appear in a header on lots of pages.</p>
+<li><p>Is the data needed for a “component” that exists really at the template
+level, perhaps in a base template or is included in several templates? For
+example, it might be data needed for common elements that appear
+in a header or footer on lots of pages.</p>
 <p>In general this can be done most easily by using a <a class="reference external" href="https://docs.djangoproject.com/en/stable/howto/custom-template-tags/#inclusion-tags/">custom inclusion template
 tag</a>
 which can load its own data — that way you don’t have to worry about changing
@@ -130,11 +131,10 @@ not have a well defined interface, and this always hinders comprehension. If
 you think of <code class="docutils literal notranslate"><span class="pre">get_context_data</span></code> not as a method, but as a function whose
 first parameter is <code class="docutils literal notranslate"><span class="pre">self</span></code>, you’ll quickly see how complicated its interface
 is.</p></li>
-<li><p>Over time, mixins defined like this quickly becomes tangled, due to that
+<li><p>Over time, mixins defined like this quickly become tangled, due to that
 problematic <code class="docutils literal notranslate"><span class="pre">self</span></code> parameter, which can have all kinds of things attached to
-it. Very quickly you can end up with a mixin that works in one context, but
-not in another, due to different expectations about what is attached to
-<code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+it. You can easily end up with a mixin that works in one context, but not in
+another, due to different expectations about what is attached to <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 <p>In contrast, all the parameters to functions are usually well defined, and you
 can usually have a very high level of confidence that they will work in all
 contexts. There is no <code class="docutils literal notranslate"><span class="pre">self</span></code> parameter which you can you use to sneak things
@@ -241,7 +241,7 @@ which also mentions mixins.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
