@@ -8,7 +8,7 @@ We are getting into more advanced territory now, so this page is heavier than
 the ones that have come before, but the techniques here are also very powerful
 and widely applicable.
 
-Continuing of our :doc:`example of two different views both featuring lists of
+Continuing our :doc:`example of two different views both featuring lists of
 products <delegation>`, let's add a new requirement, imitating the kind of
 complexity you will likely encounter in real projects.
 
