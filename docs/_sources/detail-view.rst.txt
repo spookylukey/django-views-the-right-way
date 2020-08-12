@@ -300,7 +300,7 @@ If we have used “convention over configuration”, they have to:
 1. Know all the conventions that could end up referencing this template.
 
 2. Look for any ``DetailView``, find the model it is using, and check to see if
-   it matches ``product.Product``. And also any further subclasses of
+   it matches ``shop.Product``. And also any further subclasses of
    ``DetailView`` etc.
 
 3. In addition, they will have to do a grep for code that references
