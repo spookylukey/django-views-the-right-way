@@ -234,8 +234,8 @@ Using CBVs we could rewrite the code as:
 
    from django.views.generic import TemplateView
 
-    class ExampleView(TemplateView):
-        template_name = "example.html"
+   class ExampleView(TemplateView):
+       template_name = "example.html"
 
 
 But now **all 3 essential elements of the view have disappeared**. Where is the
