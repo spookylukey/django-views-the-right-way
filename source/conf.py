@@ -92,7 +92,7 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
-    'description': 'An opionated guide',
+    'description': 'An opinionated guide',
     'show_related': True,
     'show_relbars': True,
     'page_width': '1100px',  # Wide enough for typical 80 char code samples
