@@ -92,7 +92,7 @@ Something like this:
 To explain a little: here we passed the ``product_search`` function into
 ``display_product_list`` as the parameter ``searcher``. This feature is called
 “first class functions” — just like you can pass around any other data as a
-parameter, you pass around functions too. That is the heart of the technique
+parameter, you can pass around functions too. That is the heart of the technique
 here, allowing us to insert our custom logic into the middle of the common
 logic.
 
@@ -272,9 +272,9 @@ We could solve this by saving the object onto ``self``, something like this:
 In this solution, we have separate methods that are forced to communicate with
 each other by setting data on ``self``. This is hacky and difficult to follow or
 reason about. Your ``product_search`` method now has some hidden inputs that
-could easily be missing. To be sure of correctness, you need to know what order
-your different methods are going to get called in. When you are forced to use
-``self`` like this, it's worth reflecting on the `objects are a poor man's
+could easily be missing. To be sure of correctness, you need to know the order
+in which your different methods are going to get called. When you are forced to
+use ``self`` like this, it's worth reflecting on the `objects are a poor man's
 closures koan <https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent>`_.
 
 This kind of code is not uncommon with CBVs. For example, a lot of code that
@@ -325,7 +325,7 @@ trying to detect typos in instance variables, and does a pretty good job.
 However it cannot detect the ordering issue mentioned, and it also complains
 about us setting instance variables outside of ``__init__`` (W0201
 ``attribute-defined-outside-init``) — a complaint which has some solid reasons,
-and is essentially recommending that we don't structure our code like this. If
+and is essentially recommending that you don't structure our code like this. If
 you follow its recommendations you'll (eventually) get yourself to the FBV.
 
 When I had finished this refactoring, which in the end completely removed my

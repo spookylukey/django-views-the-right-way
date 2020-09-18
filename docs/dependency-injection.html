@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom logic in the middle — dependency injection</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -125,7 +126,7 @@ manipulating a passed in <code class="docutils literal notranslate"><span class=
 <p>To explain a little: here we passed the <code class="docutils literal notranslate"><span class="pre">product_search</span></code> function into
 <code class="docutils literal notranslate"><span class="pre">display_product_list</span></code> as the parameter <code class="docutils literal notranslate"><span class="pre">searcher</span></code>. This feature is called
 “first class functions” — just like you can pass around any other data as a
-parameter, you pass around functions too. That is the heart of the technique
+parameter, you can pass around functions too. That is the heart of the technique
 here, allowing us to insert our custom logic into the middle of the common
 logic.</p>
 <p>But what about the <code class="docutils literal notranslate"><span class="pre">special_offer_detail</span></code> view? If we pass
@@ -274,9 +275,9 @@ call functions with two different signatures.</p>
 <p>In this solution, we have separate methods that are forced to communicate with
 each other by setting data on <code class="docutils literal notranslate"><span class="pre">self</span></code>. This is hacky and difficult to follow or
 reason about. Your <code class="docutils literal notranslate"><span class="pre">product_search</span></code> method now has some hidden inputs that
-could easily be missing. To be sure of correctness, you need to know what order
-your different methods are going to get called in. When you are forced to use
-<code class="docutils literal notranslate"><span class="pre">self</span></code> like this, it’s worth reflecting on the <a class="reference external" href="https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent">objects are a poor man’s
+could easily be missing. To be sure of correctness, you need to know the order
+in which your different methods are going to get called. When you are forced to
+use <code class="docutils literal notranslate"><span class="pre">self</span></code> like this, it’s worth reflecting on the <a class="reference external" href="https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent">objects are a poor man’s
 closures koan</a>.</p>
 <p>This kind of code is not uncommon with CBVs. For example, a lot of code that
 uses <code class="docutils literal notranslate"><span class="pre">DetailView</span></code> will need to use the fact that <code class="docutils literal notranslate"><span class="pre">get_object</span></code> method stores
@@ -317,7 +318,7 @@ trying to detect typos in instance variables, and does a pretty good job.
 However it cannot detect the ordering issue mentioned, and it also complains
 about us setting instance variables outside of <code class="docutils literal notranslate"><span class="pre">__init__</span></code> (W0201
 <code class="docutils literal notranslate"><span class="pre">attribute-defined-outside-init</span></code>) — a complaint which has some solid reasons,
-and is essentially recommending that we don’t structure our code like this. If
+and is essentially recommending that you don’t structure our code like this. If
 you follow its recommendations you’ll (eventually) get yourself to the FBV.</p>
 <p>When I had finished this refactoring, which in the end completely removed my
 custom CBV base class, I confess I had a little twinge of sadness — my final
@@ -413,7 +414,7 @@ hug.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirects</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -72,7 +73,7 @@ redirecting to named views, and other things.</p></li>
 — a class that provides an entire view that does redirection, and has a few
 neat features like being able to look up view by name, including arguments
 from a path, and also copy the query string. I recommend using this if the
-only thing that your view does is a redirect, otherwise just use
+only thing that your view does is a redirect. Otherwise just use
 <code class="docutils literal notranslate"><span class="pre">HttpResponse</span></code> objects directly.</p>
 <p>For example, if you have an old URL at <code class="docutils literal notranslate"><span class="pre">/old-path/&lt;number&gt;/</span></code> and want to
 permanently redirect it to <code class="docutils literal notranslate"><span class="pre">/new-path/&lt;number&gt;/</span></code>, you can use do it from
@@ -273,7 +274,7 @@ to be, so this will play well with <a class="reference internal" href="url-param
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
