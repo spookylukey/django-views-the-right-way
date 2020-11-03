@@ -35,7 +35,7 @@ In addition, Django provides some shortcuts:
   — a class that provides an entire view that does redirection, and has a few
   neat features like being able to look up view by name, including arguments
   from a path, and also copy the query string. I recommend using this if the
-  only thing that your view does is a redirect, otherwise just use
+  only thing that your view does is a redirect. Otherwise just use
   ``HttpResponse`` objects directly.
 
   For example, if you have an old URL at ``/old-path/<number>/`` and want to
