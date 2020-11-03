@@ -27,6 +27,5 @@ div.body {
 @media screen and (max-width: 500px) {
     body {
         padding: 10px 10px;
-        font-size: 15px;
     }
 }
