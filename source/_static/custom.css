@@ -17,3 +17,9 @@ pre {
       margin-left: 30px;
   }
 }
+
+div.body {
+    /* Work nicely on mobile */
+    min-width: unset;
+}
+
