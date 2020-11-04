@@ -175,8 +175,8 @@ that we're going to go back to some basics, the first of which is
 :doc:`redirects` and then :doc:`forms`.
 
 
-Note — terminology
-------------------
+Note: terminology
+-----------------
 
 In OO languages, the standard solution to this problem is the “strategy
 pattern”. That involves creating an object which can encapsulate the action you
