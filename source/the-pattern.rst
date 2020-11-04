@@ -214,8 +214,8 @@ Next up: :doc:`anything`.
 
 .. _visibility:
 
-Discussion — keep the view viewable!
-------------------------------------
+Discussion: keep the view viewable!
+-----------------------------------
 
 The most important thing about the pattern I'm recommending is that the view
 itself is visible. The fundamental nature of a view is that it is a function (or
