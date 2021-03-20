@@ -325,7 +325,7 @@ trying to detect typos in instance variables, and does a pretty good job.
 However it cannot detect the ordering issue mentioned, and it also complains
 about us setting instance variables outside of ``__init__`` (W0201
 ``attribute-defined-outside-init``) — a complaint which has some solid reasons,
-and is essentially recommending that you don't structure our code like this. If
+and is essentially recommending that you don't structure your code like this. If
 you follow its recommendations you'll (eventually) get yourself to the FBV.
 
 When I had finished this refactoring, which in the end completely removed my
