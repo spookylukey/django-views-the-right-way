@@ -54,7 +54,7 @@ sqlparse==0.3.1
 toml==0.10.0
 traitlets==4.3.3
 typed-ast==1.4.1
-urllib3==1.25.9
+urllib3==1.26.5
 wcwidth==0.1.9
 wrapt==1.12.1
 zipp==3.1.0
