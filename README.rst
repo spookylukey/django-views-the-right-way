@@ -15,3 +15,6 @@ You can file an issue for typos, or something that you'd like to see covered
 
 If you have PRs for typos etc., it would be most useful if you could add changes
 to the ``.rst`` files in the `source <source/>`_ folder. Thanks!
+
+General comments can be left `here <https://github.com/spookylukey/django-views-the-right-way/issues/9>`_.
+
