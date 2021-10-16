@@ -93,8 +93,8 @@ want this decorator to be generic and future proof, so we put those in there
 from the start.
 
 
-Managing multiple decorators
-----------------------------
+Adding multiple decorators
+--------------------------
 
 Our decorator as above has an issue — if an anonymous user accesses it,
 ``request.user`` will be an ``AnonymousUser`` instance, and won't have an
