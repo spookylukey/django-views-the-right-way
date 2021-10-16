@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>URL parameters in views</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Displaying a single database object" href="detail-view.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="url-parameters-in-views">
+  <section id="url-parameters-in-views">
 <h1>URL parameters in views<a class="headerlink" href="#url-parameters-in-views" title="Permalink to this headline">¶</a></h1>
 <p>As described in the <a class="reference external" href="https://docs.djangoproject.com/en/stable/intro/tutorial03/">Django tutorial for views</a> and the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#how-django-processes-a-request">request
 handling docs</a>,
@@ -92,7 +92,7 @@ the different kind of things you might add into your URLs. If you are into type
 hints, also see below for tips on how you can enhance this pattern.</p>
 <p>Otherwise, onto <a class="reference internal" href="detail-view.html"><span class="doc">Displaying a single database object</span></a>, where we will actually use the <code class="docutils literal notranslate"><span class="pre">slug</span></code>
 parameter.</p>
-<div class="section" id="discussion-generic-code-and-function-signatures">
+<section id="discussion-generic-code-and-function-signatures">
 <h2>Discussion: Generic code and function signatures<a class="headerlink" href="#discussion-generic-code-and-function-signatures" title="Permalink to this headline">¶</a></h2>
 <p>Django’s URL-to-function dispatching mechanism is very elegant and powerful,
 converting parts of the URL into a function parameter that’s just ready and
@@ -119,8 +119,8 @@ CBVs, where you have to do extra work get to hold of the parameter:</p>
 </pre></div>
 </div>
 </div></blockquote>
-</div>
-<div class="section" id="discussion-type-checked-parameters">
+</section>
+<section id="discussion-type-checked-parameters">
 <span id="type-checked-parameters"></span><h2>Discussion: Type-checked parameters<a class="headerlink" href="#discussion-type-checked-parameters" title="Permalink to this headline">¶</a></h2>
 <p>Of course, if we add type hints, wouldn’t it be even cooler if we could
 automatically ensure that the URL configuration matched the view function, both
@@ -142,8 +142,8 @@ of just yours. So CBVs have to have a <code class="docutils literal notranslate"
 what you wanted. Generic code by definition lacks the personal touch.</p>
 <p>Of course, there can be times when the advantages outweigh the disadvantages.
 But make sure you know what you are missing!</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -179,7 +179,7 @@ But make sure you know what you are missing!</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -205,7 +205,7 @@ But make sure you know what you are missing!</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -227,7 +227,7 @@ But make sure you know what you are missing!</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

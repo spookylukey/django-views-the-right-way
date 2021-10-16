@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Adding data to a template</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Common context data" href="common-context-data.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="adding-data-to-a-template">
+  <section id="adding-data-to-a-template">
 <h1>Adding data to a template<a class="headerlink" href="#adding-data-to-a-template" title="Permalink to this headline">¶</a></h1>
 <p>Suppose we have some data that we want to use in a template. We therefore need
 to pass that data into the template’s “context”. It could be anything — a simple
@@ -95,7 +95,7 @@ it:</p>
 </pre></div>
 </div>
 <p>That’s it! Next up: <a class="reference internal" href="common-context-data.html"><span class="doc">Common context data</span></a>.</p>
-<div class="section" id="discussion-embarrassingly-simple">
+<section id="discussion-embarrassingly-simple">
 <h2>Discussion: Embarrassingly simple?<a class="headerlink" href="#discussion-embarrassingly-simple" title="Permalink to this headline">¶</a></h2>
 <p>This code is so simple it might not seem worth mentioning. Yet, with Class Based
 Views, the equivalent is anything but simple. Suppose we start with a
@@ -135,8 +135,8 @@ capable developer to actually successfully pull off all the parts needed for a
 <a class="reference external" href="https://docs.djangoproject.com/en/stable/howto/custom-template-tags/">custom template tag</a>.</p>
 <p>Rather, he struggled for so long because of a bad <a class="reference internal" href="anything.html#starting-point"><span class="std std-ref">starting point</span></a> that was making a simple thing hard. If we as the Django
 community have made this hard, we are the ones who should be embarrassed.</p>
-</div>
-<div class="section" id="discussion-boilerplate">
+</section>
+<section id="discussion-boilerplate">
 <span id="boilerplate"></span><h2>Discussion: Boilerplate<a class="headerlink" href="#discussion-boilerplate" title="Permalink to this headline">¶</a></h2>
 <p>With the above in mind, do we have more boilerplate with CBVs or FBVs?</p>
 <p>Before we answer that, the first thing to note about boilerplate (by which I
@@ -205,8 +205,8 @@ CBV is very explicit about use of templates, but so is the FBV. Now that we’ve
 added <code class="docutils literal notranslate"><span class="pre">get_context_data</span></code>, the CBV is clear about context data, but so was the
 FBV. However, CBV has made the key elements of the view <a class="reference internal" href="the-pattern.html#visibility"><span class="std std-ref">invisible</span></a>, as we noted before, and obscured all the control flow, so I think
 it is difficult to argue this is a win for comprehension.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -242,7 +242,7 @@ it is difficult to argue this is a win for comprehension.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -268,7 +268,7 @@ it is difficult to argue this is a win for comprehension.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -290,7 +290,7 @@ it is difficult to argue this is a win for comprehension.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

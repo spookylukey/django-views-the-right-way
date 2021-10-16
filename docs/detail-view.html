@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Displaying a single database object</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Displaying a list of objects" href="list-view.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="displaying-a-single-database-object">
+  <section id="displaying-a-single-database-object">
 <h1>Displaying a single database object<a class="headerlink" href="#displaying-a-single-database-object" title="Permalink to this headline">¶</a></h1>
 <p>To continue <a class="reference internal" href="url-parameters.html"><span class="doc">our example</span></a>, we want to display individual
 product pages, looking them up from a product slug that will be part of the URL.</p>
@@ -90,7 +90,7 @@ template, then the final, concise version of our view will look like this:</p>
 </pre></div>
 </div>
 <p>That’s it! Next up: <a class="reference internal" href="list-view.html"><span class="doc">Displaying a list of objects</span></a></p>
-<div class="section" id="discussion-layering-violations-shortcuts-vs-mixins">
+<section id="discussion-layering-violations-shortcuts-vs-mixins">
 <span id="shortcuts-vs-mixins"></span><h2>Discussion: Layering violations — shortcuts vs mixins<a class="headerlink" href="#discussion-layering-violations-shortcuts-vs-mixins" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">get_object_or_404</span></code> is an example of a “shortcut” function. <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/shortcuts/">Django’s docs for
 shortcut functions</a> defines them
@@ -235,8 +235,8 @@ code, while mixins set up a pattern for your code which determines its structure
 anti-patterns</a>. He also specifically
 calls out Django CBV mixins (though he manages to avoid saying ‘Django’), and in
 my opinion his analysis is spot on.</p>
-</div>
-<div class="section" id="discussion-comparison-to-detailview">
+</section>
+<section id="discussion-comparison-to-detailview">
 <span id="detailview-comparison"></span><h2>Discussion: Comparison to DetailView<a class="headerlink" href="#discussion-comparison-to-detailview" title="Permalink to this headline">¶</a></h2>
 <p>If instead of my FBV above we had used <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/class-based-views/generic-display/#detailview">DetailView</a>,
 what would the code look like? This is what I would write:</p>
@@ -261,8 +261,8 @@ my FBV:</p>
 value for money.</p>
 <p>You could make the CBV version more concise, but not in good ways. Each
 alternative way to write this brings up some issues that I’ll discuss in turn.</p>
-</div>
-<div class="section" id="discussion-convention-vs-configuration">
+</section>
+<section id="discussion-convention-vs-configuration">
 <h2>Discussion: Convention vs configuration<a class="headerlink" href="#discussion-convention-vs-configuration" title="Permalink to this headline">¶</a></h2>
 <p>The first way we could shorten the CBV version is by omitting <code class="docutils literal notranslate"><span class="pre">template_name</span></code>.
 The generic CBVs have some logic built in to derive a template name from the
@@ -338,8 +338,8 @@ you can save. But this is a false dichotomy. With dynamic languages, very often
 <strong>we can choose exactly how much configuration we want to avoid</strong>. We should
 make sure we restrain ourselves if we are going to make code less maintainable
 for the sake of saving a tiny bit of typing.</p>
-</div>
-<div class="section" id="discussion-static-vs-dynamic">
+</section>
+<section id="discussion-static-vs-dynamic">
 <h2>Discussion: Static vs dynamic<a class="headerlink" href="#discussion-static-vs-dynamic" title="Permalink to this headline">¶</a></h2>
 <p>For the case of statically defining what query to start with as class attributes
 on the CBV, we have two options:</p>
@@ -385,8 +385,8 @@ classes has attributes like <code class="docutils literal notranslate"><span cla
 able to check it for you before you even access the admin.</p>
 <p>Some of the trade-offs here also depend on how often the static attribute is
 enough, compared to how often you need the dynamic version.</p>
-</div>
-<div class="section" id="discussion-generic-code-and-variable-names">
+</section>
+<section id="discussion-generic-code-and-variable-names">
 <h2>Discussion: Generic code and variable names<a class="headerlink" href="#discussion-generic-code-and-variable-names" title="Permalink to this headline">¶</a></h2>
 <p>A third way to shorten the CBV is to omit <code class="docutils literal notranslate"><span class="pre">context_object_name</span></code>. In that case,
 instead of our <code class="docutils literal notranslate"><span class="pre">Product</span></code> object having the name <code class="docutils literal notranslate"><span class="pre">product</span></code> in the template,
@@ -410,8 +410,8 @@ function gets called by the framework. In contrast, libraries leave you in
 control, you choose to call the library functions in the structure you see fit.
 Both have their place, but if we accept the constraints of a framework we should
 be sure that it is worth it.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -447,7 +447,7 @@ be sure that it is worth it.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -476,7 +476,7 @@ be sure that it is worth it.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -498,7 +498,7 @@ be sure that it is worth it.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

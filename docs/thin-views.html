@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Thin views</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Preconditions" href="preconditions.html" />
@@ -43,7 +43,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="thin-views">
+  <section id="thin-views">
 <h1>Thin views<a class="headerlink" href="#thin-views" title="Permalink to this headline">¶</a></h1>
 <p>This section, the last in my guide, is about what <strong>not</strong> to put in a view.</p>
 <p>My basic philosophy is that views should:</p>
@@ -62,7 +62,7 @@ interactive user. Then, divide up the logic that would be common to both the web
 site and the other types of application. Logic that is <strong>common</strong> should <strong>not</strong>
 be part of your view function or view layer utilities.</p>
 <p>We’ll have a look at a few examples to illustrate this.</p>
-<div class="section" id="example-push-actions-to-the-model-layer">
+<section id="example-push-actions-to-the-model-layer">
 <h2>Example: push actions to the model layer<a class="headerlink" href="#example-push-actions-to-the-model-layer" title="Permalink to this headline">¶</a></h2>
 <p>This example comes from code I wrote (always a fruitful place to look for
 examples of how not to do it…), for a booking system. After adding place
@@ -105,8 +105,8 @@ help a lot.</p>
 <p>Note that we did <strong>not</strong> move the <code class="docutils literal notranslate"><span class="pre">messages.info()</span></code> call into the model layer.
 It is concerned with putting a message into a web page, and so stays in the view
 layer where it belongs.</p>
-</div>
-<div class="section" id="example-push-filtering-to-the-model-layer">
+</section>
+<section id="example-push-filtering-to-the-model-layer">
 <h2>Example: push filtering to the model layer<a class="headerlink" href="#example-push-filtering-to-the-model-layer" title="Permalink to this headline">¶</a></h2>
 <p>Continuing the example above, when we display a list of bookings to the user, we
 might want to do different types of filtering. For example, we might want to
@@ -160,7 +160,7 @@ forget to add access controls, so I will be less prone to <a class="reference ex
 object reference</a>
 security issues.</p>
 <p>The question now is, how do we create an interface like that?</p>
-<div class="section" id="chainable-custom-queryset-methods">
+<section id="chainable-custom-queryset-methods">
 <h3>Chainable custom QuerySet methods<a class="headerlink" href="#chainable-custom-queryset-methods" title="Permalink to this headline">¶</a></h3>
 <p>The answer is we define <code class="docutils literal notranslate"><span class="pre">in_basket()</span></code>, <code class="docutils literal notranslate"><span class="pre">on_shelf()</span></code>, <code class="docutils literal notranslate"><span class="pre">confirmed()</span></code>,
 <code class="docutils literal notranslate"><span class="pre">for_year()</span></code> etc. as custom <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> methods. By making them <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code>
@@ -201,8 +201,8 @@ the shelf or in the basket:</p>
 <code class="docutils literal notranslate"><span class="pre">on_shelf_or_in_basket</span></code>, you’ll execute a single DB query that will return
 both types of bookings. So we get efficient code that is also readable and
 doesn’t leak our schema inappropriately.</p>
-</div>
-<div class="section" id="where-to-put-this-code">
+</section>
+<section id="where-to-put-this-code">
 <h3>Where to put this code<a class="headerlink" href="#where-to-put-this-code" title="Permalink to this headline">¶</a></h3>
 <p>If not in the view, where does this code actually live? If you are going for the
 “fat model” arrangement, as above, often this gets put into a <code class="docutils literal notranslate"><span class="pre">models.py</span></code> file.</p>
@@ -218,15 +218,15 @@ that class. You should “listen to the code”, and also listen to the business
 level requirements, and discover the concepts and divisions that make sense
 for your project.</p></li>
 </ul>
-</div>
-<div class="section" id="the-end">
+</section>
+<section id="the-end">
 <h3>The end<a class="headerlink" href="#the-end" title="Permalink to this headline">¶</a></h3>
 <p>That’s the end of the guide! (Apart from discussion sections below, as always). I
 hope it has been helpful. If there are some common things I haven’t covered,
 feel free to <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way">open an issue on GitHub</a>.</p>
-</div>
-</div>
-<div class="section" id="discussion-service-layer">
+</section>
+</section>
+<section id="discussion-service-layer">
 <span id="service-layers"></span><h2>Discussion: service layer?<a class="headerlink" href="#discussion-service-layer" title="Permalink to this headline">¶</a></h2>
 <p>A service layer goes further than the above, and creates an interface for
 accessing the data in the database that doesn’t expose ORM methods at all. In
@@ -244,8 +244,8 @@ agree with some of the patterns I’ve suggested. For example, the
 weird or terrible idea. However, if you are sold on using the <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> API
 (with custom methods) as your interface, then this is just a useful shortcut
 that adapts the <code class="docutils literal notranslate"><span class="pre">QuerySet</span></code> API for a common case in HTTP applications.</p>
-</div>
-<div class="section" id="discussion-pragmatism-and-purity">
+</section>
+<section id="discussion-pragmatism-and-purity">
 <h2>Discussion: pragmatism and purity<a class="headerlink" href="#discussion-pragmatism-and-purity" title="Permalink to this headline">¶</a></h2>
 <p>When trying to hide schema details from your view layer, there are some obstacles.</p>
 <p>For example, for performance, appropriate use of <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/models/querysets/#django.db.models.query.QuerySet.select_related">select_related</a>
@@ -268,8 +268,8 @@ rest of the app. You can get benefits from doing it partially, and if you have
 some integration tests that exercise the queries constructed by your view code,
 you will have a mechanism for finding those places where your schema has leaked
 out.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -301,7 +301,7 @@ out.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -334,7 +334,7 @@ out.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -355,7 +355,7 @@ out.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

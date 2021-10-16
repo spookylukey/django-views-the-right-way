@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Preconditions</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Thin views" href="thin-views.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="preconditions">
+  <section id="preconditions">
 <h1>Preconditions<a class="headerlink" href="#preconditions" title="Permalink to this headline">¶</a></h1>
 <p>When writing views, a common situation is that you have some checks that need to
 be done at the beginning of a view before the main logic, and several views
@@ -121,7 +121,7 @@ make debugging nicer, and sometimes it can be important for functionality too
 our wrapper take <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> might not seem necessary. But we
 want this decorator to be generic and future proof, so we put those in there
 from the start.</p>
-<div class="section" id="managing-multiple-decorators">
+<section id="managing-multiple-decorators">
 <h2>Managing multiple decorators<a class="headerlink" href="#managing-multiple-decorators" title="Permalink to this headline">¶</a></h2>
 <p>Our decorator as above has an issue — if an anonymous user accesses it,
 <code class="docutils literal notranslate"><span class="pre">request.user</span></code> will be an <code class="docutils literal notranslate"><span class="pre">AnonymousUser</span></code> instance, and won’t have an
@@ -140,7 +140,7 @@ follows:</p>
 </div>
 <p>The checks that <code class="docutils literal notranslate"><span class="pre">login_required</span></code> does ensure that by the time we get into the
 <code class="docutils literal notranslate"><span class="pre">premium_required</span></code> view wrapper, we are guaranteed to have a logged in user.</p>
-<div class="section" id="ordering-multiple-decorators">
+<section id="ordering-multiple-decorators">
 <h3>Ordering multiple decorators<a class="headerlink" href="#ordering-multiple-decorators" title="Permalink to this headline">¶</a></h3>
 <p>When dealing with multiple decorators, as above, ordering can be very important,
 and it’s easy to get confused about what order everything is happening.</p>
@@ -172,8 +172,8 @@ decorator are run in the order that the decorators appear in your source code.</
 <p>However, you might also want to do post-processing in your view wrappers. If you
 do that, remember the onion metaphor — post-processing from the innermost
 wrapper will run before post-processing from the outermost wrapper.</p>
-</div>
-<div class="section" id="exercise">
+</section>
+<section id="exercise">
 <h3>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline">¶</a></h3>
 <p>If the above left you horribly confused, I think the best way to understand this
 is to get your hands dirty with some examples, so here is an exercise.</p>
@@ -221,8 +221,8 @@ wrong, have another look until you understand exactly what is going on.</p>
 <li><p>Replace the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> syntax with the long-hand version</p></li>
 <li><p>Simplify using no decorators, then one decorator, then two decorators</p></li>
 </ul>
-</div>
-<div class="section" id="combining-multiple-decorators">
+</section>
+<section id="combining-multiple-decorators">
 <h3>Combining multiple decorators<a class="headerlink" href="#combining-multiple-decorators" title="Permalink to this headline">¶</a></h3>
 <p>If you have multiple decorators that need to be applied in a certain order, or
 where you often have them together, you should probably be thinking about
@@ -230,17 +230,17 @@ building a single decorator that combines them — for which I can do no better
 than point you to Adam Johnson’s post <a class="reference external" href="https://adamj.eu/tech/2020/04/01/how-to-combine-two-python-decorators/">How to Combine Two Python Decorators</a>!</p>
 <p>You could also see this Stackoverflow post with <a class="reference external" href="https://stackoverflow.com/questions/5409450/can-i-combine-two-decorators-into-a-single-one-in-python">general code for composing any
 number of decorators</a></p>
-</div>
-</div>
-<div class="section" id="built-in-decorators">
+</section>
+</section>
+<section id="built-in-decorators">
 <h2>Built-in decorators<a class="headerlink" href="#built-in-decorators" title="Permalink to this headline">¶</a></h2>
 <p>Also, don’t miss out on the decorators and “decorator factories” than come with
 Django and cover many of the common cases, such as <code class="docutils literal notranslate"><span class="pre">login_required</span></code> (already
 used), <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#django.contrib.auth.decorators.user_passes_test">user_passes_test</a>
 and <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#the-permission-required-decorator">permission_required</a></p>
 <p>Next up: <a class="reference internal" href="thin-views.html"><span class="doc">Thin views</span></a>.</p>
-</div>
-<div class="section" id="discussion-mixins-do-not-compose">
+</section>
+<section id="discussion-mixins-do-not-compose">
 <h2>Discussion: Mixins do not compose<a class="headerlink" href="#discussion-mixins-do-not-compose" title="Permalink to this headline">¶</a></h2>
 <p>Django also provides mixins for applying preconditions, like <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#the-loginrequired-mixin">LoginRequired</a>
 etc., which work by overriding the <code class="docutils literal notranslate"><span class="pre">dispatch()</span></code> method.</p>
@@ -279,8 +279,8 @@ that you are using it correctly, rather than its implementation.</p>
 <p>Decorators aren’t prone to this problem. Mixins are like injecting things right
 into the middle of someone else’s code, hoping that the context will fit, while
 decorators wrap existing functionality depending only its interface.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -316,7 +316,7 @@ decorators wrap existing functionality depending only its interface.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -348,7 +348,7 @@ decorators wrap existing functionality depending only its interface.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -370,7 +370,7 @@ decorators wrap existing functionality depending only its interface.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

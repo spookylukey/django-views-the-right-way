@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>How to do anything in a view</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Adding data to a template" href="context-data.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="how-to-do-anything-in-a-view">
+  <section id="how-to-do-anything-in-a-view">
 <h1>How to do anything in a view<a class="headerlink" href="#how-to-do-anything-in-a-view" title="Permalink to this headline">¶</a></h1>
 <p>So, you have a template for writing a view function. There is something
 different you want to do. How should you go about it?</p>
@@ -70,7 +70,7 @@ more concise if you find yourself writing the same things over and over. Don’t
 be afraid to make some mistakes along the way.</p></li>
 </ul>
 <p>Next up: <a class="reference internal" href="context-data.html"><span class="doc">Adding data to a template</span></a>.</p>
-<div class="section" id="discussion-starting-points">
+<section id="discussion-starting-points">
 <span id="starting-point"></span><h2>Discussion: Starting points<a class="headerlink" href="#discussion-starting-points" title="Permalink to this headline">¶</a></h2>
 <p>One of the reasons for the pattern I’m recommending is that it makes a great
 starting point for doing anything. The body of the view — the function that
@@ -98,8 +98,8 @@ code, because that is a safe option, and usually involves less work. Plus, once
 you have started down the CBV route, you quickly gain various mixins etc. and
 the principle of One Way To Do It and consistency means that plain functions
 will appear less attractive.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -135,7 +135,7 @@ will appear less attractive.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">How to do anything in a view</a><ul>
@@ -160,7 +160,7 @@ will appear less attractive.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -182,7 +182,7 @@ will appear less attractive.</p>
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

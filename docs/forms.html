@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Forms</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Preconditions" href="preconditions.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="forms">
+  <section id="forms">
 <h1>Forms<a class="headerlink" href="#forms" title="Permalink to this headline">¶</a></h1>
 <p>The fundamental pattern for a view that handles a form is covered fully in the
 <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/forms/#the-view">Django form docs</a>, so I don’t
@@ -93,7 +93,7 @@ attribute.</p>
 </li>
 </ul>
 <p>That’s it! Next up: <a class="reference internal" href="preconditions.html"><span class="doc">Preconditions</span></a>.</p>
-<div class="section" id="discussion-complex-form-cases">
+<section id="discussion-complex-form-cases">
 <h2>Discussion: Complex form cases<a class="headerlink" href="#discussion-complex-form-cases" title="Permalink to this headline">¶</a></h2>
 <p>Why not <code class="docutils literal notranslate"><span class="pre">FormView</span></code>? Of all the CBVs, it is perhaps the most tempting, due to
 the control flow boilerplate that it eliminates. But overall, I still feel it is
@@ -113,8 +113,8 @@ more so if you’ve forgotten how to use the <code class="docutils literal notra
 something different. This is an easy thing in HTML/HTTP, and easy if you are
 using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly and in charge of the control flow yourself, as outlined
 above, but horrible if you are trying to fit it into <code class="docutils literal notranslate"><span class="pre">FormView</span></code>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -150,7 +150,7 @@ above, but horrible if you are trying to fit it into <code class="docutils liter
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -175,7 +175,7 @@ above, but horrible if you are trying to fit it into <code class="docutils liter
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -197,7 +197,7 @@ above, but horrible if you are trying to fit it into <code class="docutils liter
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

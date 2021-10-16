@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Custom logic at the start — delegation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Custom logic in the middle — dependency injection" href="dependency-injection.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="custom-logic-at-the-start-delegation">
+  <section id="custom-logic-at-the-start-delegation">
 <h1>Custom logic at the start — delegation<a class="headerlink" href="#custom-logic-at-the-start-delegation" title="Permalink to this headline">¶</a></h1>
 <p>The next few pages address the problem of needing to re-use some logic from one
 view in another view. We’ve thought about how we can use utility functions and
@@ -151,7 +151,7 @@ so we use <code class="docutils literal notranslate"><span class="pre">None</spa
 factor out duplication.</p>
 <p>That’s it! See below for some more discussion about how this delegation pattern
 might evolve. Otherwise, onto <a class="reference internal" href="dependency-injection.html"><span class="doc">Custom logic in the middle — dependency injection</span></a>.</p>
-<div class="section" id="discussion-function-based-generic-views">
+<section id="discussion-function-based-generic-views">
 <span id="function-based-generic-views"></span><h2>Discussion: Function based generic views<a class="headerlink" href="#discussion-function-based-generic-views" title="Permalink to this headline">¶</a></h2>
 <p>What happens if you keep going with this parameterisation pattern? Let’s say you
 have not one model, but lots of models where you want to display a list, with
@@ -190,8 +190,8 @@ more visible, and can prompt you to factor things out. For example, if you
 have several parameters related to filtering a list, perhaps you actually need
 to invent a <code class="docutils literal notranslate"><span class="pre">Filterer</span></code> class?</p></li>
 </ul>
-</div>
-<div class="section" id="discussion-going-further-with-generics">
+</section>
+<section id="discussion-going-further-with-generics">
 <h2>Discussion: Going further with generics<a class="headerlink" href="#discussion-going-further-with-generics" title="Permalink to this headline">¶</a></h2>
 <p>If you have a large number of views that are very repetitive, you may continue
 this pattern even further. Examples of projects that have done this are:</p>
@@ -223,8 +223,8 @@ like <code class="docutils literal notranslate"><span class="pre">Form</span></c
 DRF has separate classes for serializers, permissions and filtering that are
 referenced from your <code class="docutils literal notranslate"><span class="pre">ViewSet</span></code>.</p></li>
 </ul>
-</div>
-<div class="section" id="discussion-copy-paste-bad-re-use-good">
+</section>
+<section id="discussion-copy-paste-bad-re-use-good">
 <h2>Discussion: Copy-Paste Bad, Re-use Good?<a class="headerlink" href="#discussion-copy-paste-bad-re-use-good" title="Permalink to this headline">¶</a></h2>
 <p>I’ve claimed above that your own generic views would be better than the generic
 CBVs that Django provides, which leads to a question:</p>
@@ -268,8 +268,8 @@ preferably three, and abstracting before then is premature. The commonalities
 may be very different from what you thought, and when you have enough
 information to make that decision you might decide that it’s not worth it. So
 avoiding all duplication at any cost is not the aim we should have.</p>
-</div>
-<div class="section" id="discussion-multiple-mixins">
+</section>
+<section id="discussion-multiple-mixins">
 <span id="multiple-mixins"></span><h2>Discussion: Multiple mixins?<a class="headerlink" href="#discussion-multiple-mixins" title="Permalink to this headline">¶</a></h2>
 <p>When doing a combined single object lookup with a list of objects, contrast the
 simplicity of the above FBV code with <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/class-based-views/mixins/#using-singleobjectmixin-with-listview">trying to wrangle CBVs into doing this</a>.</p>
@@ -338,8 +338,8 @@ rather snarled up. You will then have to retrace, and completely restructure
 your code, working out how to implement for yourself the things the CBVs were
 doing for you. Again we find the CBV is a bad <a class="reference internal" href="anything.html#starting-point"><span class="std std-ref">starting point</span></a>.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -375,7 +375,7 @@ doing for you. Again we find the CBV is a bad <a class="reference internal" href
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -403,7 +403,7 @@ doing for you. Again we find the CBV is a bad <a class="reference internal" href
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -425,7 +425,7 @@ doing for you. Again we find the CBV is a bad <a class="reference internal" href
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

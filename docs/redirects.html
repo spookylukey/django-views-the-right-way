@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Redirects</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Forms" href="forms.html" />
@@ -48,7 +48,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="redirects">
+  <section id="redirects">
 <h1>Redirects<a class="headerlink" href="#redirects" title="Permalink to this headline">¶</a></h1>
 <p>To implement redirects in Django, you need to know how they work in HTTP.</p>
 <p>In HTTP, a redirect is an HTTP response with a status code in the 300-399 range,
@@ -93,7 +93,7 @@ permanently redirect it to <code class="docutils literal notranslate"><span clas
 </li>
 </ul>
 <p>That’s it! On to <a class="reference internal" href="forms.html"><span class="doc">Forms</span></a>.</p>
-<div class="section" id="discussion-cbv-configuration-in-urls-py">
+<section id="discussion-cbv-configuration-in-urls-py">
 <h2>Discussion: CBV configuration in urls.py<a class="headerlink" href="#discussion-cbv-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
 <p>If you can reduce a set of common functionality down to something that can be
 configured directly in <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>, I think this is quite a nice pattern for
@@ -119,13 +119,13 @@ will serve you better, or perhaps a function that <strong>delegates</strong> to
     <span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="discussion-fbv-configuration-in-urls-py">
+</section>
+<section id="discussion-fbv-configuration-in-urls-py">
 <h2>Discussion: FBV configuration in urls.py<a class="headerlink" href="#discussion-fbv-configuration-in-urls-py" title="Permalink to this headline">¶</a></h2>
 <p>We should note that the pattern of defining views entirely within <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>
 can be achieved just as well using functions as with <code class="docutils literal notranslate"><span class="pre">View</span></code> sub-classes.</p>
 <p>Here are two methods for doing this:</p>
-<div class="section" id="additional-keyword-parameters">
+<section id="additional-keyword-parameters">
 <h3>Additional keyword parameters<a class="headerlink" href="#additional-keyword-parameters" title="Permalink to this headline">¶</a></h3>
 <p>See the docs for <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/#views-extra-options">passing extra options to view functions</a>.</p>
 <p>So, for example, if we want to reproduce the functionality of
@@ -149,8 +149,8 @@ view function like this:</p>
  <span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="mass-produced-views-view-factories">
+</section>
+<section id="mass-produced-views-view-factories">
 <h3>Mass-produced views — “view factories”<a class="headerlink" href="#mass-produced-views-view-factories" title="Permalink to this headline">¶</a></h3>
 <p>One of the issues with the above is you have a possibility of a clash between
 the contents of the configured <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> and the other keyword arguments the
@@ -184,9 +184,9 @@ that just need to be differently configured.</p>
 <p>Unlike the example above where the view function accepts <code class="docutils literal notranslate"><span class="pre">*args,</span> <span class="pre">**kwargs</span></code>,
 the inner view function can have a signature that is as specific as you need it
 to be, so this will play well with <a class="reference internal" href="url-parameters.html#type-checked-parameters"><span class="std std-ref">type-checked parameters</span></a> if you want it to.</p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -222,7 +222,7 @@ to be, so this will play well with <a class="reference internal" href="url-param
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="the-pattern.html">The Right Way</a></li>
 <li class="toctree-l1"><a class="reference internal" href="anything.html">How to do anything in a view</a></li>
@@ -252,7 +252,7 @@ to be, so this will play well with <a class="reference internal" href="url-param
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -274,7 +274,7 @@ to be, so this will play well with <a class="reference internal" href="url-param
       &copy;2020, Luke Plant.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
