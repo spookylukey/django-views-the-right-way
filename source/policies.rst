@@ -54,9 +54,9 @@ Solution 2 - decorator include with checking
 So, a modified version of the above technique is to still use
 ``decorator_include`` as above, but instead of adding security preconditions in
 the decorator, we make the decorator simply check that a required decorator has
-been applied (at import time), and do nothing at runtime.
+been applied (at import time), and do nothing at run time.
 
-So, the checking decorator might look something like this:
+The checking decorator might look something like this:
 
 .. code-block:: python
 
@@ -71,12 +71,12 @@ So, the checking decorator might look something like this:
 (See the `full code example here
 <https://github.com/spookylukey/django-views-the-right-way/tree/master/code/the_right_way/policies>`_)
 
-Our checker simply checks for the existence of an attribute on the view function
-that indicates that the security policy has been applied. I’ve defined it using
-a constant with a leading underscore here to indicate that you are not supposed
-to import this constant, but instead use it via one of several decorators that
-apply the policy. Using our “premium required” example from before, one of those
-decorators might look like this:
+Our decorator simply checks for the existence of an attribute on the view
+function that indicates that the security policy has been applied. I’ve defined
+it using a constant with a leading underscore here to indicate that you are not
+supposed to import this constant, but instead use it via one of several
+decorators that apply the policy. Using our “premium required” example from
+before, one of those decorators might look like this:
 
 
 .. code-block:: python
@@ -98,7 +98,7 @@ decorators might look like this:
        return wrapper
 
 
-Now, we can use ``decorator_include``, with ``check_security_policy_applied`` as
+We can now use ``decorator_include`` with ``check_security_policy_applied`` as
 the decorator. If all my views are decorated in ``@premium_required``,
 everything will be fine. Otherwise I will get an exception - at import time, not
 at runtime, so I won’t be able to ignore it or find out too late.
@@ -123,14 +123,27 @@ general policy. For example, we could add an ``anonymous_allowed`` decorator:
 
 The wrapper added by this decorator actually does nothing but forward to the
 original view function. It only exists to allow us to set the
-``_SECURITY_POLICY_APPLIED`` attribute. This means we have successfully moved
-from Django’s “open to everyone by default” to “private by default”.
-
-
+``_SECURITY_POLICY_APPLIED`` attribute. But with this in place, we can
+successfully move from Django’s “open to everyone by default” policy for view
+functions to “private by default”, or whatever else we want.
 
 
 Solution 3 - introspection
 --------------------------
+
+The remaining issue with the previous solution is that it is tied to the
+URL-space - our checks run only when we use ``decorator_include`` to add some
+URLs into an application. That might not always be what we want.
+
+Instead of that, we might want to apply policies to “all view functions
+everywhere”, or something else more custom. In this case, one solution is to do
+introspection of the URLconf after having loaded it. The details will depend on
+what exactly you want to do, but there is an example in the code folder. The
+Django checks framework is a good option for reporting this kind of error, or
+you could use ``raise AssertionError`` as before to be more aggressive.
+
+
+
 
 TODO  - as a test that runs against your URLconf
 
@@ -147,7 +160,8 @@ Helpful patterns: make it hard for people to add exceptions thoughtlessly.
 - your “public allowed” decorator contains a mandatory ``rationale`` argument
   in which the developer must provide a string reason for its existence.
 
-
+- Make your checking decorator give a more specific error message that will
+  tell people exactly how to fix it.
 
 
 

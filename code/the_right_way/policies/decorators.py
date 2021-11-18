@@ -27,7 +27,11 @@ def anonymous_allowed(view_func):
     return wrapper
 
 
+def has_security_policy_applied(view_func):
+    return getattr(view_func, _SECURITY_POLICY_APPLIED, False)
+
+
 def check_security_policy_applied(view_func):
-    if not getattr(view_func, _SECURITY_POLICY_APPLIED, False):
+    if not has_security_policy_applied(view_func):
         raise AssertionError(f"{view_func.__module__}.{view_func.__name__} needs to have a security policy applied")
     return view_func

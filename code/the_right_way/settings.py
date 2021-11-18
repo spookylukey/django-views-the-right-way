@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Ours
     'accounts',
     'shop',
+    'the_right_way',
 ]
 
 MIDDLEWARE = [
@@ -113,3 +114,5 @@ SILENCED_SYSTEM_CHECKS = [
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_URL = 'admin:index'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

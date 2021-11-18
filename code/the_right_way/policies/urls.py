@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from decorator_include import decorator_include
 
 from . import decorators
@@ -23,5 +23,4 @@ urlpatterns = [
             namespace="policies_decorator_include_check",
         ),
     ),
-
 ]
