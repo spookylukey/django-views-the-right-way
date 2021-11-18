@@ -133,9 +133,9 @@ nature, views have to work in terms of HTTP requests and responses, but they
 also have to arrange to get data from the database (or somewhere), and this CBV
 is just a class-based equivalent to the view function.
 
-Perhaps a better way is to think about it is the “the single responsibility
-principle” for class design. Through that lens, this class doesn't look very
-good at all. It has far too many different directions you might want to take it.
+Perhaps a better way to think about it is “the single responsibility principle” 
+for class design. Through that lens, this class doesn't look very good at all. 
+It has far too many different directions you might want to take it.
 
 But the most convincing to me is to look at what happens when you carry on this
 pattern.
