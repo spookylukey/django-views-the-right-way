@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block "content" %}
+  <h1>Ordinary page</h1>
+  <p>Anyone may view this.</p>
+
+  {% if request.user.is_anonymous %}
+    <p>You are anonymous<p>
+  {% else %}
+      {% if request.user.is_premium %}
+        <p>You are a premium user. </p>
+      {% else %}
+        <p>You are not a premium user. </p>
+      {% endif %}
+  {% endif %}
+
+{% endblock %}

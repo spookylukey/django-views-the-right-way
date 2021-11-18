@@ -3,4 +3,10 @@
 
 {% block "content" %}
   <h1>Premium page</h1>
+
+  {% if request.user.is_anonymous or not request.user.is_premium %}
+    <p>You are not a premium user. You should not have got here!</p>
+  {% else %}
+    <p>You are a premium user, welcome!</p>
+  {% endif %}
 {% endblock %}
