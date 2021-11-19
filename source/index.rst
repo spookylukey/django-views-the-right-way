@@ -81,6 +81,7 @@ So let's go!
    redirects
    forms
    preconditions
+   policies
    thin-views
 
 

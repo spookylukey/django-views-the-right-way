@@ -243,8 +243,9 @@ used), `user_passes_test
 and `permission_required
 <https://docs.djangoproject.com/en/stable/topics/auth/default/#the-permission-required-decorator>`_
 
-Next up: :doc:`thin-views`.
+Next up: :doc:`policies`.
 
+.. _mixins-do-not-compose:
 
 Discussion: Mixins do not compose
 ---------------------------------
