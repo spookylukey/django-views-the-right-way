@@ -93,8 +93,8 @@ want this decorator to be generic and future proof, so we put those in there
 from the start.
 
 
-Managing multiple decorators
-----------------------------
+Adding multiple decorators
+--------------------------
 
 Our decorator as above has an issue — if an anonymous user accesses it,
 ``request.user`` will be an ``AnonymousUser`` instance, and won't have an
@@ -243,8 +243,9 @@ used), `user_passes_test
 and `permission_required
 <https://docs.djangoproject.com/en/stable/topics/auth/default/#the-permission-required-decorator>`_
 
-Next up: :doc:`thin-views`.
+Next up: :doc:`policies`.
 
+.. _mixins-do-not-compose:
 
 Discussion: Mixins do not compose
 ---------------------------------

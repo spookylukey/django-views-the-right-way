@@ -15,7 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Thin views" href="thin-views.html" />
+    <link rel="next" title="Applying policies" href="policies.html" />
     <link rel="prev" title="Forms" href="forms.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -38,7 +38,7 @@
           <a href="forms.html" title="Previous document">Forms</a>
         </li>
         <li>
-          <a href="thin-views.html" title="Next document">Thin views</a>
+          <a href="policies.html" title="Next document">Applying policies</a>
           &rarr;
         </li>
     </ul>
@@ -121,8 +121,8 @@ make debugging nicer, and sometimes it can be important for functionality too
 our wrapper take <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> might not seem necessary. But we
 want this decorator to be generic and future proof, so we put those in there
 from the start.</p>
-<section id="managing-multiple-decorators">
-<h2>Managing multiple decorators<a class="headerlink" href="#managing-multiple-decorators" title="Permalink to this headline">¶</a></h2>
+<section id="adding-multiple-decorators">
+<h2>Adding multiple decorators<a class="headerlink" href="#adding-multiple-decorators" title="Permalink to this headline">¶</a></h2>
 <p>Our decorator as above has an issue — if an anonymous user accesses it,
 <code class="docutils literal notranslate"><span class="pre">request.user</span></code> will be an <code class="docutils literal notranslate"><span class="pre">AnonymousUser</span></code> instance, and won’t have an
 <code class="docutils literal notranslate"><span class="pre">is_premium</span></code> attribute, which will result in a 500 error.</p>
@@ -238,10 +238,10 @@ number of decorators</a></p>
 Django and cover many of the common cases, such as <code class="docutils literal notranslate"><span class="pre">login_required</span></code> (already
 used), <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#django.contrib.auth.decorators.user_passes_test">user_passes_test</a>
 and <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#the-permission-required-decorator">permission_required</a></p>
-<p>Next up: <a class="reference internal" href="thin-views.html"><span class="doc">Thin views</span></a>.</p>
+<p>Next up: <a class="reference internal" href="policies.html"><span class="doc">Applying policies</span></a>.</p>
 </section>
 <section id="discussion-mixins-do-not-compose">
-<h2>Discussion: Mixins do not compose<a class="headerlink" href="#discussion-mixins-do-not-compose" title="Permalink to this headline">¶</a></h2>
+<span id="mixins-do-not-compose"></span><h2>Discussion: Mixins do not compose<a class="headerlink" href="#discussion-mixins-do-not-compose" title="Permalink to this headline">¶</a></h2>
 <p>Django also provides mixins for applying preconditions, like <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/auth/default/#the-loginrequired-mixin">LoginRequired</a>
 etc., which work by overriding the <code class="docutils literal notranslate"><span class="pre">dispatch()</span></code> method.</p>
 <p>Now, suppose we were to go the CBV route, and have a <code class="docutils literal notranslate"><span class="pre">PremiumRequired</span></code> mixin
@@ -293,7 +293,7 @@ decorators wrap existing functionality depending only its interface.</p>
           <a href="forms.html" title="Previous document">Forms</a>
         </li>
         <li>
-          <a href="thin-views.html" title="Next document">Thin views</a>
+          <a href="policies.html" title="Next document">Applying policies</a>
           &rarr;
         </li>
     </ul>
@@ -330,7 +330,7 @@ decorators wrap existing functionality depending only its interface.</p>
 <li class="toctree-l1"><a class="reference internal" href="redirects.html">Redirects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="forms.html">Forms</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Preconditions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#managing-multiple-decorators">Managing multiple decorators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-multiple-decorators">Adding multiple decorators</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ordering-multiple-decorators">Ordering multiple decorators</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#exercise">Exercise</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#combining-multiple-decorators">Combining multiple decorators</a></li>
@@ -340,6 +340,7 @@ decorators wrap existing functionality depending only its interface.</p>
 <li class="toctree-l2"><a class="reference internal" href="#discussion-mixins-do-not-compose">Discussion: Mixins do not compose</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="policies.html">Applying policies</a></li>
 <li class="toctree-l1"><a class="reference internal" href="thin-views.html">Thin views</a></li>
 </ul>
 
@@ -358,7 +359,7 @@ decorators wrap existing functionality depending only its interface.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="forms.html" title="previous chapter">Forms</a></li>
-      <li>Next: <a href="thin-views.html" title="next chapter">Thin views</a></li>
+      <li>Next: <a href="policies.html" title="next chapter">Applying policies</a></li>
   </ul></li>
 </ul>
 </div>
