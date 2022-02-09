@@ -125,12 +125,8 @@ CBVs, where you have to do extra work get to hold of the parameter:</p>
 <p>Of course, if we add type hints, wouldn’t it be even cooler if we could
 automatically ensure that the URL configuration matched the view function, both
 in terms of names and types of arguments?</p>
-<p><a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/blob/master/code/the_right_way/url_checker.py">OK, you’ve persuaded me, go on then!</a>
-(This code is pretty functional as it is already, and I’ve enjoyed using it in
-my projects. But needs a fair amount of work to be a proper package. If anyone
-would like to take that on as a project, please go ahead, and I’ll link it here!
-You can play around with it by checking out the <a class="reference external" href="https://github.com/spookylukey/django-views-the-right-way/tree/master/code">example code</a>
-that accompanies this guide).</p>
+<p><a class="reference external" href="https://github.com/AliSayyah/django-urlconfchecks/">django-urlconfchecks</a>
+will do exactly that! (Based on code I wrote, but nicely packaged by Ali Sayyah).</p>
 <p>Unfortunately, you lose out here if you are using CBVs, because you don’t have a
 signature that you can decorate with type hints. The signature that is
 externally visible for your view is <code class="docutils literal notranslate"><span class="pre">view(request,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code>, so it is

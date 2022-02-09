@@ -222,9 +222,9 @@ itself is visible. The fundamental nature of a view is that it is a function (or
 callable) that takes a request and returns a response. This is pretty obvious in
 the pattern above — we have:
 
-* a function (check)
-* that takes an argument called ``request`` (check)
-* and returns some kind of response — a ``TemplateResponse`` (check)
+* a function ✓
+* that takes an argument called ``request`` ✓
+* and returns some kind of response — a ``TemplateResponse`` ✓
 
 
 Using CBVs we could rewrite the code as:

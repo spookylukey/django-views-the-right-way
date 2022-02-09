@@ -218,9 +218,9 @@ itself is visible. The fundamental nature of a view is that it is a function (or
 callable) that takes a request and returns a response. This is pretty obvious in
 the pattern above — we have:</p>
 <ul class="simple">
-<li><p>a function (check)</p></li>
-<li><p>that takes an argument called <code class="docutils literal notranslate"><span class="pre">request</span></code> (check)</p></li>
-<li><p>and returns some kind of response — a <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code> (check)</p></li>
+<li><p>a function ✓</p></li>
+<li><p>that takes an argument called <code class="docutils literal notranslate"><span class="pre">request</span></code> ✓</p></li>
+<li><p>and returns some kind of response — a <code class="docutils literal notranslate"><span class="pre">TemplateResponse</span></code> ✓</p></li>
 </ul>
 <p>Using CBVs we could rewrite the code as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
