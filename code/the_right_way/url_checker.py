@@ -1,3 +1,5 @@
+# Instead of using this - see https://github.com/AliSayyah/django-urlconfchecks/
+
 # Quick and dirty URL checker:
 #
 # - checks presence of parameters to every callback registered in main urlconf
