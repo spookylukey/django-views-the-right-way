@@ -33,7 +33,7 @@ this example, in contrast to what ``Paginator`` gives you with page counts
 etc.)
 
 For special offers, however, we have been provided with a **different** function
-to use:
+to use, which takes an additional parameter.
 
 .. code-block:: python
 
@@ -110,9 +110,9 @@ parameters needed, but this is clunky — we'll have to pass these parameters th
 it doesn't care about, just so that it can pass them on to somewhere else. Plus
 it is unnecessary.
 
-Instead, what we do is make ``special_offer_detail`` provide a wrapper function
+Instead, what we do is make ``special_offer_detail`` provide an adaptor function
 that matches the signature that ``display_product_list`` expects for
-``searcher``. Inside the wrapper function, we'll call the
+``searcher``. Inside the adaptor function, we'll call the
 ``special_product_search`` function the way it needs to be called. While we're
 at it, we can do our additional requirements too.
 
@@ -127,7 +127,7 @@ function for the extra logging:
    def special_offer_detail(request, slug):
        special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
 
-       def special_product_search_wrapper(filters, page=1):
+       def special_product_search_adaptor(filters, page=1):
            products = special_product_search(filters, special_offer, page=page)
            log_special_offer_product_view(request.user, special_offer, products)
            return products
@@ -137,21 +137,21 @@ function for the extra logging:
            context={
                'special_offer': special_offer,
            },
-           searcher=special_product_search_wrapper,
+           searcher=special_product_search_adaptor,
            template_name='products/special_offer_detail.html',
        })
 
 There are some important things to note about this:
 
-* We defined our wrapper function ``special_product_search_wrapper`` inside the
+* We defined our adaptor function ``special_product_search_adaptor`` inside the
   body of the main view. This is important for the functionality that follows.
   (There are other ways to do it but this is the simplest.)
 
 * We made its signature match the one expected by ``display_product_list``.
 
-* Our wrapper function has access to the ``special_offer`` object from the
+* Our adaptor function has access to the ``special_offer`` object from the
   enclosing scope, and also ``request``. These objects “stay with it” when the
-  wrapper function gets passed to ``display_product_list``, so they are able to
+  adaptor function gets passed to ``display_product_list``, so they are able to
   use them despite not having been passed them as a normal arguments.
 
   Functions that behave in this way are called “closures” — they capture
@@ -332,8 +332,7 @@ When I had finished this refactoring, which in the end completely removed my
 custom CBV base class, I confess I had a little twinge of sadness — my final
 code seemed just a little bit… *plain*. I now had just a bunch of simple
 functions and a few closures, and fewer OOP hierarchies and clever tricks to
-feel smug about. But this is misplaced sadness. If you are into smugness-driven
-development, nothing can beat the feeling you get when you come back to some
-code 3 months or 3 years later and find it's so straightforward to work with
-that, after doing ``git praise``, you feel the need to give yourself a little
-hug.
+feel smug about. Misplaced sadness! If you are into smugness-driven development,
+nothing can beat the feeling you get when you come back to some code 3 months or
+3 years later and find it's so straightforward to work with that, after doing
+``git praise``, you feel the need to give yourself a little hug.
