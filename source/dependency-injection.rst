@@ -195,11 +195,11 @@ dependency is a just a single function call, we can simply accept a function as
 a parameter. If our dependency is a set of related function calls, we might want
 an object with methods as the parameter.
 
-Often you will hear the term “dependency injection” being used for things that
+(Often you will hear the term “dependency injection” being used for things that
 go one step further, and inject dependencies **automatically** in some way. I
 call these “dependency injection frameworks/containers”. Outside of `pytest's
 fixtures <https://docs.pytest.org/en/latest/fixture.html>`_ I have not yet found
-a need or desire for these in Python.
+a need or desire for these in Python.)
 
 So, we can call this pattern “first class functions”, or “callbacks”, “strategy
 pattern” or “dependency injection”. But dependency injection is clearly the
