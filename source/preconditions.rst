@@ -291,7 +291,7 @@ not compose**. I've said it :ref:`before <multiple-mixins>` but it is worth
 repeating. You can have two mixins that work perfectly apart, but fail together.
 To be sure that they do compose, you have to **know the implementation**.
 Further, it's entirely possible that when you first put them together there is
-no issue, but a later change means they fail start failing in the worst possible
+no issue, but a later change means they may start failing in the worst possible
 way — **silently**.
 
 This is a horrible way to write software! As much as possible, we should choose
@@ -300,4 +300,4 @@ that you are using it correctly, rather than its implementation.
 
 Decorators aren't prone to this problem. Mixins are like injecting things right
 into the middle of someone else's code, hoping that the context will fit, while
-decorators wrap existing functionality depending only its interface.
+decorators wrap existing functionality depending only on its interface.
