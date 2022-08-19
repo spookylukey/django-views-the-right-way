@@ -309,10 +309,11 @@ just pointing out to you the much greater complexity of the former, which has
 implications for any human maintainer of the code, as well as for tools.</p>
 <p>I’m not using anything fancy in terms of linters, by the way — just <code class="docutils literal notranslate"><span class="pre">flake8</span></code>
 integrated into my editor. If you want to go further and add type hints and use
-mypy, you will find it very easy to do with the approach I’ve outlined above,
-and make it possible to automatically verify even more things. On the other
-hand, if your CBV <code class="docutils literal notranslate"><span class="pre">self</span></code> object is a rag-bag of stuff as above it will be very
-hard for even the most advanced tools to help you.</p>
+mypy or <a class="reference external" href="https://pyre-check.org/">pyre</a> etc., you will find it very easy to do
+with the approach I’ve outlined above, and make it possible to automatically
+verify even more things.</p>
+<p>On the other hand, if your CBV <code class="docutils literal notranslate"><span class="pre">self</span></code> object is a rag-bag of stuff, as above,
+it will be very hard for even the most advanced tools to help you.</p>
 <p><a class="reference external" href="https://pylint.pycqa.org/en/latest/">pylint</a> gets further than flake8 in
 trying to detect typos in instance variables, and does a pretty good job.
 However it cannot detect the ordering issue mentioned, and it also complains

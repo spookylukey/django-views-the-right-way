@@ -271,14 +271,14 @@ not compose</strong>. I’ve said it <a class="reference internal" href="delegat
 repeating. You can have two mixins that work perfectly apart, but fail together.
 To be sure that they do compose, you have to <strong>know the implementation</strong>.
 Further, it’s entirely possible that when you first put them together there is
-no issue, but a later change means they fail start failing in the worst possible
+no issue, but a later change means they may start failing in the worst possible
 way — <strong>silently</strong>.</p>
 <p>This is a horrible way to write software! As much as possible, we should choose
 techniques where you can simply depend on the interface of some code to know
 that you are using it correctly, rather than its implementation.</p>
 <p>Decorators aren’t prone to this problem. Mixins are like injecting things right
 into the middle of someone else’s code, hoping that the context will fit, while
-decorators wrap existing functionality depending only its interface.</p>
+decorators wrap existing functionality depending only on its interface.</p>
 </section>
 </section>
 
