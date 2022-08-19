@@ -211,7 +211,7 @@ If not in the view, where does this code actually live? If you are going for the
 
 But you should note:
 
-* You can split a ``models.py`` files into any number of modules. No need to
+* You can split a ``models.py`` file into any number of modules. No need to
   create massive files!
 * Model layer code doesn't have to refer to "database models". We are really talking about
   "domain models" here, which can often be backed directly by a Django database
@@ -286,4 +286,3 @@ rest of the app. You can get benefits from doing it partially, and if you have
 some integration tests that exercise the queries constructed by your view code,
 you will have a mechanism for finding those places where your schema has leaked
 out.
-
