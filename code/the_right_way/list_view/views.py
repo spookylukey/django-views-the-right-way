@@ -22,8 +22,9 @@ def product_list(request):
 
 def product_list_refactored(request):
     products = Product.objects.all()
-    context = {}
-    context.update(paged_object_list_context(request, products, paginate_by=25))
+    context = {
+        # ...
+    } | paged_object_list_context(request, products, paginate_by=25)
     return TemplateResponse(request, 'shop/product_list.html', context)
 
 

@@ -16,6 +16,11 @@ it. There are some common models defined in ``shop``.
 Running the app
 ---------------
 
+Create a virtualenv, Python 3.9 or later.
+Install the requirements::
+
+  pip install -r requirements.txt
+
 ::
 
    ./manage.py runserver

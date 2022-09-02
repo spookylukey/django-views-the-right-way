@@ -2,8 +2,9 @@ from django.template.response import TemplateResponse
 
 
 def checkout_start(request):
-    context = {}
-    context.update(checkout_pages_context_data(request.user))
+    context = {
+        # ...
+    } | checkout_pages_context_data(request.user)
     return TemplateResponse(request, "shop/checkout/start.html", context)
 
 

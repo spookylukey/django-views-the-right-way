@@ -44,10 +44,10 @@ a bit shorter:
 
    def product_list(request):
        products = Product.objects.all()
-       context = {}
-       context.update(paged_object_list_context(request, products, paginate_by=5))
+       context = {
+          # ...
+       } | paged_object_list_context(request, products, paginate_by=5)
        return TemplateResponse(request, 'shop/product_list.html', context)
-
 
 Next up: :doc:`delegation`
 

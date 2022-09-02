@@ -111,6 +111,10 @@ Caveats and disclaimers etc.
    things I'm expressing now. So please understand my criticisms as a form of
    “learning process debate”, rather than as attacks!
 
+5. I’m assuming Python 3.9 or later, and any “recent” version of Django (which
+   is 3.2 or later at the time of writing). Almost everything will apply to
+   older (or newer) versions.
+
 
 Indices and tables
 ==================

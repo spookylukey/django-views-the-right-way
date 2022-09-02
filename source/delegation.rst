@@ -96,7 +96,7 @@ from our two entry-point view functions:
        if context is None:
            context = {}
        queryset = apply_product_filtering(request, queryset)
-       context.update(paged_object_list_context(request, queryset, paginate_by=5))
+       context |= paged_object_list_context(request, queryset, paginate_by=5)
        return TemplateResponse(request, template_name, context)
 
 
