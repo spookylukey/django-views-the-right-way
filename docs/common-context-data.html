@@ -76,8 +76,9 @@ it in the same way.</p>
 <p>For this, we can use the simple technique below of pulling out the code that
 returns the common data into a function:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">checkout_start</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">checkout_pages_context_data</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">))</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># etc</span>
+    <span class="p">}</span> <span class="o">|</span> <span class="n">checkout_pages_context_data</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;shop/checkout/start.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 
@@ -88,8 +89,7 @@ returns the common data into a function:</p>
     <span class="k">return</span> <span class="n">context</span>
 </pre></div>
 </div>
-<p>Just add <code class="docutils literal notranslate"><span class="pre">context.update(checkout_pages_context_data(request.user))</span></code> into
-every view that needs it.</p>
+<p>Just add <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">checkout_pages_context_data(request.user)</span></code> into every view that needs it.</p>
 <p>This is a perfectly adequate technique that is very easy to use, easy to
 understand and flexible. You can add parameters to the function if necessary,
 such as the <code class="docutils literal notranslate"><span class="pre">user</span></code> object as above, and combine common sets of these helpers
@@ -112,7 +112,7 @@ surely more elegant:</p>
 </pre></div>
 </div>
 <p>You simply have to include <code class="docutils literal notranslate"><span class="pre">CheckoutPageMixin</span></code> in your base classes, which is
-less typing than <code class="docutils literal notranslate"><span class="pre">context.update(checkout_pages_context_data(request.user))</span></code>.
+less typing than <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">checkout_pages_context_data(request.user)</span></code>.
 This kind of base class or mixin might also provide some other functionality,
 like doing some pre-condition checks and redirects as necessary.</p>
 <p>My response would be, first, a reminder that a small reduction in typing is a

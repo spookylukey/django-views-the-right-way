@@ -131,7 +131,7 @@ from our two entry-point view functions:</p>
     <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">apply_product_filtering</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">)</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">context</span> <span class="o">|=</span> <span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template_name</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>

@@ -74,7 +74,11 @@ something like this:</p>
     <span class="p">})</span>
 </pre></div>
 </div>
-<p>That’s basically it! Your real view might have additional needs, like filtering
+<p>That’s basically it! The <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/paginator/#django.core.paginator.Paginator.get_page">Paginator.get_page</a>
+method returns a <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/paginator/#page-class">Page</a> object
+that has everything you need in the template — refer to the linked docs for all
+the details.</p>
+<p>Your real view might have additional needs, like filtering
 and ordering. These can be handled by responding to query string parameters and
 modifying your <code class="docutils literal notranslate"><span class="pre">products</span></code> QuerySet above.</p>
 <p>There is a bit of boilerplate here for doing pagination. If you have a
@@ -84,8 +88,9 @@ paging, you could pull some of this boilerplate out into a utility like
 a bit shorter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">product_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">products</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+       <span class="c1"># ...</span>
+    <span class="p">}</span> <span class="o">|</span> <span class="n">paged_object_list_context</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">products</span><span class="p">,</span> <span class="n">paginate_by</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;shop/product_list.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 </pre></div>
 </div>

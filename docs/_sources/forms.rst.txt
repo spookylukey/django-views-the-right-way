@@ -77,7 +77,24 @@ Or if you have form handling as well as something else (such as a list of
 items), you will be in confusion if you are trying to use ``FormView``, even
 more so if you've forgotten how to use the ``Form`` API directly.
 
-Another example is when you need multiple different submit buttons, which do
-something different. This is an easy thing in HTML/HTTP, and easy if you are
-using ``Form`` directly and in charge of the control flow yourself, as outlined
-above, but horrible if you are trying to fit it into ``FormView``.
+Another example that comes up quite frequently, and described above, is when you
+need multiple different submit buttons which take different actions . This is an
+easy thing in HTML/HTTP, and easy if you are using ``Form`` directly and in
+charge of the control flow yourself, but horrible if you are trying to fit it
+into ``FormView``.
+
+Finally, the way that ``FormView`` obscures the flow control can be disastrous:
+
+In 2016 some Django core developers took on the task of refactoring a function
+based form view (the password reset views) to use ``FormView`` view. In the
+process, the checking of the “magic link” token was accidentally moved to a
+branch such that all security was effectively disabled — a trivial curl command
+enabled you to reset anyone’s password to anything you liked.
+
+Such a mistake would have been painfully obvious in the FBV, but in the CBV
+version, despite being authored by one core developer and reviewed by another,
+it went unnoticed and was committed to the master branch. It was `thankfully
+noticed
+<https://groups.google.com/d/msg/django-developers/HUZySAw43uE/RD4ifBLPBgAJ>`_
+before the next release, but it highlights just how badly the use of mixins for
+flow control obscures your code and makes reasoning about it a nightmare.

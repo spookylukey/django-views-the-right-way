@@ -36,8 +36,9 @@ returns the common data into a function:
 .. code-block:: python
 
    def checkout_start(request):
-       context = {}
-       context.update(checkout_pages_context_data(request.user))
+       context = {
+           # etc
+       } | checkout_pages_context_data(request.user)
        return TemplateResponse(request, "shop/checkout/start.html", context)
 
 
@@ -47,8 +48,7 @@ returns the common data into a function:
            context["user_addresses"] = list(user.addresses.order_by("primary", "first_line"))
        return context
 
-Just add ``context.update(checkout_pages_context_data(request.user))`` into
-every view that needs it.
+Just add ``| checkout_pages_context_data(request.user)`` into every view that needs it.
 
 This is a perfectly adequate technique that is very easy to use, easy to
 understand and flexible. You can add parameters to the function if necessary,
@@ -79,7 +79,7 @@ surely more elegant:
            return context
 
 You simply have to include ``CheckoutPageMixin`` in your base classes, which is
-less typing than ``context.update(checkout_pages_context_data(request.user))``.
+less typing than ``| checkout_pages_context_data(request.user)``.
 This kind of base class or mixin might also provide some other functionality,
 like doing some pre-condition checks and redirects as necessary.
 

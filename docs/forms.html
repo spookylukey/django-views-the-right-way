@@ -109,10 +109,23 @@ lots of pain.</p>
 <p>Or if you have form handling as well as something else (such as a list of
 items), you will be in confusion if you are trying to use <code class="docutils literal notranslate"><span class="pre">FormView</span></code>, even
 more so if you’ve forgotten how to use the <code class="docutils literal notranslate"><span class="pre">Form</span></code> API directly.</p>
-<p>Another example is when you need multiple different submit buttons, which do
-something different. This is an easy thing in HTML/HTTP, and easy if you are
-using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly and in charge of the control flow yourself, as outlined
-above, but horrible if you are trying to fit it into <code class="docutils literal notranslate"><span class="pre">FormView</span></code>.</p>
+<p>Another example that comes up quite frequently, and described above, is when you
+need multiple different submit buttons which take different actions . This is an
+easy thing in HTML/HTTP, and easy if you are using <code class="docutils literal notranslate"><span class="pre">Form</span></code> directly and in
+charge of the control flow yourself, but horrible if you are trying to fit it
+into <code class="docutils literal notranslate"><span class="pre">FormView</span></code>.</p>
+<p>Finally, the way that <code class="docutils literal notranslate"><span class="pre">FormView</span></code> obscures the flow control can be disastrous:</p>
+<p>In 2016 some Django core developers took on the task of refactoring a function
+based form view (the password reset views) to use <code class="docutils literal notranslate"><span class="pre">FormView</span></code> view. In the
+process, the checking of the “magic link” token was accidentally moved to a
+branch such that all security was effectively disabled — a trivial curl command
+enabled you to reset anyone’s password to anything you liked.</p>
+<p>Such a mistake would have been painfully obvious in the FBV, but in the CBV
+version, despite being authored by one core developer and reviewed by another,
+it went unnoticed and was committed to the master branch. It was <a class="reference external" href="https://groups.google.com/d/msg/django-developers/HUZySAw43uE/RD4ifBLPBgAJ">thankfully
+noticed</a>
+before the next release, but it highlights just how badly the use of mixins for
+flow control obscures your code and makes reasoning about it a nightmare.</p>
 </section>
 </section>
 

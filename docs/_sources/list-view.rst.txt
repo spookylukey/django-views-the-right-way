@@ -30,7 +30,14 @@ something like this:
            'page_obj': page_obj,
        })
 
-That's basically it! Your real view might have additional needs, like filtering
+That's basically it! The `Paginator.get_page
+<https://docs.djangoproject.com/en/stable/ref/paginator/#django.core.paginator.Paginator.get_page>`_
+method returns a `Page
+<https://docs.djangoproject.com/en/stable/ref/paginator/#page-class>`_ object
+that has everything you need in the template — refer to the linked docs for all
+the details.
+
+Your real view might have additional needs, like filtering
 and ordering. These can be handled by responding to query string parameters and
 modifying your ``products`` QuerySet above.
 
@@ -44,10 +51,10 @@ a bit shorter:
 
    def product_list(request):
        products = Product.objects.all()
-       context = {}
-       context.update(paged_object_list_context(request, products, paginate_by=5))
+       context = {
+          # ...
+       } | paged_object_list_context(request, products, paginate_by=5)
        return TemplateResponse(request, 'shop/product_list.html', context)
-
 
 Next up: :doc:`delegation`
 
