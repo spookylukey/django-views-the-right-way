@@ -9,20 +9,20 @@ asgiref==3.4.1
 click==8.0.3
     # via pip-tools
 django==3.2.15
-    # via -r requirements.in
+    # via -r code/requirements.in
 django-colorfield==0.4.5
-    # via -r requirements.in
+    # via -r code/requirements.in
 pep517==0.11.0
     # via pip-tools
 pip-tools==6.4.0
-    # via -r requirements.in
+    # via -r code/requirements.in
 pytz==2020.1
     # via django
 sqlparse==0.3.1
     # via django
 tomli==1.2.1
     # via pep517
-wheel==0.37.0
+wheel==0.38.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
