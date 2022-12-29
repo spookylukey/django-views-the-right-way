@@ -9,13 +9,13 @@ asgiref==3.4.1
 click==8.0.3
     # via pip-tools
 django==3.2.15
-    # via -r requirements.in
+    # via -r code/requirements.in
 django-colorfield==0.4.5
-    # via -r requirements.in
+    # via -r code/requirements.in
 pep517==0.11.0
     # via pip-tools
 pip-tools==6.4.0
-    # via -r requirements.in
+    # via -r code/requirements.in
 pytz==2020.1
     # via django
 sqlparse==0.3.1
