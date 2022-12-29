@@ -22,7 +22,7 @@ sqlparse==0.3.1
     # via django
 tomli==1.2.1
     # via pep517
-wheel==0.37.0
+wheel==0.38.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
