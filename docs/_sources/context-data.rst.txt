@@ -13,6 +13,7 @@ view for your site.
 As we said, the answer to how do anything in a view is “Just do it”:
 
 .. code-block:: python
+   :emphasize-lines: 5
 
    from datetime import date
 
