@@ -274,7 +274,7 @@ each other by setting data on ``self``. This is hacky and difficult to follow or
 reason about. Your ``product_search`` method now has some hidden inputs that
 could easily be missing. To be sure of correctness, you need to know the order
 in which your different methods are going to get called. When you are forced to
-use ``self`` like this, it's worth reflecting on the `objects are a poor man's
+use ``self`` like this, it’s worth reflecting on the `objects are a poor man's
 closures koan <https://wiki.c2.com/?ClosuresAndObjectsAreEquivalent>`_.
 
 This kind of code is not uncommon with CBVs. For example, a lot of code that
@@ -336,5 +336,5 @@ code seemed just a little bit… *plain*. I now had just a bunch of simple
 functions and a few closures, and fewer OOP hierarchies and clever tricks to
 feel smug about. Misplaced sadness! If you are into smugness-driven development,
 nothing can beat the feeling you get when you come back to some code 3 months or
-3 years later and find it's so straightforward to work with that, after doing
+3 years later and find it’s so straightforward to work with that, after doing
 ``git praise``, you feel the need to give yourself a little hug.

@@ -8,13 +8,13 @@ The answer is:
 
    Just do it.
 
-That probably isn't very clear yet, so I'll cover some common examples. What I
+That probably isn't very clear yet, so I’ll cover some common examples. What I
 want you to remember is:
 
-* You are in charge. It's your view function. You make it do whatever you want
+* You are in charge. It’s your view function. You make it do whatever you want
   it to do, without trying to fit into someone else's pattern. Just do it.
 
-* It's probably not hard and you can probably do it already.
+* It’s probably not hard and you can probably do it already.
 
 * Sometimes you might have to write a little bit of code to make it do what you
   want, rather than being able to find something already written. But you are a

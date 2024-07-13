@@ -163,7 +163,7 @@ Next up: :doc:`thin-views`.
 Discussion: secure by default
 -----------------------------
 
-In the patterns suggested, I’m thinking about a simplified version of `Rusty's
+In the patterns suggested, I’m thinking about a simplified version of `Rusty’s
 API Design Manifesto
 <http://sweng.the-davies.net/Home/rustys-api-design-manifesto>`_:
 

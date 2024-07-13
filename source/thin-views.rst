@@ -141,7 +141,7 @@ example:
 
 If there is a user involved, I usually prefer code that looks like this. By
 getting into the habit of starting all user-related queries with ``user``,
-whether I'm displaying a list or a retrieving a single item, it's harder to
+whether I'm displaying a list or a retrieving a single item, it’s harder to
 forget to add access controls, so I will be less prone to `insecure direct
 object reference <https://portswigger.net/web-security/access-control/idor>`_
 security issues.
@@ -268,7 +268,7 @@ and `prefetch_related
 is very important. To know exactly what to include in them requires knowing what
 the view and template code is going to do, so it has to be a view layer
 decision. At the same time, it requires knowing details about the kind of
-foreign keys you have at the schema level. So it's difficult to see how we can
+foreign keys you have at the schema level. So it’s difficult to see how we can
 properly isolate the layers from each other.
 
 This is actually quite common problem in software — performance fixes often

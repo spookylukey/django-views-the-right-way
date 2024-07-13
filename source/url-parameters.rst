@@ -83,7 +83,7 @@ You can additionally make use of this by adding type hints:
        pass  # etc
 
 Now, you no longer have to check the URLconf to be sure of the type of the
-argument, it's right there in your function.
+argument, it’s right there in your function.
 
 The elegance of URL parameters as part of the function signature contrasts with
 CBVs, where you have to do extra work get to hold of the parameter:

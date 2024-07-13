@@ -8,8 +8,8 @@ have much to add, except a few notes:
 
 * You don't need to use ``FormView``, and I recommend you don't.
 
-* You don't actually need ``Form`` either. It's an API that provides a very
-  helpful set of behaviours (validation etc.), but it's entirely possible to
+* You don't actually need ``Form`` either. It’s an API that provides a very
+  helpful set of behaviours (validation etc.), but it’s entirely possible to
   build forms in Django without it. You need to know how forms work at the `HTML
   level <https://developer.mozilla.org/en-US/docs/Learn/Forms>`_, and you need
   to process `request.GET

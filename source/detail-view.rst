@@ -202,7 +202,7 @@ and therefore to the HTTP request object via ``self.request``. This meant there 
 no clear separation of request processing from anything else — the layers had
 all merged. This happens very easily with classes like this, because you never
 have to explicitly pass the ``request`` parameter around to make it available,
-it's implicitly available via ``self``.
+it’s implicitly available via ``self``.
 
 This kind of code is painful to work with even for the job it is doing. But when
 new requirements come along — like you need to generate XLS reports offline,
@@ -250,7 +250,7 @@ then we will have to do extra configuration by adding ``slug_url_kwarg``.
 This CBV is shorter, at least in terms of token count, than my version, although
 not by much. It suffers from the common disadvantages that CBVs have, such as by
 default not having an easy way to add extra data into the context, which makes a
-big difference — put ``get_context_data()`` in and it's longer again.
+big difference — put ``get_context_data()`` in and it’s longer again.
 
 The essential logic that ``DetailView`` adds is equivalent to a single line in
 my FBV::
@@ -261,7 +261,7 @@ For a mixin plus two lines of configuration, I don't think you are getting much
 value for money.
 
 You could make the CBV version more concise, but not in good ways. Each
-alternative way to write this brings up some issues that I'll discuss in turn.
+alternative way to write this brings up some issues that I’ll discuss in turn.
 
 
 Discussion: Convention vs configuration
@@ -273,9 +273,9 @@ model name and the type of view, which in this case would result in
 ``shop/product_detail.html``, on the assumption that the 'app' the model
 lived in was called ``shop``.
 
-This kind of behaviour is called “convention over configuration”. It's popular
+This kind of behaviour is called “convention over configuration”. It’s popular
 in Ruby on Rails, much less so in Python and Django, partly due to the fact that
-it's pretty much directly against the `Zen of Python
+it’s pretty much directly against the `Zen of Python
 <https://www.python.org/dev/peps/pep-0020/>`_ maxim “Explicit is better than
 implicit”.
 
@@ -425,12 +425,12 @@ it would have the name ``object``. Don't do that! ``object`` is a very bad
 choice of name for something unless you really have no idea what type it is, and
 it will hurt maintenance in various ways.
 
-It's good that the ``context_object_name`` configuration switch exists, but
+It’s good that the ``context_object_name`` configuration switch exists, but
 unfortunate that it is optional. For the instance variable on the view, however,
 things are worse — it is always ``self.object``. This is probably a good thing
 when you are writing CBVs, but a bad thing when doing maintenance.
 
-The issue here is again the problem of generic code. For the view code, it's an
+The issue here is again the problem of generic code. For the view code, it’s an
 unusually tricky problem — you are inheriting from generic code that doesn't
 know a better name than ``object``. However, **your** code is not generic, and
 could have chosen a much better name, but your code isn't “in charge”.

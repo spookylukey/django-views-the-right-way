@@ -2,11 +2,11 @@ Adding data to a template
 =========================
 
 Suppose we have some data that we want to use in a template. We therefore need
-to pass that data into the template's “context”. It could be anything — a simple
+to pass that data into the template’s “context”. It could be anything — a simple
 value or a list of objects retrieved using the ORM. Using :ref:`the-pattern` I
 described earlier, how do we do that?
 
-For the sake of argument, we are going to put today's date into the context,
+For the sake of argument, we are going to put today’s date into the context,
 with the name ``today``, and I'm going to assume you are writing the home page
 view for your site.
 
@@ -19,7 +19,7 @@ As we said, the answer to how do anything in a view is “Just do it”:
 
    def home(request):
        return TemplateResponse(request, "home.html", {
-           'today': date.today(),   # This is the line you add
+           "today": date.today(),   # This is the line you add
        })
 
 
@@ -31,7 +31,7 @@ As we said, the answer to how do anything in a view is “Just do it”:
    There is no need to follow the formatting, and you (or your tools) might
    have other ideas!
 
-   **Imports:** For brevity I'll omit any imports I've already mentioned. If you
+   **Imports:** For brevity I’ll omit any imports I've already mentioned. If you
    want full source code, have a look at the `code folder
    <https://github.com/spookylukey/django-views-the-right-way/tree/master/code>`_.
 
@@ -50,13 +50,13 @@ it:
    def home(request):
        today = date.today()
        context = {
-           'today': today,
+           "today": today,
        }
        if today.weekday() == 0:
-           context['special_message'] = 'Happy Monday!'
+           context["special_message"] = "Happy Monday!"
        return TemplateResponse(request, "home.html", context)
 
-That's it! Next up: :doc:`common-context-data`.
+That’s it! Next up: :doc:`common-context-data`.
 
 
 Discussion: Embarrassingly simple?
@@ -77,12 +77,12 @@ The fact that there is such as thing as a context dictionary is not obvious —
 all this has been hidden from the developer.
 
 The minimum I can possibly write as a developer is to calculate the data
-— ``date.today()`` — and pick a name for it — ``'today'``. With the FBV, the code
+— ``date.today()`` — and pick a name for it — ``"today"``. With the FBV, the code
 I actually end up adding is::
 
-      'today': date.today(),
+      "today": date.today(),
 
-So it's extremely hard to see how this can be improved.
+So it’s extremely hard to see how this can be improved.
 
 With a CBV, however, what you have to add is this:
 
@@ -90,7 +90,7 @@ With a CBV, however, what you have to add is this:
 
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
-           context['today'] = date.today()
+           context["today"] = date.today()
            return context
 
 If I'm lucky then most of this method has already been written for me (in which
@@ -103,7 +103,7 @@ write blog posts about it <https://vsupalov.com/pass-context-to-django-cbv/>`_.
 Is this a real problem? Am I making a mountain out of a molehill?
 
 Here is another `blog post about putting data on your home page
-<https://rasulkireev.com/django-get-context-data>`_. The author's `first attempt
+<https://rasulkireev.com/django-get-context-data>`_. The author’s `first attempt
 <https://twitter.com/rasulkireev/status/1230974745644060678>`_ involved using
 template tags to solve this problem — something he was very embarrassed about.
 But he shouldn't be embarrassed — for a newbie, you would have to be a pretty
@@ -144,7 +144,7 @@ functions have ``request`` as a parameter because it is an input to the
 function. Making it an implicit one, instead of an explicit one, would hurt you
 in lots of ways.
 
-With that said, let's do a comparison. Once you have added the need for context
+With that said, let’s do a comparison. Once you have added the need for context
 data, as above, the CBV equivalent to the view I wrote above is as follows:
 
 .. code-block:: python
@@ -157,14 +157,14 @@ data, as above, the CBV equivalent to the view I wrote above is as follows:
 
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
-           context['today'] = date.today()
+           context["today"] = date.today()
            return context
 
 
 .. code-block:: python
 
    urlpatterns = [
-       path('', views.HomeView.as_view(), name='home'),
+       path("", views.HomeView.as_view(), name="home"),
    ]
 
 
@@ -196,7 +196,7 @@ like this, which otherwise wouldn't make much sense.
 In other words:
 
 * The boilerplate you need for a basic CBV is bigger than for an FBV.
-* It's so big and tedious that people feel the need of snippets libraries.
+* It’s so big and tedious that people feel the need of snippets libraries.
 
 Maybe the boilerplate issue will be better when it comes to ``DetailView`` etc?
 :ref:`We'll see about that <DetailView comparison>`.

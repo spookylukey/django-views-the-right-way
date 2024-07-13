@@ -43,7 +43,7 @@ them in a decorator, which we will use like this:
        return TemplateResponse(request, 'premium_page.html', {})
 
 
-To understand how to implement a decorator, it's often useful to remember what
+To understand how to implement a decorator, it’s often useful to remember what
 decorator syntax is doing. The long-hand way of defining ``my_premium_page``,
 equivalent to the above, is like this:
 
@@ -123,7 +123,7 @@ Ordering multiple decorators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When dealing with multiple decorators, as above, ordering can be very important,
-and it's easy to get confused about what order everything is happening.
+and it’s easy to get confused about what order everything is happening.
 
 The best analogy I know of is to think of it as an **onion**. In the centre, you
 have the actual view function, and each decorator adds a layer. Let's write it
@@ -290,7 +290,7 @@ However, docs or not, this is a great example of how, in general, **mixins do
 not compose**. I've said it :ref:`before <multiple-mixins>` but it is worth
 repeating. You can have two mixins that work perfectly apart, but fail together.
 To be sure that they do compose, you have to **know the implementation**.
-Further, it's entirely possible that when you first put them together there is
+Further, it’s entirely possible that when you first put them together there is
 no issue, but a later change means they may start failing in the worst possible
 way — **silently**.
 

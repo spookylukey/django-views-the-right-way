@@ -1,7 +1,7 @@
 Django Views — The Right Way — code
 ===================================
 
-This folder contains an app with code to accompany the guide. It's main purpose
+This folder contains an app with code to accompany the guide. It’s main purpose
 is to make sure that the guide isn't buggy, but it can also serve as extra
 explanation or illustration of things in the guide.
 

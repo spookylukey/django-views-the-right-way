@@ -2,12 +2,12 @@ Custom logic at the start — delegation
 ======================================
 
 The next few pages address the problem of needing to re-use some logic from one
-view in another view. We've thought about how we can use utility functions and
-classes, but sometimes these don't cut it — sometimes the majority of the body
+view in another view. We’ve thought about how we can use utility functions and
+classes, but sometimes these don’t cut it — sometimes the majority of the body
 of the view needs to be re-used. How can we do that with FBVs?
 
-Continuing our :doc:`example <list-view>` of a list of products, let's add a
-variation. As well as the main product list page, we've also got a “special
+Continuing our :doc:`example <list-view>` of a list of products, let’s add a
+variation. As well as the main product list page, we’ve also got a “special
 offers” page — or rather, a set of them, because we have a ``SpecialOffer``
 model that allows us to have many different ones. Each of these pages needs to
 display some details about the special offer, and then the list of products
@@ -17,7 +17,7 @@ etc.), so we want to re-use the logic as much as possible.
 
 So our view will need to do two things: it will show a single object, and also
 shows a list. The answer of how to do two things with FBVs is: **do two
-things**. No special tricks needed for that. Let's start with a simple version
+things**. No special tricks needed for that. Let’s start with a simple version
 of our view:
 
 .. code-block:: python
@@ -27,7 +27,7 @@ of our view:
    from . import views
 
    urlpatterns = [
-       path('special-offers/<slug:slug>/', views.special_offer_detail, name='special_offer_detail'),
+       path("special-offers/<slug:slug>/", views.special_offer_detail, name="special_offer_detail"),
    ]
 
 .. code-block:: python
@@ -36,29 +36,29 @@ of our view:
 
    def special_offer_detail(request, slug):
        special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
-       return TemplateResponse(request, 'shop/special_offer_detail.html', {
-           'special_offer': special_offer,
-           'products': special_offer.get_products(),
+       return TemplateResponse(request, "shop/special_offer_detail.html", {
+           "special_offer": special_offer,
+           "products": special_offer.get_products(),
        })
 
-I've assumed the ``SpecialOffer.get_products()`` method exists and returns a
+I’ve assumed the ``SpecialOffer.get_products()`` method exists and returns a
 ``QuerySet``. If you have an appropriate ``ManyToMany`` relationships the
 implementation might be as simple as ``return self.products.all()``, but it
 might be different.
 
 But now we want to change this view to re-use the logic in our normal
 ``product_list`` view, whether it is filtering/sorting/paging or anything else
-it has built up by now (which I'll represent using the function
+it has built up by now (which I’ll represent using the function
 ``apply_product_filtering()`` below). How should we do that?
 
 One way would be to do what we did in :doc:`common-context-data` — move part of
 the existing ``product_list`` view into a function that takes some parameters
 and returns the data to be added to the context. However, sometimes that
-interface won't work. For instance, if the view decides that in some cases it
+interface won’t work. For instance, if the view decides that in some cases it
 will return a completely different kind of response — perhaps a redirection, for
-example — then the common logic won't fit into that mould.
+example — then the common logic won’t fit into that mould.
 
-Instead we'll use what I'm going to call **delegation** — our entry-point view
+Instead we’ll use what I’m going to call **delegation** — our entry-point view
 will delegate the rest of the work to another function.
 
 To create this function, look at our old ``product_list`` view and apply
@@ -76,7 +76,7 @@ from our two entry-point view functions:
        return display_product_list(
            request,
            queryset=Product.objects.all(),
-           template_name='shop/product_list.html',
+           template_name="shop/product_list.html",
        )
 
 
@@ -85,10 +85,10 @@ from our two entry-point view functions:
        return display_product_list(
            request,
            context={
-               'special_offer': special_offer,
+               "special_offer": special_offer,
            },
            queryset=special_offer.get_products(),
-           template_name='shop/special_offer_detail.html',
+           template_name="shop/special_offer_detail.html",
        )
 
 
@@ -106,18 +106,18 @@ from our two entry-point view functions:
 
    * the arguments after ``*`` are `keyword only arguments
      <https://lukeplant.me.uk/blog/posts/keyword-only-arguments-in-python/>`_.
-   * ``queryset`` and ``template_name`` lack defaults (because we don't have any
+   * ``queryset`` and ``template_name`` lack defaults (because we don’t have any
      good defaults) which forces calling code to supply the arguments.
    * for ``context`` we do have a sensible default, but also need to avoid the
      `mutable default arguments gotcha
      <https://docs.python-guide.org/writing/gotchas/#mutable-default-arguments>`_,
      so we use ``None`` in the signature and change to ``{}`` later.
 
-At the template level, we'll probably do a similar refactoring, using `include
+At the template level, we’ll probably do a similar refactoring, using `include
 <https://docs.djangoproject.com/en/stable/ref/templates/builtins/#include>`_ to
 factor out duplication.
 
-That's it! See below for some more discussion about how this delegation pattern
+That’s it! See below for some more discussion about how this delegation pattern
 might evolve. Otherwise, onto :doc:`dependency-injection`.
 
 .. _function-based-generic-views:
@@ -125,29 +125,29 @@ might evolve. Otherwise, onto :doc:`dependency-injection`.
 Discussion: Function based generic views
 ----------------------------------------
 
-What happens if you keep going with this parameterisation pattern? Let's say you
+What happens if you keep going with this parameterisation pattern? Let’s say you
 have not one model, but lots of models where you want to display a list, with
 the same kind of filtering/sorting/paging logic applied?
 
 You might end up with an ``object_list`` function and a bunch of parameters,
-instead of ``product_list``. In other words, you'll end up with your own
+instead of ``product_list``. In other words, you’ll end up with your own
 function based generic views, `just like the ones that used to exist in Django
 <https://django.readthedocs.io/en/1.3.X/topics/generic-views.html#generic-views-of-objects>`_.
 
-Isn't that a step backwards? I'd argue no. With the benefit of hindsight, I'd
+Isn’t that a step backwards? I’d argue no. With the benefit of hindsight, I’d
 argue that the move from these function based generic views to class based
 generic views was actually the backwards step.
 
 But that is in the past. Looking forward, the generic views you might develop
-will be better than both Django's old generic FBVs and the newer generic CBVs in
+will be better than both Django’s old generic FBVs and the newer generic CBVs in
 several ways:
 
 * They will have all the functionality you need built-in.
-* Importantly, they will have none of the functionality you don't need.
+* Importantly, they will have none of the functionality you don’t need.
 * You will be able to change them **whenever you want**, **however you want**.
 
 In other words, they will be both specific (to your project) and generic (across
-your project) in all the right ways. They won't suffer from Django's limitations
+your project) in all the right ways. They won’t suffer from Django’s limitations
 in trying to be all things to all men.
 
 As FBVs they will probably be better for you than your own custom CBVs:
@@ -157,8 +157,8 @@ As FBVs they will probably be better for you than your own custom CBVs:
 
 * The generic code will be properly separated from the specific. For example,
   inside your ``object_list`` function, local variable names will be very
-  generic, but these won't bleed out into functions that might call
-  ``object_list``, because you don't inherit local variable names (in contrast
+  generic, but these won’t bleed out into functions that might call
+  ``object_list``, because you don’t inherit local variable names (in contrast
   to classes where you do inherit instance variable names).
 
 * At some point you might find you have too many parameters to a function. But
@@ -182,7 +182,7 @@ Both of these have their own forms of “Class Based Views”, but actually prov
 higher level functionality in terms of **sets of views** rather than just
 individual views.
 
-I've had good experiences with both, and here are my ideas about why they have
+I’ve had good experiences with both, and here are my ideas about why they have
 succeeded:
 
 * They both provide a fairly narrow set of views. Both are essentially CRUD
@@ -209,23 +209,23 @@ succeeded:
 Discussion: Copy-Paste Bad, Re-use Good?
 ----------------------------------------
 
-I've claimed above that your own generic views would be better than the generic
+I’ve claimed above that your own generic views would be better than the generic
 CBVs that Django provides, which leads to a question:
 
-Where do Django's generic CBVs come from? Why didn't we stop with function based
+Where do Django’s generic CBVs come from? Why didn’t we stop with function based
 generic views?
 
 The problem was that there was an endless list of requests to extend generic
 views to do one more thing, and we wanted to provide something more
 customisable.
 
-Our answer to this problem ought to have been: if these generic views don't do
+Our answer to this problem ought to have been: if these generic views don’t do
 what you want, write your own. You can easily copy-paste the functionality you
-need and start from there. So why didn't we just say that? I think we somehow
+need and start from there. So why didn’t we just say that? I think we somehow
 had the idea that copy-paste is the ultimate disaster in software development.
 If there is some functionality written, we should always make it re-usable
-rather than re-implement, and we've somehow failed as software developers if we
-can't.
+rather than re-implement, and we’ve somehow failed as software developers if we
+can’t.
 
 You can see this in the design of the CBVs. A lot of the complexity in the
 hierarchy looks like it was introduced in order to avoid a single duplicate
@@ -234,7 +234,7 @@ duplicate <https://verraes.net/2014/08/dry-is-about-knowledge/>`_. There are
 plenty of things worse than copy-paste programming, and `the wrong abstraction
 <https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction>`_ is one of them.
 
-I recently wrote several implementations of Mozilla's `Fluent
+I recently wrote several implementations of Mozilla’s `Fluent
 <https://projectfluent.org/>`_ localisation language, all of them in Python.
 First I wrote an interpreter, then a Fluent-to-Python compiler, then a
 Fluent-to-Elm compiler. These last two projects are clearly very similar in
@@ -259,7 +259,7 @@ attempting to write the two projects with a common abstraction layer.
 Before you can abstract commonality, you actually need at least two examples,
 preferably three, and abstracting before then is premature. The commonalities
 may be very different from what you thought, and when you have enough
-information to make that decision you might decide that it's not worth it. So
+information to make that decision you might decide that it’s not worth it. So
 avoiding all duplication at any cost is not the aim we should have.
 
 .. _multiple-mixins:
@@ -300,7 +300,7 @@ changed:
 
        def get_context_data(self, **kwargs):
            context = super().get_context_data(**kwargs)
-           context['special_offer'] = self.object
+           context["special_offer"] = self.object
            return context
 
        def get_queryset(self):
@@ -321,25 +321,25 @@ without any helpers):
    def special_offer_detail(request, slug):
        special_offer = get_object_or_404(SpecialOffer.objects.all(), slug=slug)
        paginator = Paginator(special_offer.products.all(), 2)
-       page_number = request.GET.get('page')
+       page_number = request.GET.get("page")
        page_obj = paginator.get_page(page_number)
-       return TemplateResponse(request, 'shop/special_offer_detail.html', {
-           'special_offer': special_offer,
-           'page_obj': page_obj,
+       return TemplateResponse(request, "shop/special_offer_detail.html", {
+           "special_offer": special_offer,
+           "page_obj": page_obj,
        })
 
 This is a clear win for FBVs by any code size metric.
 
-Thankfully the Django docs do add a “don't try this at home kids” warning and
-mention that many mixins don't actually work together. But we need to add to
+Thankfully the Django docs do add a “don’t try this at home kids” warning and
+mention that many mixins don’t actually work together. But we need to add to
 those warnings:
 
-* It's virtually impossible to know ahead of time which combinations are likely
-  to turn out bad. It's pretty much the point of mixins that you should be able
-  to “mix and match” behaviour. But you can't.
+* It’s virtually impossible to know ahead of time which combinations are likely
+  to turn out bad. It’s pretty much the point of mixins that you should be able
+  to “mix and match” behaviour. But you can’t.
 
 * Simple things often turn into complicated things. If you have started with
-  CBVs, you will most likely want to continue, and you'll quickly find yourself
+  CBVs, you will most likely want to continue, and you’ll quickly find yourself
   rather snarled up. You will then have to retrace, and completely restructure
   your code, working out how to implement for yourself the things the CBVs were
   doing for you. Again we find the CBV is a bad :ref:`starting point
