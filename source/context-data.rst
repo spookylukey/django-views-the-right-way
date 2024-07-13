@@ -28,7 +28,7 @@ As we said, the answer to how do anything in a view is “Just do it”:
    **Formatting:** I'm formatting my code examples in line with PEP8, and after
    that for clarity, especially to highlight things that have changed. So this
    example adds one line to our pattern, and I've formatted it accordingly.
-   There is no need to following the formatting, and you (or your tools) might
+   There is no need to follow the formatting, and you (or your tools) might
    have other ideas!
 
    **Imports:** For brevity I'll omit any imports I've already mentioned. If you
