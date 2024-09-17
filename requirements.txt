@@ -18,7 +18,7 @@ click==8.0.3
     # via pip-tools
 docutils==0.17.1
     # via sphinx
-idna==3.3
+idna==3.7
     # via requests
 imagesize==1.2.0
     # via sphinx
