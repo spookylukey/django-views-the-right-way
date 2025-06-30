@@ -2,3 +2,4 @@
 *.doctree
 *.buildinfo
 *.inv
+build/

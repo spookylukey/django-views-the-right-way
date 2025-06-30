@@ -1,3 +1,0 @@
-pip-tools==6.4.0
-Sphinx==4.2.0
--e git+ssh://git@github.com/spookylukey/alabaster.git@3cbfd7b6626f8b88c8a7ce0fa56e3b31fc2c2146#egg=alabaster

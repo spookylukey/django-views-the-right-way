@@ -1,0 +1,10 @@
+[project]
+name = "django-views-the-right-way"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.rst"
+requires-python = ">=3.13"
+dependencies = [
+    "ipython>=9.3.0",
+    "sphinx>=8.2.3",
+]
