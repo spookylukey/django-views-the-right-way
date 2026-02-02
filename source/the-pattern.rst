@@ -10,9 +10,11 @@ This is how you start writing any HTML-based view in Django:
 
 .. code-block:: python
 
+   from django.http import HttpRequest, HttpResponse
    from django.template.response import TemplateResponse
 
-   def example_view(request, arg):
+
+   def example_view(request: HttpRequest, arg: str) -> HttpResponse:
        return TemplateResponse(request, 'example.html', {})
 
 And the corresponding urls.py:
@@ -189,13 +191,24 @@ everything in this guide will work exactly the same with ``render`` instead of
 ``TemplateResponse``).
 
 With that substitution, we've arrived at the pattern you'll want to start with
-for views:
+for views. I’m also going to add type hints, which are optional, but very
+helpful. We are indicating that:
+
+- The ``request`` parameter is an ``HttpRequest`` object
+- The ``arg`` is a ``str`` (this should match the type defined in your
+  ``urls.py`` file, if applicable)
+- The return value is an ``HttpResponse`` (``TemplateResponse`` is a
+  subclass of this type, so that’s fine).
+
+I will omit type hints in many of my examples, but they are a good habit that
+will help you in lots of ways. So now we have, as at the beginning:
 
 .. code-block:: python
 
+   from django.http import HttpRequest, HttpResponse
    from django.template.response import TemplateResponse
 
-   def example_view(request, arg):
+   def example_view(request: HttpRequest, arg: str) -> HttpResponse:
        return TemplateResponse(request, 'example.html', {})
 
 
@@ -257,6 +270,3 @@ You might think “this is shorter than the FBV” is one of the advantages. It 
 slightly, but as soon as you add the need for :doc:`context data <context-data>`
 this advantage disappears, and we'll find we have :ref:`more boilerplate
 <boilerplate>`, not less, with CBVs.
-
-
-

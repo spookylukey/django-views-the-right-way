@@ -48,7 +48,8 @@ returns the common data into a function:
            context["user_addresses"] = list(user.addresses.order_by("primary", "first_line"))
        return context
 
-Just add ``| checkout_pages_context_data(request.user)`` into every view that needs it.
+Just add ``| checkout_pages_context_data(request.user)`` into every view that
+needs it. The ``|`` operator here is doing a dictionary merge.
 
 This is a perfectly adequate technique that is very easy to use, easy to
 understand and flexible. You can add parameters to the function if necessary,
