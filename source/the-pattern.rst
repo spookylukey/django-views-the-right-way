@@ -238,11 +238,17 @@ Using CBVs we could rewrite the code as:
        template_name = "example.html"
 
 
-But now **all 3 essential elements of the view have disappeared**. Where is the
-function or callable? Where is the request? Where is the response? To have any
-idea that this matches the description of what a view is you have to know what
-the base classes do, and the fundamental simplicity of what you are doing has
-been obscured.
+But now **all 3 essential elements of the view have disappeared**.
+
+Where is the function or callable? The class itself is not actually a callable
+that takes a request and returns a response. In fact, neither is an instance of
+this class – for good reasons, it doesn’t implement ``__call__`` to make it
+callable. You actually have to use ``.as_view(…)`` to make a view function.
+*Ceci n’est pas une view*.
+
+And where is the request? Where is the response? To have any idea that this
+matches the description of what a view is you have to know what the base classes
+do, and the fundamental simplicity of what you are doing has been obscured.
 
 There may be reasons for doing this, of course, but let's be aware of this
 problem and weigh up the advantages and disadvantages.
