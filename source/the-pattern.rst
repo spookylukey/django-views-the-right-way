@@ -180,7 +180,7 @@ The issue with just using ``render`` is that you get a plain ``HttpResponse``
 object back that has no memory that it ever came from a template. Sometimes,
 however, it is useful to have functions return a value that does remember what
 it’s “made of” — something that stores the template it is from, and the context.
-This can be really useful in testing, but also if we want to something outside
+This can be really useful in testing, but also if we want something outside
 of our view function (such as decorators or middleware) to check or even change
 what’s in the response before it finally gets ‘rendered’ and sent to the user.
 
