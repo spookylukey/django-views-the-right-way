@@ -1,4 +1,4 @@
 pip-tools==6.4.0
-Django==3.2.25
+Django==4.2.16
 django-colorfield==0.4.5
 
