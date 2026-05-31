@@ -136,7 +136,7 @@ ratio. **Boilerplate reduction should be almost entirely about code
 comprehension, not typing reduction.**
 
 For example, if we wanted, we could reduce the “repetition” of having
-``request`` as an parameter to each view function using threadlocals and an
+``request`` as a parameter to each view function using threadlocals and an
 import. We could go further, and remove the import using some magic like web2py
 does. But `we recognise both of these as bad ideas
 <https://youtu.be/S0No2zSJmks?t=1716>`_, because they reduce clarity. Those
